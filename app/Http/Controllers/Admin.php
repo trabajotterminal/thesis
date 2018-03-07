@@ -47,6 +47,16 @@ class Admin extends Controller{
         return view('schools_ranking', compact('schools'));
     }
 
+    public function userRanking($id){
+        $user_id = $id;
+        return view('user_ranking', compact(['user_id']));
+    }
+
+    public function getUserRanking($id){
+        $results = "H";
+        return $results;
+    }
+
     public function categoryList(){
         $categories = Category::all();
         $names = [];

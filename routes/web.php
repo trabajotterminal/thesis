@@ -47,8 +47,10 @@ Route::group(['prefix' => 'admin',  'middleware' => 'checkIfIsAdmin'], function(
     Route::get('/topic/{id}/questionnaire', 'Admin@topicQuestionnaireManager');
     Route::get('/categories/list/json', 'Admin@categoryListJSON');
     Route::get('/users/ranking', 'Admin@usersRanking');
+    Route::get('/statistics/user/{name}', 'Admin@userRanking');
     Route::get('/groups/ranking', 'Admin@groupsRanking');
     Route::get('/schools/ranking', 'Admin@schoolsRanking');
+    Route::get('/user/ranking/{name}', 'Admin@getUserRanking');
     Route::post('/categories/register', 'Admin@registerCategory');
     Route::post('/topics/register', 'Admin@registerTopic');
     Route::post('/categories/delete', 'Admin@deleteCategory');
