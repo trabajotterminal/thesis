@@ -54,7 +54,7 @@
                                 <div class="col">
                                     @foreach($options[$key] as $secondKey => $option)
                                         <div class="form-check" id="{{$key}}">
-                                            <input class="form-check-input" type="radio" name="options_{{($key + 1)}}" value="{{($secondKey + 1)}}">
+                                            <input class="form-check-input" type="radio" name="options_{{($key + 1)}}" value="{{($secondKey + 1)}}" {{$secondKey == 0 ? 'checked': ''}}>
                                             <label class="form-check-label" for="options_{{($key + 1)}}">
                                                 <h5>{{$option}}</h5>
                                             </label>
