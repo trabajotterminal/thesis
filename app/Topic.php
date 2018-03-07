@@ -4,8 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Topic extends Model
-{
+class Topic extends Model{
     protected $fillable = ['name', 'category_id'];
 
     public function references(){
@@ -27,5 +26,4 @@ class Topic extends Model
     public function tags(){
         return $this -> belongsToMany('\App\Tag');
     }
-
 }
