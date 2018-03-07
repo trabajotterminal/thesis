@@ -134,7 +134,7 @@
                 user_answers.push($('input[name="options_'+(i+1)+'"]:checked').val());
             var url = $('#questionnaireDone').attr('action');
             var topic_name = $('#hiddenTopicName').val();
-            var right_answers = <?php echo json_encode($right_answers); ?>;
+            var right_answers = answers;
             $.ajax({
                 beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
                 url: url,
