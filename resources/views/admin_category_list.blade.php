@@ -1,0 +1,123 @@
+@if($names)
+    @foreach($names as $key => $name)
+        <section>
+            <div class="pagenation-holder">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <form action ="{{url('admin/categories/edit')}}" method="post" class="editText">
+                                <h3 class="editable-text" data-id="{{$name}}">{{$name}}</h3>
+                                <input type="submit" style="position: absolute; left: -9999px"/>
+                            </form>
+                            <div id="error_{{($key + 1)}}" style="display:none;color:red;"><ul></ul></div>
+                        </div>
+                        <div class="col-md-6" >
+                            <div class="input-group" style="float:right;">
+                                <input name="submit" value="Editar" class="btn btn-primary" type="submit" data-id="{{$name}}" data-key="{{($key + 1)}}">
+                                <span class="input-group-btn"></span>
+                                <form action="{{ url('admin/categories/delete') }}" method="POST" class="deleteCategory">
+                                    {{(csrf_field())}}
+                                    <input type="hidden" name="deletedElementName" value="{{$name}}" >
+                                    <input name="submit" value="Eliminar" class="btn btn-danger" type="submit" data-id="{{$name}}">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    @endforeach
+@else
+    <section>
+        <div class="container">
+            <div class="row text-center" style="margin-top:150px;">
+                <h1 style="font-size:60px;font-weight: 100">Aún no hay categorias.</h1>
+            </div>
+        </div>
+    </section>
+@endif
+
+<script>
+    var buttonpressed = 0;
+    var textPressed = "";
+    var keyPressed = 0;
+    $('.btn-danger').click(function() {
+        buttonpressed = $(this).attr('data-id');
+    });
+
+    $('.btn-primary').click(function() {
+        textPressed = $(this).attr('data-id');
+        keyPressed  = $(this).attr('data-key');
+        var category_name = textPressed;
+        var input = $('<input id="editedText" name="editedText" type="text" value="' + category_name + '" />')
+        $(".editable-text[data-id='"+category_name+"']").text('').append(input);
+        input.select();
+        input.blur(function() {
+            var text = $('#editedText').val();
+            $('#editedText').parent().text(text);
+            $('#editedText').remove();
+            $("#category_list").fadeOut(300).load("/admin/categories/list", function(response, status, xhr) {
+                $(this).fadeIn(500);
+            });
+        });
+    });
+
+
+
+    $(".deleteCategory").submit(function(e){
+        e.preventDefault();
+        var category_name = buttonpressed;
+        var url = $('.deleteCategory').attr('action');
+        $.ajax({
+            beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
+            url: url,
+            type: 'POST',
+            data: {"category_name" : category_name},
+            dataType: 'json',
+            success: function( _response ){
+                $("#category_list").fadeOut(300).load("/admin/categories/list", function(response, status, xhr) {
+                    $(this).fadeIn(500);
+                });
+            },
+            error: function(xhr, status, error) {
+                alert(error);
+            },
+        });
+        return false;
+    });
+
+
+    $(".editText").submit(function(e){
+        var url = $('.editText').attr('action');
+        var category_name = textPressed;
+        var newCategoryName = document.getElementById('editedText').value;
+        $.ajax({
+            beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
+            url: url,
+            type: 'POST',
+            data: {"category_name" : category_name, "new_category_name": newCategoryName},
+            dataType: 'json',
+            success: function(data) {
+                if($.isEmptyObject(data.error)){
+                    $("#category_list").fadeOut(300).load("/admin/categories/list", function(response, status, xhr) {
+                        $(this).fadeIn(500);
+                    });
+                }else{
+                    printErrorMsg(data.error, keyPressed);
+                }
+            },
+        });
+
+        function printErrorMsg (msg, id) {
+            var div = "#error_"+id;
+            $(div).find("ul").html('');
+            $(div).css('display','block');
+            $.each( msg, function( key, value ) {
+                $(div).find("ul").append('<li>'+value+'</li>');
+            });
+        }
+
+        return false;
+    });
+
+</script>

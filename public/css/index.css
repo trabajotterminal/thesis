@@ -1,0 +1,43 @@
+.parallax-section26{
+    background: url("/images/cover.png");
+    background-image: url("/images/cover.png");
+  background-position-x: center;
+  background-position-y: center;
+  background-size: cover;
+  background-repeat-x: no-repeat;
+  background-repeat-y: no-repeat;
+  background-color: initial;
+}
+.textoTop{
+  font-family: 'Open Sans', sans-serif;
+  opacity: 0;
+}
+#searchsubmit{
+  background-color: red;
+}
+.tag{
+  margin-left:70px;
+}
+.left-move, .right-move{
+  opacity: 0;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 15px;
+  position: center;
+}
+.tag:hover{
+  color:white;
+  text-decoration: underline;
+}
+.ui-autocomplete-input {
+    width:500px;
+}
+.ac-item-a {
+    text-decoration: underline;
+    color: blue;
+    font-size: .7em;
+    cursor: pointer;
+    margin-left: 10px;
+}
+ul.ui-autocomplete.ui-menu { 
+  z-index: 1000; 
+}
