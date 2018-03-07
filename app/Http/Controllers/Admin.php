@@ -37,6 +37,16 @@ class Admin extends Controller{
         return view('users_ranking', compact('users'));
     }
 
+    public function groupsRanking(){
+        $groups = DB::select('SELECT G.name AS Grupo, AVG(P.points) AS PuntajeFinal FROM groups G JOIN users U ON G.id=U.group_id JOIN marks P ON U.id=P.user_id GROUP BY P.group_id ORDER BY AVG(points) DESC ');
+        return view('groups_ranking', compact('groups'));
+    }
+
+    public function schoolsRanking(){
+        $schools = DB::select('SELECT E.name AS Escuela, AVG(P.points) AS PuntajeFinal FROM schools E JOIN groups G ON E.id=G.school_id JOIN users U ON G.id=U.group_id JOIN marks P ON U.id=P.user_id GROUP BY P.school_id ORDER BY AVG(points) DESC;');
+        return view('schools_ranking', compact('schools'));
+    }
+
     public function categoryList(){
         $categories = Category::all();
         $names = [];
