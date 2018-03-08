@@ -29,7 +29,6 @@ class Authenticator extends Controller
                 $request -> session() -> flash('user_email_exists', 'Existe una cuenta asociada con el email introducido.');
             if($user_name)
                 $request -> session() -> flash('user_name_exists', 'Existe una cuenta asociada con el nombre de usuario introducido.');
-            $request -> session() -> flash('indexPage', 1);
             return redirect('/login');
         }else{
             $user = new User([
@@ -51,7 +50,6 @@ class Authenticator extends Controller
 
     public function login(Request $request){
         $request -> session() -> flash('indexPage', 0);
-
         $customMessages = [
             'required'  => 'Campo vacio.',
             'email'     => 'Introduce un email válido',
