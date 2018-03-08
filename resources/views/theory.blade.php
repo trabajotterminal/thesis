@@ -186,6 +186,9 @@
                 data: {"topic_name": topic_name, "user_id": user_id, "type": 'T'},
                 error: function(data){
                     console.warn('Error occurred while saving some data to server');
+                },
+                success: function(){
+                    console.warn('Data saved...');
                 }
             });
             return false;

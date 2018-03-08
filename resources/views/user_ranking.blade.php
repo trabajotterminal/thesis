@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Inicio')
+@section('title', 'Estadisticas')
 
 @section('statics-css')
     @include('layouts/statics-css-1')
 @endsection
 
 @section('menu')
-    @include('layouts/menu', ['page' => 'index'])
+    @include('layouts/menu', ['page' => 'login'])
 @endsection
 @section('content')
     <div class="row" style="min-height:550px;">

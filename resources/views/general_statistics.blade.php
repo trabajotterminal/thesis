@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Inicio')
+@section('title', 'Estadisticas')
 
 @section('statics-css')
     @include('layouts/statics-css-1')

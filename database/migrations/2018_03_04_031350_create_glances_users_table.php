@@ -26,8 +26,8 @@ class CreateGlancesUsersTable extends Migration
             $table->foreign('group_id')->references('group_id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('school_id')->references('school_id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('glance_id')->references('id')->on('glances')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('topic_id')->references('id')->on('topics')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('category_id')->references('category_id')->on('topics')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('topic_id')->references('topic_id')->on('glances')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('category_id')->references('category_id')->on('glances')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

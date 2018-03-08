@@ -53,8 +53,25 @@ class Admin extends Controller{
     }
 
     public function getUserRanking($id){
-        $results = "H";
-        return $results;
+        $user_id = $id;
+        $categories = Category::all();
+        $categories_array = [];
+        $topics_array = [];
+        for($i = 0; $i < count($categories); $i++){
+            $categories_array[$i] = $categories[$i] -> name;
+            $topics = $categories[$i] -> topics() -> get();
+            $topics_array[$i] = [];
+            for($j = 0; $j < count($topics); $j++){
+                $topics_array[$i][$j] = $topics[$j] -> name;
+            }
+        }
+        $theory_glances = User::where('id', '=', $user_id) -> first() -> glances() -> get();
+        $theory_glances_array = [];
+        for($i = 0; $i < count($theory_glances); $i++){
+            $topic_name = Topic::where('id', '=', $theory_glances[$i] -> topic_id) -> first();
+            $theory_glances_array[$i] = $topic_name;
+        }
+        return view('user_statistics_theory_table', compact(['user_id', 'categories_array', 'topics_array', 'theory_glances_array']));
     }
 
     public function categoryList(){
