@@ -51,7 +51,7 @@ class Authenticator extends Controller
     public function login(Request $request){
         $request -> session() -> flash('indexPage', 0);
         $customMessages = [
-            'required'  => 'Campo vacio.',
+            'required'  => 'Campo vacio',
             'email'     => 'Introduce un email válido',
             'max'       => 'El campo es demasiado largo',
         ];
