@@ -52,26 +52,28 @@ class Admin extends Controller{
         return view('user_ranking', compact(['user_id']));
     }
 
-    public function getUserRanking($id){
-        $user_id = $id;
+    public function getUserRanking($user){
+        $user_name = $user;
         $categories = Category::all();
         $categories_array = [];
         $topics_array = [];
+        $total_topics = 0;
         for($i = 0; $i < count($categories); $i++){
             $categories_array[$i] = $categories[$i] -> name;
             $topics = $categories[$i] -> topics() -> get();
             $topics_array[$i] = [];
             for($j = 0; $j < count($topics); $j++){
                 $topics_array[$i][$j] = $topics[$j] -> name;
+                $total_topics++;
             }
         }
-        $theory_glances = User::where('id', '=', $user_id) -> first() -> glances() -> get();
+        $theory_glances = User::where('username', '=', $user_name) -> first() -> glances() -> get();
         $theory_glances_array = [];
         for($i = 0; $i < count($theory_glances); $i++){
             $topic_name = Topic::where('id', '=', $theory_glances[$i] -> topic_id) -> first();
             $theory_glances_array[$i] = $topic_name;
         }
-        return view('user_statistics_theory_table', compact(['user_id', 'categories_array', 'topics_array', 'theory_glances_array']));
+        return view('user_statistics_theory_table', compact(['user_id', 'categories_array', 'topics_array', 'theory_glances_array', 'total_topics']));
     }
 
     public function categoryList(){

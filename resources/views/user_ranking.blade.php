@@ -31,10 +31,10 @@
             <div id="user_ranking_theory" ></div>
         </div>
         <div class="col-md-12">
-            <div id="user_ranking_simulation" ></div>
+            <div id="user_ranking_simulation"></div>
         </div>
         <div class="col-md-12">
-            <div id="user_ranking_questionnaire" ></div>
+            <div id="user_ranking_questionnaire"></div>
         </div>
     </div>
 @endsection
@@ -44,11 +44,35 @@
 
 @section('statics-js')
     @include('layouts/statics-js-1')
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+    <script src="{{ asset('js/progress-circle/jquery.circlechart.js')}}"></script>
+    <script src="{{ asset('js/universal/jquery.js')}}"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <script>
         $(document).ready(function(){
             $("#filter").val('0');
+            $('#user_ranking_questionnaire').hide();
+            $('#user_ranking_simulation').hide();
             $('#user_ranking_theory').load('/admin/user/ranking/{{$user_id}}',function(){}).hide().fadeIn();
         });
+        $('#filter').on('change', function() {
+            var index = this.value;
+            if(index == 0){
+                $('#user_ranking_simulation').hide();
+                $('#user_ranking_questionnaire').hide();
+                $('#user_ranking_theory').hide().fadeIn();
+            }
+            if(index == 1){
+                $('#user_ranking_theory').hide();
+                $('#user_ranking_simulation').hide();
+                $('#user_ranking_questionnaire').hide().fadeIn();
+            }
+            if(index == 2){
+                $('#user_ranking_theory').hide();
+                $('#user_ranking_questionnaire').hide();
+                $('#user_ranking_simulation').hide().fadeIn();
+            }
+        })
     </script>
 @endsection
 
