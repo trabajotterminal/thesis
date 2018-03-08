@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
         $group -> save();
         $me    = new User([
             'name' => 'Jair',
+            'username' => 'rjairsaid',
             'lastname'  => 'Hernandez',
             'password'  => '123',
             'email'     => 'rjairsaid@gmail.com',
@@ -30,6 +31,7 @@ class DatabaseSeeder extends Seeder
 
         $admin    = new User([
             'name' => 'Jair',
+            'username' => 'jairsaidds',
             'lastname'  => 'Hernandez',
             'password'  => '123',
             'email'     => 'jairsaidds@gmail.com',
