@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Topic;
 use App\Category;
 use App\User;
+use App\Glance;
+Use DB;
 
 class Questionnaire extends Controller
 {
@@ -62,7 +64,6 @@ class Questionnaire extends Controller
         $user = User::where('id', '=', $user_id) -> first();
         $topic = Topic::where('name', '=', $request -> topic_name) -> first();
         $mark = User::where('id', '=', $user -> id) -> first() -> marks() -> where('topic_id', '=',$topic -> id) -> first();
-
         if($mark == null){
             $mark = new Mark(['try_number' => 1, 'points' => $points, 'user_id' => $user -> id, 'group_id' => $user -> group_id, 'school_id' => $user -> school_id, 'topic_id' => $topic -> id, 'category_id' => $topic -> category_id]);
         }else{
@@ -70,6 +71,22 @@ class Questionnaire extends Controller
             $mark -> points = $points;
         }
         $mark -> save();
+        $glance = Glance::firstOrNew(array(
+            'type'          => 'C',
+            'topic_id'      => $topic -> id,
+            'category_id'   => $topic -> category_id,
+        ));
+        $glance -> save();
+        $hasGlance = DB::select('SELECT G.type FROM glances G, glance_user Gu where Gu.user_id = ? and G.type = ? and G.topic_id = ? and G.id = Gu.glance_id', [$user -> id, 'C', $topic -> id]);
+        if(count($hasGlance) == 0){
+            $user -> glances() -> attach($glance -> id, [
+                'user_id' => $user ->id,
+                'group_id' => $user -> group_id,
+                'school_id' => $user -> school_id,
+                'topic_id' => $topic -> id,
+                'category_id' => $topic -> category_id
+            ]);
+        }
         return response() -> json(['success' => $mark]);
     }
 }
