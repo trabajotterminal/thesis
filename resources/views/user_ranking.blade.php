@@ -20,8 +20,8 @@
                 <div class="col-sm-10">
                     <select class="form-control" id="filter" style="width:250px;">
                         <option value="0" selected>Teoría</option>
-                        <option value="1">Cuestionario</option>
-                        <option value="2">Simulación</option>
+                        <option value="1">Cuestionarios</option>
+                        <option value="2">Simulaciones</option>
                     </select>
                 </div>
             </div>
@@ -53,7 +53,8 @@
             $("#filter").val('0');
             $('#user_ranking_questionnaire').hide();
             $('#user_ranking_simulation').hide();
-            $('#user_ranking_theory').load('/admin/user/ranking/{{$user_id}}',function(){}).hide().fadeIn();
+            $('#user_ranking_theory').load('/admin/user/ranking/{{$user_id}}/theory',function(){}).hide().fadeIn();
+
         });
         $('#filter').on('change', function() {
             var index = this.value;
@@ -65,7 +66,7 @@
             if(index == 1){
                 $('#user_ranking_theory').hide();
                 $('#user_ranking_simulation').hide();
-                $('#user_ranking_questionnaire').hide().fadeIn();
+                $('#user_ranking_questionnaire').load('/admin/user/ranking/{{$user_id}}/questionnaire',function(){}).hide().fadeIn();
             }
             if(index == 2){
                 $('#user_ranking_theory').hide();

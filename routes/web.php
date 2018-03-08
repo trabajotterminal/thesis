@@ -50,7 +50,8 @@ Route::group(['prefix' => 'admin',  'middleware' => 'checkIfIsAdmin'], function(
     Route::get('/statistics/user/{name}', 'Admin@userRanking');
     Route::get('/groups/ranking', 'Admin@groupsRanking');
     Route::get('/schools/ranking', 'Admin@schoolsRanking');
-    Route::get('/user/ranking/{name}', 'Admin@getUserRanking');
+    Route::get('/user/ranking/{name}/theory', 'Admin@getUserTheoryStatistics');
+    Route::get('/user/ranking/{name}/questionnaire', 'Admin@getUserQuestionnaireStatistics');
     Route::post('/categories/register', 'Admin@registerCategory');
     Route::post('/topics/register', 'Admin@registerTopic');
     Route::post('/categories/delete', 'Admin@deleteCategory');

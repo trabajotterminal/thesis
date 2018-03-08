@@ -52,7 +52,7 @@ class Admin extends Controller{
         return view('user_ranking', compact(['user_id']));
     }
 
-    public function getUserRanking($user){
+    public function getUserTheoryStatistics($user){
         $user_name = $user;
         $categories = Category::all();
         $categories_array = [];
@@ -67,13 +67,37 @@ class Admin extends Controller{
                 $total_topics++;
             }
         }
-        $theory_glances = User::where('username', '=', $user_name) -> first() -> glances() -> get();
+        $theory_glances = User::where('username', '=', $user_name) -> first() -> glances() -> where('type', '=', 'T') -> get();
         $theory_glances_array = [];
         for($i = 0; $i < count($theory_glances); $i++){
             $topic_name = Topic::where('id', '=', $theory_glances[$i] -> topic_id) -> first();
             $theory_glances_array[$i] = $topic_name;
         }
         return view('user_statistics_theory_table', compact(['user_id', 'categories_array', 'topics_array', 'theory_glances_array', 'total_topics']));
+    }
+
+    public function getUserQuestionnaireStatistics($user){
+        $user_name = $user;
+        $categories = Category::all();
+        $categories_array = [];
+        $topics_array = [];
+        $total_topics = 0;
+        for($i = 0; $i < count($categories); $i++){
+            $categories_array[$i] = $categories[$i] -> name;
+            $topics = $categories[$i] -> topics() -> get();
+            $topics_array[$i] = [];
+            for($j = 0; $j < count($topics); $j++){
+                $topics_array[$i][$j] = $topics[$j] -> name;
+                $total_topics++;
+            }
+        }
+        $questionnaire_glances = User::where('username', '=', $user_name) -> first() -> glances() -> where('type', '=', 'C') -> get();
+        $questionnaire_glances_array = [];
+        for($i = 0; $i < count($questionnaire_glances); $i++){
+            $topic_name = Topic::where('id', '=', $questionnaire_glances[$i] -> topic_id) -> first();
+            $questionnaire_glances_array[$i] = $topic_name;
+        }
+        return view('user_statistics_questionnaire_table', compact(['user_id', 'categories_array', 'topics_array', 'questionnaire_glances_array', 'total_topics']));
     }
 
     public function categoryList(){

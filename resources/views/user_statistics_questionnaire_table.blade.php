@@ -1,6 +1,6 @@
 @php
-    $glances_theory_topics = array_column($theory_glances_array, 'name');
-    $seen_topics = count($glances_theory_topics);
+    $glances_questionnaire_topics = array_column($questionnaire_glances_array, 'name');
+    $seen_topics = count($glances_questionnaire_topics);
     $percentage = $seen_topics * 100 / $total_topics;
 @endphp
 
@@ -26,7 +26,7 @@
                         <div class="col-md-2">
                             <div class="feature-box-103 text-center bmargin">
 
-                                @if(in_array($topic, $glances_theory_topics))
+                                @if(in_array($topic, $glances_questionnaire_topics))
                                     <div class="iconbox-medium round" style="background-color:#2ecc71;">
                                         <span class="fa-stack">
                                             <i class="fa fa-check fa-stack-1x"></i>
@@ -54,7 +54,7 @@
     @endforeach
 </div>
 <h3 class="margin-left-3 margin-top1">Estadisticas generales - Teoría.</h3>
-<div id="chartContainerTheory" style="height: 300px; width: 100%;margin-top:60px;"></div>
+<div id="chartContainerQuestionnaire" style="height: 300px; width: 100%;margin-top:60px;"></div>
 <script>
     $(document).ready(function(){
         CanvasJS.addColorSet("greenShades",
@@ -63,7 +63,7 @@
                 "#CD6155",
             ]
         );
-        var chart = new CanvasJS.Chart("chartContainerTheory", {
+        var chart = new CanvasJS.Chart("chartContainerQuestionnaire", {
             colorSet: "greenShades",
             animationEnabled: true,
             title:{
@@ -78,8 +78,8 @@
                 indexLabel: "{label} - #percent%",
                 toolTipContent: "<b>{label}:</b> {y} (#percent%)",
                 dataPoints: [
-                    { y: <?php echo $percentage ?>, label: "Temas vistos" },
-                    { y: 100 - <?php echo $percentage ?>, label: "Temas sin revisar" },
+                    { y: <?php echo $percentage ?>, label: "Cuestionarios contestados" },
+                    { y: 100 - <?php echo $percentage ?>, label: "Cuestionarios sin contestar" },
                 ]
             }]
         });
