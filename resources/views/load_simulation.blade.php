@@ -128,11 +128,6 @@
 
 @section('statics-js')
     @include('layouts/statics-js-1')
-    <script>
-        $(document).ready(function(){
-
-        });
-    </script>
 @endsection
 
 
