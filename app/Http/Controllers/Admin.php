@@ -12,6 +12,7 @@ use Monolog\Processor\TagProcessor;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 Use DB;
+use ZipArchive;
 
 
 class Admin extends Controller{
@@ -195,8 +196,6 @@ class Admin extends Controller{
             $topic->save();
             Storage::disk('local')->makeDirectory('public/' . $category->name . '/' . $topic->name);
             Storage::disk('local')->makeDirectory('public/' . $category->name . '/' . $topic->name . '/Simulacion');
-            Storage::disk('local')->makeDirectory('public/' . $category->name . '/' . $topic->name . '/Simulacion/js');
-            Storage::disk('local')->makeDirectory('public/' . $category->name . '/' . $topic->name . '/Simulacion/css');
             Storage::disk('local')->makeDirectory('public/' . $category->name . '/' . $topic->name . '/Teoria');
             Storage::disk('local')->makeDirectory('public/' . $category->name . '/' . $topic->name . '/Cuestionario');
             return response()->json(['success'=>'OK.']);
@@ -327,7 +326,7 @@ class Admin extends Controller{
     }
 
     public function topicSimulationManager($name){
-        return view('simulationmanager');
+        return view('simulationmanager', compact('name'));
     }
 
     public function topicQuestionnaireManager($name){
@@ -338,8 +337,7 @@ class Admin extends Controller{
         if ($request->hasFile('input_file')) {
             $topic = Topic::where('name', '=', $request -> topic_name) -> first();
             $category   = Category::where('id', '=', $topic -> category_id) -> first();
-            $file = $request -> file('input_file');
-            $name = $request -> file('input_file')->getClientOriginalName();
+            $name = $request -> file('input_file') -> getClientOriginalName();
             $destinationPath = public_path('storage/'.$category -> name.'/'.$topic -> name.'/Teoria/');
             $request -> input_file -> move($destinationPath, $name);
             $route = new Reference();
@@ -350,6 +348,29 @@ class Admin extends Controller{
             $route -> save();
             return redirect('admin/topic/'.$topic->name);
         }
+    }
+
+    public function registerSimulationFile(Request $request){
+        $topic = Topic::where('name', '=', $request -> topic_name) -> first();
+        $category   = Category::where('id', '=', $topic -> category_id) -> first();
+        $file = $request -> file('input_file');
+        $name = $request -> file('input_file')->getClientOriginalName();
+        $destinationPath = public_path('storage/'.$category -> name.'/'.$topic -> name.'/Simulacion/');
+        $request -> input_file -> move($destinationPath, 'archivo.zip');
+        $zip = new ZipArchive();
+        $zip_reference = $zip->open($destinationPath.'archivo.zip');
+        if ($zip_reference){
+            $zip->extractTo($destinationPath); // change this to the correct site path
+            $zip->close();
+            unlink($destinationPath.'archivo.zip');
+            $reference = new Reference();
+            $reference -> type = 'S';
+            $reference -> route = $destinationPath;
+            $reference -> category_id = $category -> id;
+            $reference -> topic_id = $topic -> id;
+            $reference -> save();
+        }
+        return redirect('admin/topic/'.$topic->name);
     }
 
     public function registerQuestionnaireFile(Request $request){

@@ -60,6 +60,7 @@ Route::group(['prefix' => 'admin',  'middleware' => 'checkIfIsAdmin'], function(
     Route::post('/topics/edit', 'Admin@editTopic');
     Route::post('/topic/theory/register/file', 'Admin@registerTheoryFile');
     Route::post('/topic/questionnaire/register/file', 'Admin@registerQuestionnaireFile');
+    Route::post('/topic/simulation/register/file', 'Admin@registerSimulationFile');
     Route::post('/topic/theory/register/manually', 'Admin@registerTheoryManually');
     Route::post('/topic/questionnaire/register/manually', 'Admin@registerQuestionnaireManually');
     Route::post('/topic/theory/register/manually/save', 'Admin@saveTheoryManually');
