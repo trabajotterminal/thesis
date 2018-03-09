@@ -28,6 +28,7 @@ Route::group(['middleware' => 'web'], function(){
     Route::get('/simulation/{name}', 'Simulation@simulation');
     Route::get('/theory/{name}', 'Theory@theory');
     Route::post('/theory/updateGlance', 'Theory@updateGlance');
+    Route::post('/simulation/updateGlance', 'Simulation@updateGlance');
 });
 
 Route::get('/questionnaire/{name}', 'Questionnaire@showQuestionnaire') -> middleware('checkIfLoggedIn');

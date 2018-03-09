@@ -1,6 +1,8 @@
 @php
     $cssLinks = "";
     $jsLinks  = "";
+    $user            = session('user');
+    $user_type       = session('user_type');
 @endphp
 
 @foreach($cssFiles as $cssFile)
@@ -120,6 +122,14 @@
         @php
             echo $htmlFile;
         @endphp
+        @if($user != null && $user_type == 'alumno')
+            <form id="updateGlance" method="POST" action="{{url('/simulation/updateGlance')}}">
+                {{(csrf_field())}}
+                <input type="hidden" id="user_id" value="{{$user}}" />
+                <input type="hidden" id="topic_name" value="{{$topic_name}}" />
+                <input type="submit" style="display:none"/>
+            </form>
+        @endif
     </div>
 @endsection
 @section('footer')
@@ -128,6 +138,40 @@
 
 @section('statics-js')
     @include('layouts/statics-js-1')
+    <script>
+        $("#updateGlance").submit(function(e){
+            e.preventDefault();
+            var url = $('#updateGlance').attr('action');
+            var user_id = $('#user_id').val();
+            var topic_name = $('#topic_name').val();
+            $.ajax({
+                beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
+                type: "POST",
+                url: url,
+                data: {"topic_name": topic_name, "user_id": user_id, "type": 'S'},
+                error: function(data){
+                    console.warn('Error occurred while saving some data to server');
+                },
+                success: function(){
+                    console.warn('Data saved...');
+                }
+            });
+            return false;
+        });
+
+        function runAjax(){
+            var form = document.getElementById('updateGlance');
+            if(form){
+                $('#updateGlance').submit();
+            }
+        }
+
+        $(document).ready(function() {
+            setTimeout(function() {
+                runAjax();
+            }, 10000);
+        });
+    </script>
 @endsection
 
 
