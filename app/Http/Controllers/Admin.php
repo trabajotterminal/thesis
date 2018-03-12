@@ -91,21 +91,24 @@ class Admin extends Controller{
         $topics_array       = [];
         $total_topics       = 0;
         $percentages        = [];
+        $people             = [];
         for($i = 0; $i < count($categories); $i++){
             $categories_array[$i] = $categories[$i] -> name;
             $topics = $categories[$i] -> topics() -> get();
-            $topics_array[$i] = [];
+            $topics_array[$i]   = [];
+            $percentages[$i]    = [];
             for($j = 0; $j < count($topics); $j++){
                 $users_in_group  = User::where('group_id', '=', $group -> id) -> get();
                 $users_in_group_count  = count($users_in_group);
                 $seen = DB::select('SELECT COUNT(*) as many FROM glance_user as GU, glances as G where GU.group_id = ? and G.type = ?  and G.topic_id = ? and G.id = Gu.glance_id', [$group -> id, 'T', $topics[$j] -> id]);
                 $seen = $seen[0] -> many;
-                $percentages[$topics[$j] -> name] = $users_in_group_count > 0 ? $seen * 100 / $users_in_group_count : 0;
+                $people[$i][$j] = $seen;
+                $percentages[$i][$j] = $users_in_group_count > 0 ? $seen * 100 / $users_in_group_count : 0;
                 $topics_array[$i][$j] = $topics[$j] -> name;
                 $total_topics++;
             }
         }
-        return view('group_statistics_theory_table', compact(['categories_array', 'topics_array', 'percentages']));
+        return view('group_statistics_theory_table', compact(['categories_array', 'topics_array', 'percentages', 'people']));
     }
 
     public function getUserQuestionnaireStatistics($user){
