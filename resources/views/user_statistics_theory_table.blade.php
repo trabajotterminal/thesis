@@ -1,7 +1,7 @@
 @php
     $glances_theory_topics = array_column($theory_glances_array, 'name');
     $seen_topics = count($glances_theory_topics);
-    $percentage = $seen_topics * 100 / $total_topics;
+    $percentage = $total_topics > 0  ? $seen_topics * 100 / $total_topics: 0;
 @endphp
 
 <style>body{overflow-x: hidden;}</style>

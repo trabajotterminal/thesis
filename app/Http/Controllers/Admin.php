@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Group;
 use Illuminate\Http\Request;
 use \App\Category;
 use \App\Topic;
@@ -48,9 +49,14 @@ class Admin extends Controller{
         return view('schools_ranking', compact('schools'));
     }
 
-    public function userRanking($id){
+    public function userStatistics($id){
         $user_id = $id;
         return view('user_ranking', compact(['user_id']));
+    }
+
+    public function groupStatistics($name){
+        $group_name = $name;
+        return view('group_statistics', compact(['group_name']));
     }
 
     public function getUserTheoryStatistics($user){
@@ -75,6 +81,31 @@ class Admin extends Controller{
             $theory_glances_array[$i] = $topic_name;
         }
         return view('user_statistics_theory_table', compact(['user_id', 'categories_array', 'topics_array', 'theory_glances_array', 'total_topics']));
+    }
+
+    public function getGroupTheoryStatistics($name){
+        $group_name         = $name;
+        $group              = Group::where('name', '=', $group_name) -> first();
+        $categories         = Category::all();
+        $categories_array   = [];
+        $topics_array       = [];
+        $total_topics       = 0;
+        $percentages        = [];
+        for($i = 0; $i < count($categories); $i++){
+            $categories_array[$i] = $categories[$i] -> name;
+            $topics = $categories[$i] -> topics() -> get();
+            $topics_array[$i] = [];
+            for($j = 0; $j < count($topics); $j++){
+                $users_in_group  = User::where('group_id', '=', $group -> id) -> get();
+                $users_in_group_count  = count($users_in_group);
+                $seen = DB::select('SELECT COUNT(*) as many FROM glance_user as GU, glances as G where GU.group_id = ? and G.type = ?  and G.topic_id = ? and G.id = Gu.glance_id', [$group -> id, 'T', $topics[$j] -> id]);
+                $seen = $seen[0] -> many;
+                $percentages[$topics[$j] -> name] = $users_in_group_count > 0 ? $seen * 100 / $users_in_group_count : 0;
+                $topics_array[$i][$j] = $topics[$j] -> name;
+                $total_topics++;
+            }
+        }
+        return view('group_statistics_theory_table', compact(['categories_array', 'topics_array', 'percentages']));
     }
 
     public function getUserQuestionnaireStatistics($user){

@@ -1,10 +1,3 @@
-@php
-    $glances_questionnaire_topics = array_column($questionnaire_glances_array, 'name');
-    $seen_topics = count($glances_questionnaire_topics);
-    $percentage = $total_topics > 0 ? $seen_topics * 100 / $total_topics : 0;
-@endphp
-
-<style>body{overflow-x: hidden;}</style>
 <link rel="stylesheet" href="{{ asset('/css/shortcodes.css')}}" type="text/css" />
 <link rel="stylesheet" href="{{asset('css/et-line-font/et-line-font.css')}}">
 <div class="row margin-left-1">
@@ -25,25 +18,8 @@
                     @foreach($topics_array[$key] as $topic)
                         <div class="col-md-2">
                             <div class="feature-box-103 text-center bmargin">
-
-                                @if(in_array($topic, $glances_questionnaire_topics))
-                                    <div class="iconbox-medium round" style="background-color:#2ecc71;">
-                                        <span class="fa-stack">
-                                            <i class="fa fa-check fa-stack-1x"></i>
-                                            <i class="fa fa-check fa-stack-1x"></i>
-                                        </span>
-                                    </div>
-                                    <br>
-                                    <h5>{{$topic}}</h5>
-                                @else
-                                    <div class="iconbox-medium round" style="background-color:#e74c3c;">
-
-                                        <span class="fa-stack fa-lg">
-                                          <i class="fas fa-eye-slash fa-stack-1x" style="color:white;"></i>
-                                        </span>
-                                    </div>
-                                    <h5>{{$topic}}</h5>
-                                @endif
+                                <h1>{{$topic}}</h1>
+                                <h4>{{$percentages[$topic]}}</h4>
                             </div>
                         </div>
                     @endforeach
@@ -54,7 +30,7 @@
     @endforeach
 </div>
 <h3 class="margin-left-3 margin-top1">Estadisticas generales - Teoría.</h3>
-<div id="chartContainerQuestionnaire" style="height: 300px; width: 100%;margin-top:60px;"></div>
+<div id="chartContainerTheory" style="height: 300px; width: 100%;margin-top:60px;"></div>
 <script>
     $(document).ready(function(){
         CanvasJS.addColorSet("greenShades",
@@ -63,7 +39,7 @@
                 "#CD6155",
             ]
         );
-        var chart = new CanvasJS.Chart("chartContainerQuestionnaire", {
+        var chart = new CanvasJS.Chart("chartContainerTheory", {
             colorSet: "greenShades",
             animationEnabled: true,
             title:{
@@ -78,8 +54,8 @@
                 indexLabel: "{label} - #percent%",
                 toolTipContent: "<b>{label}:</b> {y} (#percent%)",
                 dataPoints: [
-                    { y: <?php echo $percentage ?>, label: "Cuestionarios contestados" },
-                    { y: 100 - <?php echo $percentage ?>, label: "Cuestionarios sin contestar" },
+                    { y: 100, label: "Temas vistos" },
+                    { y: 100 - 100, label: "Temas sin revisar" },
                 ]
             }]
         });

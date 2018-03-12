@@ -48,10 +48,12 @@ Route::group(['prefix' => 'admin',  'middleware' => 'checkIfIsAdmin'], function(
     Route::get('/topic/{id}/questionnaire', 'Admin@topicQuestionnaireManager');
     Route::get('/categories/list/json', 'Admin@categoryListJSON');
     Route::get('/users/ranking', 'Admin@usersRanking');
-    Route::get('/statistics/user/{name}', 'Admin@userRanking');
+    Route::get('/statistics/user/{name}', 'Admin@userStatistics');
+    Route::get('/statistics/group/{name}', 'Admin@groupStatistics');
     Route::get('/groups/ranking', 'Admin@groupsRanking');
     Route::get('/schools/ranking', 'Admin@schoolsRanking');
     Route::get('/user/ranking/{name}/theory', 'Admin@getUserTheoryStatistics');
+    Route::get('/group/statistics/{name}/theory', 'Admin@getGroupTheoryStatistics');
     Route::get('/user/ranking/{name}/questionnaire', 'Admin@getUserQuestionnaireStatistics');
     Route::get('/user/ranking/{name}/simulation', 'Admin@getUserSimulationStatistics');
     Route::post('/categories/register', 'Admin@registerCategory');
