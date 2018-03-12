@@ -53,6 +53,7 @@ Route::group(['prefix' => 'admin',  'middleware' => 'checkIfIsAdmin'], function(
     Route::get('/schools/ranking', 'Admin@schoolsRanking');
     Route::get('/user/ranking/{name}/theory', 'Admin@getUserTheoryStatistics');
     Route::get('/user/ranking/{name}/questionnaire', 'Admin@getUserQuestionnaireStatistics');
+    Route::get('/user/ranking/{name}/simulation', 'Admin@getUserSimulationStatistics');
     Route::post('/categories/register', 'Admin@registerCategory');
     Route::post('/topics/register', 'Admin@registerTopic');
     Route::post('/categories/delete', 'Admin@deleteCategory');

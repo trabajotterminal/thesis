@@ -101,6 +101,30 @@ class Admin extends Controller{
         return view('user_statistics_questionnaire_table', compact(['user_id', 'categories_array', 'topics_array', 'questionnaire_glances_array', 'total_topics']));
     }
 
+    public function getUserSimulationStatistics($user){
+        $user_name = $user;
+        $categories = Category::all();
+        $categories_array = [];
+        $topics_array = [];
+        $total_topics = 0;
+        for($i = 0; $i < count($categories); $i++){
+            $categories_array[$i] = $categories[$i] -> name;
+            $topics = $categories[$i] -> topics() -> get();
+            $topics_array[$i] = [];
+            for($j = 0; $j < count($topics); $j++){
+                $topics_array[$i][$j] = $topics[$j] -> name;
+                $total_topics++;
+            }
+        }
+        $simulation_glances = User::where('username', '=', $user_name) -> first() -> glances() -> where('type', '=', 'S') -> get();
+        $simulation_glances_array = [];
+        for($i = 0; $i < count($simulation_glances); $i++){
+            $topic_name = Topic::where('id', '=', $simulation_glances[$i] -> topic_id) -> first();
+            $simulation_glances_array[$i] = $topic_name;
+        }
+        return view('user_statistics_simulation_table', compact(['user_id', 'categories_array', 'topics_array', 'simulation_glances_array', 'total_topics']));
+    }
+
     public function categoryList(){
         $categories = Category::all();
         $names = [];

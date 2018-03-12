@@ -118,10 +118,8 @@
     @include('layouts/menu', ['page' => 'category'])
 @endsection
 @section('content')
-    <div id="content">
-        @php
-            echo $htmlFile;
-        @endphp
+    <div id="content" style="height:590px;">
+        <iframe width="100%" height="100%;" frameborder="0" id="iFrameContent"></iframe>
         @if($user != null && $user_type == 'alumno')
             <form id="updateGlance" method="POST" action="{{url('/simulation/updateGlance')}}">
                 {{(csrf_field())}}
@@ -167,6 +165,10 @@
         }
 
         $(document).ready(function() {
+            var iframe = document.getElementById('iFrameContent');
+            var htmlFile = <?php echo json_encode($htmlFile); ?>;
+            iframe = iframe.contentWindow || ( iframe.contentDocument.document || iframe.contentDocument);
+            iframe.document.open();iframe.document.write(htmlFile);iframe.document.close();
             setTimeout(function() {
                 runAjax();
             }, 10000);

@@ -71,7 +71,7 @@
             if(index == 2){
                 $('#user_ranking_theory').hide();
                 $('#user_ranking_questionnaire').hide();
-                $('#user_ranking_simulation').hide().fadeIn();
+                $('#user_ranking_simulation').load('/admin/user/ranking/{{$user_id}}/simulation',function(){}).hide().fadeIn();
             }
         })
     </script>
