@@ -50,12 +50,16 @@ Route::group(['prefix' => 'admin',  'middleware' => 'checkIfIsAdmin'], function(
     Route::get('/users/ranking', 'Admin@usersRanking');
     Route::get('/statistics/user/{name}', 'Admin@userStatistics');
     Route::get('/statistics/group/{name}', 'Admin@groupStatistics');
+    Route::get('/statistics/school/{name}', 'Admin@schoolStatistics');
     Route::get('/groups/ranking', 'Admin@groupsRanking');
     Route::get('/schools/ranking', 'Admin@schoolsRanking');
     Route::get('/user/ranking/{name}/theory', 'Admin@getUserTheoryStatistics');
     Route::get('/group/statistics/{name}/theory', 'Admin@getGroupTheoryStatistics');
     Route::get('/group/statistics/{name}/questionnaire', 'Admin@getGroupQuestionnaireStatistics');
     Route::get('/group/statistics/{name}/simulation', 'Admin@getGroupSimulationStatistics');
+    Route::get('/school/statistics/{name}/theory', 'Admin@getSchoolTheoryStatistics');
+    Route::get('/school/statistics/{name}/questionnaire', 'Admin@getSchoolQuestionnaireStatistics');
+    Route::get('/school/statistics/{name}/simulation', 'Admin@getSchoolSimulationStatistics');
     Route::get('/user/ranking/{name}/questionnaire', 'Admin@getUserQuestionnaireStatistics');
     Route::get('/user/ranking/{name}/simulation', 'Admin@getUserSimulationStatistics');
     Route::post('/categories/register', 'Admin@registerCategory');

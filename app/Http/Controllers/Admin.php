@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Group;
+use App\School;
 use Illuminate\Http\Request;
 use \App\Category;
 use \App\Topic;
@@ -57,6 +58,11 @@ class Admin extends Controller{
     public function groupStatistics($name){
         $group_name = $name;
         return view('group_statistics', compact(['group_name']));
+    }
+
+    public function schoolStatistics($name){
+        $school_name = $name;
+        return view('school_statistics', compact(['school_name']));
     }
 
     public function getUserTheoryStatistics($user){
@@ -174,6 +180,100 @@ class Admin extends Controller{
             }
         }
         return view('group_statistics_simulation_table', compact(['categories_array', 'topics_array', 'percentages', 'people', 'users_in_group_count', 'visualizations']));
+    }
+
+
+    public function getSchoolTheoryStatistics($name){
+        $school_name         = $name;
+        $school              = School::where('name', '=', $school_name) -> first();
+        $categories         = Category::all();
+        $categories_array   = [];
+        $topics_array       = [];
+        $total_topics       = 0;
+        $percentages        = [];
+        $people             = [];
+        $visualizations     = 0;
+        for($i = 0; $i < count($categories); $i++){
+            $categories_array[$i] = $categories[$i] -> name;
+            $topics = $categories[$i] -> topics() -> get();
+            $topics_array[$i]   = [];
+            $percentages[$i]    = [];
+            $users_in_school  = User::where('school_id', '=', $school -> id) -> get();
+            $users_in_school_count  = count($users_in_school);
+            for($j = 0; $j < count($topics); $j++){
+                $seen = DB::select('SELECT COUNT(*) as many FROM glance_user as GU, glances as G where GU.school_id = ? and G.type = ?  and G.topic_id = ? and G.id = Gu.glance_id', [$school -> id, 'T', $topics[$j] -> id]);
+                $seen = $seen[0] -> many;
+                $people[$i][$j] = $seen;
+                $visualizations += $seen;
+                $percentages[$i][$j] = $users_in_school_count > 0 ? $seen * 100 / $users_in_school_count : 0;
+                $percentages[$i][$j] = number_format((float)$percentages[$i][$j], 2, '.', '');
+                $topics_array[$i][$j] = $topics[$j] -> name;
+                $total_topics++;
+            }
+        }
+        return view('school_statistics_theory_table', compact(['categories_array', 'topics_array', 'percentages', 'people', 'visualizations']));
+    }
+
+    public function getSchoolQuestionnaireStatistics($name){
+        $school_name        = $name;
+        $school             = School::where('name', '=', $school_name) -> first();
+        $categories         = Category::all();
+        $categories_array   = [];
+        $topics_array       = [];
+        $total_topics       = 0;
+        $percentages        = [];
+        $people             = [];
+        $visualizations     = 0;
+        for($i = 0; $i < count($categories); $i++){
+            $categories_array[$i] = $categories[$i] -> name;
+            $topics = $categories[$i] -> topics() -> get();
+            $topics_array[$i]   = [];
+            $percentages[$i]    = [];
+            $users_in_school  = User::where('school_id', '=', $school -> id) -> get();
+            $users_in_school_count  = count($users_in_school);
+            for($j = 0; $j < count($topics); $j++){
+                $seen = DB::select('SELECT COUNT(*) as many FROM glance_user as GU, glances as G where GU.school_id = ? and G.type = ?  and G.topic_id = ? and G.id = Gu.glance_id', [$school -> id, 'C', $topics[$j] -> id]);
+                $seen = $seen[0] -> many;
+                $people[$i][$j] = $seen;
+                $visualizations += $seen;
+                $percentages[$i][$j] = $users_in_school_count > 0 ? $seen * 100 / $users_in_school_count : 0;
+                $percentages[$i][$j] = number_format((float)$percentages[$i][$j], 2, '.', '');
+                $topics_array[$i][$j] = $topics[$j] -> name;
+                $total_topics++;
+            }
+        }
+        return view('school_statistics_questionnaire_table', compact(['categories_array', 'topics_array', 'percentages', 'people', 'users_in_group_count', 'visualizations']));
+    }
+
+    public function getSchoolSimulationStatistics($name){
+        $school_name        = $name;
+        $school             = School::where('name', '=', $school_name) -> first();
+        $categories         = Category::all();
+        $categories_array   = [];
+        $topics_array       = [];
+        $total_topics       = 0;
+        $percentages        = [];
+        $people             = [];
+        $visualizations     = 0;
+        for($i = 0; $i < count($categories); $i++){
+            $categories_array[$i] = $categories[$i] -> name;
+            $topics = $categories[$i] -> topics() -> get();
+            $topics_array[$i]   = [];
+            $percentages[$i]    = [];
+            $users_in_school  = User::where('school_id', '=', $school -> id) -> get();
+            $users_in_school_count  = count($users_in_school);
+            for($j = 0; $j < count($topics); $j++){
+                $seen = DB::select('SELECT COUNT(*) as many FROM glance_user as GU, glances as G where GU.school_id = ? and G.type = ?  and G.topic_id = ? and G.id = Gu.glance_id', [$school -> id, 'S', $topics[$j] -> id]);
+                $seen = $seen[0] -> many;
+                $people[$i][$j] = $seen;
+                $visualizations += $seen;
+                $percentages[$i][$j] = $users_in_school_count > 0 ? $seen * 100 / $users_in_school_count : 0;
+                $percentages[$i][$j] = number_format((float)$percentages[$i][$j], 2, '.', '');
+                $topics_array[$i][$j] = $topics[$j] -> name;
+                $total_topics++;
+            }
+        }
+        return view('school_statistics_simulation_table', compact(['categories_array', 'topics_array', 'percentages', 'people', 'users_in_group_count', 'visualizations']));
     }
 
     public function getUserQuestionnaireStatistics($user){
