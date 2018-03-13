@@ -25,6 +25,9 @@ class DatabaseSeeder extends Seeder
         $clubDeAlgoritmia = new Group(['name' => 'Club de Algoritmia', 'school_id' => $ESCOM -> id]);
         $clubDeAlgoritmia -> save();
 
+        $clubDeAlgoritmiaEntrevistas = new Group(['name' => 'Club de Algoritmia Entrevistas', 'school_id' => $ESCOM -> id]);
+        $clubDeAlgoritmiaEntrevistas -> save();
+
         $me    = new User([
             'name' => 'Jair',
             'username' => 'rjairsaid',
@@ -56,7 +59,7 @@ class DatabaseSeeder extends Seeder
             'password'  => '123',
             'email'     => 'fili@gmail.com',
             'type'      => 'alumno',
-            'group_id'  => $clubDeAlgoritmia -> id,
+            'group_id'  => $clubDeAlgoritmiaEntrevistas -> id,
             'school_id' => $ESCOM -> id,
         ]);
         $fili -> save();
