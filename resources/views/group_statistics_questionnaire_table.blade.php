@@ -18,19 +18,19 @@
                     @foreach($topics_array[$key] as $secondKey => $topic)
                         <div class="col-md-4">
                             <div class="feature-box-103 text-center bmargin">
-                                <div id="theory_percentage_{{$category}}_{{$secondKey}}" data-percentage={{$percentages[$key][$secondKey]}} style="height: 300px; width: 100%;"></div>
-                            </div>
+                                <div id="questionnaire_percentage_{{$category}}_{{$secondKey}}" data-percentage={{$percentages[$key][$secondKey]}} style="height: 300px; width: 100%;"></div>
                         </div>
-                    @endforeach
                 </div>
-            @endif
+                @endforeach
         </div>
-        <div class="sh-divider-line doubble light  margin"></div>
-    @endforeach
+        @endif
 </div>
-<h3 class="margin-left-3 margin-top2">Estadisticas generales - Teoría.</h3>
+<div class="sh-divider-line doubble light  margin"></div>
+@endforeach
+</div>
+<h3 class="margin-left-3 margin-top2">Estadisticas generales - Cuestionarios.</h3>
 <br>
-<div id="chartContainerTheory" class="col-centered" style="height: 400px; width: 85%;margin-top:60px;"></div>
+<div id="chartContainerQuestionnaire" class="col-centered" style="height: 400px; width: 85%;margin-top:60px;"></div>
 <script>
     $(document).ready(function(){
         var categories          = <?php echo json_encode($categories_array); ?>;
@@ -46,9 +46,9 @@
                 "#CD6155",
             ]
         );
+
         var peopleDataPoints        = [];
         var percentagesDataPoints   = [];
-
         for(var i = 0; i < categories.length; i++){
             for(var j = 0; j < topics[i].length; j++ ){
                 var topic = topics[i][j];
@@ -60,30 +60,31 @@
                 peopleDataPoints.push(firstObject);
                 percentagesDataPoints.push(secondObject);
                 CanvasJS.addColorSet("greenShades", ["#2ECC71", "#CD6155"]);
-                charts[counter] = new CanvasJS.Chart("theory_percentage_"+categories[i]+"_"+j, {
-                        animationEnabled: true,
-                        theme: "light2",
-                        colorSet: "greenShades",
-                        subtitles: [{
-                            text: topic,
-                            fontSize: 16
-                        }],
-                        data: [{
-                            type: "pie",
-                            startAngle: 240,
-                            yValueFormatString: "##0.00\"%\"",
-                            indexLabel: "{y}",
-                            dataPoints: [
-                                {y: value, label: "Porcentaje de usuarios que ha visto el tema."},
-                                {y: 100 - value, label: "Porcentaje de usuarios que no ha visto el tema."},
-                            ]
-                        }]
-                    });
+                charts[counter] = new CanvasJS.Chart("questionnaire_percentage_"+categories[i]+"_"+j, {
+                    theme: "light2",
+                    colorSet: "greenShades",
+                    animationEnabled: true,
+                    subtitles: [{
+                        text: topic,
+                        fontSize: 16
+                    }],
+                    data: [{
+                        type: "pie",
+                        indexLabelFontSize: 10,
+                        radius: 100,
+                        indexLabel: "{y}",
+                        yValueFormatString: "###0.0\"%\"",
+                        dataPoints: [
+                            { y: value, label: "Porcentaje de usuarios que han visto esto." },
+                            { y: 100 - value, label: "Porcentaje de usuarios que no han visto esto."},
+                        ]
+                    }]
+                });
                 charts[counter++].render();
             }
         }
 
-        var chart = new CanvasJS.Chart("chartContainerTheory", {
+        var chart = new CanvasJS.Chart("chartContainerQuestionnaire", {
             animationEnabled: true,
             theme: "light2",
 

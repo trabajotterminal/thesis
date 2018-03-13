@@ -48,14 +48,35 @@
     <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
     <script src="{{ asset('js/progress-circle/jquery.circlechart.js')}}"></script>
     <script src="{{ asset('js/universal/jquery.js')}}"></script>
-    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script src="{{ asset('js/canvas.js')}}"></script>
     <script>
         $(document).ready(function(){
             var url = "{{ url('/admin/group/statistics/' . $group_name . '/theory') }}";
+            $("#filter").val('0');
+            $('#group_statistics_simulation').hide();
+            $('#group_statistics_questionnaire').hide();
             $('#group_statistics_theory').load(encodeURI(url), function(){}).hide().fadeIn();
         });
         $('#filter').on('change', function() {
-
+            var index = this.value;
+            if(index == 0){
+                var url = "{{ url('/admin/group/statistics/' . $group_name . '/theory') }}";
+                $('#group_statistics_simulation').hide();
+                $('#group_statistics_questionnaire').hide();
+                $('#group_statistics_theory').load(encodeURI(url), function(){}).hide().fadeIn();
+            }
+            if(index == 1){
+                var url = "{{ url('/admin/group/statistics/' . $group_name . '/questionnaire') }}";
+                $('#group_statistics_simulation').hide();
+                $('#group_statistics_theory').hide();
+                $('#group_statistics_questionnaire').load(encodeURI(url), function(){}).hide().fadeIn();
+            }
+            if(index == 2){
+                var url = "{{ url('/admin/group/statistics/' . $group_name . '/simulation') }}";
+                $('#group_statistics_theory').hide();
+                $('#group_statistics_questionnaire').hide();
+                $('#group_statistics_simulation').load(encodeURI(url), function(){}).hide().fadeIn();
+            }
         });
     </script>
 @endsection

@@ -47,7 +47,7 @@
     <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
     <script src="{{ asset('js/progress-circle/jquery.circlechart.js')}}"></script>
     <script src="{{ asset('js/universal/jquery.js')}}"></script>
-    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script src="{{ asset('js/canvas.js')}}"></script>
     <script>
         $(document).ready(function(){
             $("#filter").val('0');
