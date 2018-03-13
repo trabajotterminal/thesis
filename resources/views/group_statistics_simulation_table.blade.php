@@ -37,7 +37,7 @@
         var topics              = <?php echo json_encode($topics_array); ?>;
         var percentages         = <?php echo json_encode($percentages); ?>;
         var people              = <?php echo json_encode($people); ?>;
-        var group_size          = <?php echo json_encode($users_in_group_count); ?>;
+        var visualizations      = <?php echo json_encode($visualizations); ?>;
         var counter = 0;
         var charts = [];
         CanvasJS.addColorSet("greenShades",
@@ -55,8 +55,9 @@
                 var value = percentages[i][j];
                 value = parseFloat(value);
                 var firstObject = {'y': people[i][j], 'label': topics[i][j]};
-                var percentage  = percentages[i][j] * group_size / 100;
-                var secondObject = {'y': percentage, 'label_percentage': percentages[i][j]};
+                var percentage  = visualizations > 0 ? people[i][j] * 100 / visualizations : 0;
+                var percentage_to_display = percentage *  people[i][j] / 100;
+                var secondObject = {'y': percentage_to_display, 'label_percentage': percentage};
                 peopleDataPoints.push(firstObject);
                 percentagesDataPoints.push(secondObject);
                 CanvasJS.addColorSet("greenShades", ["#2ECC71", "#CD6155"]);
@@ -117,6 +118,7 @@
                     type: "area",
                     name: "Porcentaje representativo grupal",
                     indexLabel: "{label_percentage}%",
+                    indexLabelFontColor: "white",
                     toolTipContent: "<p style=color:#85DCBC>Porcentaje representativo grupal: {label_percentage}%</p>",
                     markerBorderColor: "white",
                     markerBorderThickness: 2,

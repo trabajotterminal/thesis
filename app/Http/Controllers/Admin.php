@@ -92,6 +92,7 @@ class Admin extends Controller{
         $total_topics       = 0;
         $percentages        = [];
         $people             = [];
+        $visualizations     = 0;
         for($i = 0; $i < count($categories); $i++){
             $categories_array[$i] = $categories[$i] -> name;
             $topics = $categories[$i] -> topics() -> get();
@@ -103,13 +104,14 @@ class Admin extends Controller{
                 $seen = DB::select('SELECT COUNT(*) as many FROM glance_user as GU, glances as G where GU.group_id = ? and G.type = ?  and G.topic_id = ? and G.id = Gu.glance_id', [$group -> id, 'T', $topics[$j] -> id]);
                 $seen = $seen[0] -> many;
                 $people[$i][$j] = $seen;
+                $visualizations += $seen;
                 $percentages[$i][$j] = $users_in_group_count > 0 ? $seen * 100 / $users_in_group_count : 0;
                 $percentages[$i][$j] = number_format((float)$percentages[$i][$j], 2, '.', '');
                 $topics_array[$i][$j] = $topics[$j] -> name;
                 $total_topics++;
             }
         }
-        return view('group_statistics_theory_table', compact(['categories_array', 'topics_array', 'percentages', 'people', 'users_in_group_count']));
+        return view('group_statistics_theory_table', compact(['categories_array', 'topics_array', 'percentages', 'people', 'visualizations']));
     }
 
     public function getGroupQuestionnaireStatistics($name){
@@ -121,6 +123,7 @@ class Admin extends Controller{
         $total_topics       = 0;
         $percentages        = [];
         $people             = [];
+        $visualizations     = 0;
         for($i = 0; $i < count($categories); $i++){
             $categories_array[$i] = $categories[$i] -> name;
             $topics = $categories[$i] -> topics() -> get();
@@ -132,13 +135,14 @@ class Admin extends Controller{
                 $seen = DB::select('SELECT COUNT(*) as many FROM glance_user as GU, glances as G where GU.group_id = ? and G.type = ?  and G.topic_id = ? and G.id = Gu.glance_id', [$group -> id, 'C', $topics[$j] -> id]);
                 $seen = $seen[0] -> many;
                 $people[$i][$j] = $seen;
+                $visualizations += $seen;
                 $percentages[$i][$j] = $users_in_group_count > 0 ? $seen * 100 / $users_in_group_count : 0;
                 $percentages[$i][$j] = number_format((float)$percentages[$i][$j], 2, '.', '');
                 $topics_array[$i][$j] = $topics[$j] -> name;
                 $total_topics++;
             }
         }
-        return view('group_statistics_questionnaire_table', compact(['categories_array', 'topics_array', 'percentages', 'people', 'users_in_group_count']));
+        return view('group_statistics_questionnaire_table', compact(['categories_array', 'topics_array', 'percentages', 'people', 'users_in_group_count', 'visualizations']));
     }
 
     public function getGroupSimulationStatistics($name){
@@ -150,6 +154,7 @@ class Admin extends Controller{
         $total_topics       = 0;
         $percentages        = [];
         $people             = [];
+        $visualizations     = 0;
         for($i = 0; $i < count($categories); $i++){
             $categories_array[$i] = $categories[$i] -> name;
             $topics = $categories[$i] -> topics() -> get();
@@ -161,13 +166,14 @@ class Admin extends Controller{
                 $seen = DB::select('SELECT COUNT(*) as many FROM glance_user as GU, glances as G where GU.group_id = ? and G.type = ?  and G.topic_id = ? and G.id = Gu.glance_id', [$group -> id, 'S', $topics[$j] -> id]);
                 $seen = $seen[0] -> many;
                 $people[$i][$j] = $seen;
+                $visualizations += $seen;
                 $percentages[$i][$j] = $users_in_group_count > 0 ? $seen * 100 / $users_in_group_count : 0;
                 $percentages[$i][$j] = number_format((float)$percentages[$i][$j], 2, '.', '');
                 $topics_array[$i][$j] = $topics[$j] -> name;
                 $total_topics++;
             }
         }
-        return view('group_statistics_simulation_table', compact(['categories_array', 'topics_array', 'percentages', 'people', 'users_in_group_count']));
+        return view('group_statistics_simulation_table', compact(['categories_array', 'topics_array', 'percentages', 'people', 'users_in_group_count', 'visualizations']));
     }
 
     public function getUserQuestionnaireStatistics($user){
