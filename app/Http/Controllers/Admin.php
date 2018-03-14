@@ -36,18 +36,21 @@ class Admin extends Controller{
     }
 
     public function usersRanking(){
-        $users = DB::select('SELECT U.name AS Usuario, U.lastname AS Apellidos, AVG(P.points) AS PuntajeFinal FROM schools E JOIN groups G ON E.id=G.school_id JOIN users U ON G.id=U.group_id JOIN marks P ON U.id=P.user_id GROUP BY P.user_id ORDER BY AVG(points) DESC ');
-        return view('users_ranking', compact('users'));
+        $ranked_users = DB::select('SELECT U.username AS username, AVG(P.points) AS points FROM schools E JOIN groups G ON E.id=G.school_id JOIN users U ON G.id=U.group_id JOIN marks P ON U.id=P.user_id GROUP BY P.user_id ORDER BY AVG(points) DESC ');
+        $non_ranked_users = DB::select('SELECT U.username FROM users U WHERE NOT EXISTS ( SELECT user_id FROM marks where user_id = U.id )');
+        return view('users_ranking', compact(['ranked_users', 'non_ranked_users']));
     }
 
     public function groupsRanking(){
-        $groups = DB::select('SELECT G.name AS Grupo, AVG(P.points) AS PuntajeFinal FROM groups G JOIN users U ON G.id=U.group_id JOIN marks P ON U.id=P.user_id GROUP BY P.group_id ORDER BY AVG(points) DESC ');
-        return view('groups_ranking', compact('groups'));
+        $ranked_groups = DB::select('SELECT G.name AS name, AVG(P.points) AS points FROM groups G JOIN users U ON G.id=U.group_id JOIN marks P ON U.id=P.user_id GROUP BY P.group_id ORDER BY AVG(points) DESC ');
+        $non_ranked_groups = DB::select('SELECT G.name FROM groups G WHERE NOT EXISTS ( SELECT group_id FROM marks where group_id = G.id) and G.name != \'Sin Asignar\'');
+        return view('groups_ranking', compact(['ranked_groups', 'non_ranked_groups']));
     }
 
     public function schoolsRanking(){
-        $schools = DB::select('SELECT E.name AS Escuela, AVG(P.points) AS PuntajeFinal FROM schools E JOIN groups G ON E.id=G.school_id JOIN users U ON G.id=U.group_id JOIN marks P ON U.id=P.user_id GROUP BY P.school_id ORDER BY AVG(points) DESC;');
-        return view('schools_ranking', compact('schools'));
+        $ranked_schools = DB::select('SELECT E.name AS name, AVG(P.points) AS points FROM schools E JOIN groups G ON E.id=G.school_id JOIN users U ON G.id=U.group_id JOIN marks P ON U.id=P.user_id GROUP BY P.school_id ORDER BY AVG(points) DESC;');
+        $non_ranked_schools = DB::select('SELECT S.name FROM schools S WHERE NOT EXISTS ( SELECT school_id FROM marks where school_id = S.id) and S.name != \'Sin Asignar\'');
+        return view('schools_ranking', compact(['ranked_schools', 'non_ranked_schools']));
     }
 
     public function userStatistics($id){
@@ -229,7 +232,7 @@ class Admin extends Controller{
             $topics = $categories[$i] -> topics() -> get();
             $topics_array[$i]   = [];
             $percentages[$i]    = [];
-            $users_in_school  = User::where('school_id', '=', $school -> id) -> get();
+            $users_in_school  = User::where('group_id', '=', $school -> id) -> get();
             $users_in_school_count  = count($users_in_school);
             for($j = 0; $j < count($topics); $j++){
                 $seen = DB::select('SELECT COUNT(*) as many FROM glance_user as GU, glances as G where GU.school_id = ? and G.type = ?  and G.topic_id = ? and G.id = Gu.glance_id', [$school -> id, 'C', $topics[$j] -> id]);
@@ -246,8 +249,8 @@ class Admin extends Controller{
     }
 
     public function getSchoolSimulationStatistics($name){
-        $school_name        = $name;
-        $school             = School::where('name', '=', $school_name) -> first();
+        $schoo         = $name;
+        $group              = Group::where('name', '=', $group_name) -> first();
         $categories         = Category::all();
         $categories_array   = [];
         $topics_array       = [];
@@ -260,20 +263,20 @@ class Admin extends Controller{
             $topics = $categories[$i] -> topics() -> get();
             $topics_array[$i]   = [];
             $percentages[$i]    = [];
-            $users_in_school  = User::where('school_id', '=', $school -> id) -> get();
-            $users_in_school_count  = count($users_in_school);
+            $users_in_group  = User::where('group_id', '=', $group -> id) -> get();
+            $users_in_group_count  = count($users_in_group);
             for($j = 0; $j < count($topics); $j++){
-                $seen = DB::select('SELECT COUNT(*) as many FROM glance_user as GU, glances as G where GU.school_id = ? and G.type = ?  and G.topic_id = ? and G.id = Gu.glance_id', [$school -> id, 'S', $topics[$j] -> id]);
+                $seen = DB::select('SELECT COUNT(*) as many FROM glance_user as GU, glances as G where GU.group_id = ? and G.type = ?  and G.topic_id = ? and G.id = Gu.glance_id', [$group -> id, 'S', $topics[$j] -> id]);
                 $seen = $seen[0] -> many;
                 $people[$i][$j] = $seen;
                 $visualizations += $seen;
-                $percentages[$i][$j] = $users_in_school_count > 0 ? $seen * 100 / $users_in_school_count : 0;
+                $percentages[$i][$j] = $users_in_group_count > 0 ? $seen * 100 / $users_in_group_count : 0;
                 $percentages[$i][$j] = number_format((float)$percentages[$i][$j], 2, '.', '');
                 $topics_array[$i][$j] = $topics[$j] -> name;
                 $total_topics++;
             }
         }
-        return view('school_statistics_simulation_table', compact(['categories_array', 'topics_array', 'percentages', 'people', 'users_in_group_count', 'visualizations']));
+        return view('group_statistics_simulation_table', compact(['categories_array', 'topics_array', 'percentages', 'people', 'users_in_group_count', 'visualizations']));
     }
 
     public function getUserQuestionnaireStatistics($user){

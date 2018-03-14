@@ -1,7 +1,15 @@
 @php
-    /*for($i = 0; $i < count($users); $i++){
-        echo $users[$i] -> PuntajeFinal.'<br>';
-    }*/
+    $users_table    = [];
+    $ranking_table  = [];
+    $index          = 0;
+    for($i = 0; $i < count($ranked_users); $i++){
+        $users_table[$index] = $ranked_users[$i] -> username;
+        $ranking_table[$index++] = $ranked_users[$i] -> points;
+    }
+    for($i = 0; $i < count($non_ranked_users); $i++){
+        $users_table[$index] = $non_ranked_users[$i] -> username;
+        $ranking_table[$index++] = 'Sin registros';
+    }
 @endphp
 <table id="table_users" class="table table-striped" cellspacing="0" width="100%">
     <thead>
@@ -9,14 +17,18 @@
         <th>Posición</th>
         <th>Usuario</th>
         <th>Puntuación</th>
+        <th></th>
     </tr>
     </thead>
-    <tbody>
-    <tr>
-        <td>1</td>
-        <td>bolitas</td>
-        <td>10</td>
-    </tr>
+    <tbody height="300px">
+    @foreach($users_table as $key => $user)
+        <tr>
+            <td>{{$key + 1}}</td>
+            <td>{{$users_table[$key]}}</td>
+            <td>{{$ranking_table[$key]}}</td>
+            <td><a href="{{ url('admin/statistics/user/'. $users_table[$key]) }}"><button type="button" class="btn btn-default btn-xs">Perfil</button></a></td>
+        </tr>
+    @endforeach
     </tbody>
 </table>
 <script>

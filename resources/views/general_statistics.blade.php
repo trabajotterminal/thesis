@@ -16,13 +16,13 @@
 @section('content')
     <div class="row" style="min-height:550px;">
         <div class="col-md-4">
-            <div id="users_ranking" class="margin-top3 margin-left-2" style="overflow: hidden;width:90%;"></div>
+            <div id="users_ranking" class="margin-top3 margin-left-2" style="overflow: hidden;width:95%;"></div>
         </div>
         <div class="col-md-4">
-            <div id="groups_ranking" class="margin-top3 margin-left-2" style="overflow: hidden;width:90%;"></div>
+            <div id="groups_ranking" class="margin-top3 margin-left-2" style="overflow: hidden;width:95%;"></div>
         </div>
         <div class="col-md-4">
-            <div id="schools_ranking" class="margin-top3" style="overflow: hidden;width:90%;"></div>
+            <div id="schools_ranking" class="margin-top3" style="overflow: hidden;width:95%;"></div>
         </div>
     </div>
 
