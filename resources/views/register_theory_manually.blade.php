@@ -4,6 +4,16 @@
 
 @section('statics-css')
     @include('layouts/statics-css-1')
+    <link rel="stylesheet" href="{{ URL::asset('/css/codemirror.css')}}"  type="text/css" />
+    <link rel="stylesheet" href="{{ URL::asset('/css/monokai.css')}}"  type="text/css" />
+    <script src="{{ URL::asset('/js/codemirror.js')}}"></script>
+    <script src="{{ URL::asset('/js/matchbrackets.js')}}"></script>
+    <script src="{{ URL::asset('/js/closebrackets.js')}}"></script>
+    <script src="{{ URL::asset('/js/javascript.js')}}"></script>
+    <script src="{{ URL::asset('/js/sublime.js')}}"></script>
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
+
 @endsection
 
 @section('menu')
@@ -27,11 +37,9 @@
                         <input class="email_input" style="color:black;border-color:black;" type="search" name="subtitle_1">
                     </div>
                 </div>
-                <div class="col-md-12 margin-top3">
+                <div class="col-md-12 margin-top3" style="width:87%;">
                     <h3>Parrafo</h3>
-                    <div class="input_holder">
-                        <input class="email_input" style="color:black;border-color:black;height:200px;" type="search" name="paragraph_1">
-                    </div>
+                    <div id="paragraph_1"></div>
                 </div>
             </div>
             <button class="btn btn-light" style="margin-top:30px;margin-left:50px;" id="addSubtitle">Agregar nuevo subtitulo</button>
@@ -51,12 +59,39 @@
 
 @section('statics-js')
     @include('layouts/statics-js-1')
+    <script src="/ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
+    <script src="{{ URL::asset('/js/summernote-es-ES.js')}}"></script>
+    <script>
+        $(document).ready(function() {
+            $('#paragraph_1').summernote({
+                lang: "es-ES",
+                toolbar: [
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    ['font', ['strikethrough', 'superscript', 'subscript']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['picture',['picture']],
+                    ['link',['link']],
+                    ['video',['video']]
+                ],
+                placeholder: 'Introduce tu párrafo',
+                tabsize: 2,
+                height: 200,
+            });
+        });
+    </script>
     <script>
         var elements = ['title', 'subtitle', 'paragraph'];
         var title       = 1;
         var subtitle    = 1;
         var paragraph   = 1;
         var code        = 0;
+        var editors     = [];
         $("#addSubtitle").click(function() {
             var elm = '<div class="col-md-12 margin-top3">\n' +
                 '                    <h3>Subtitulo</h3>\n' +
@@ -67,26 +102,49 @@
             $(elm).hide().appendTo('#questionnaire').fadeIn();
             elements.push('subtitle');
         });
-
         $("#addParagraph").click(function() {
-            var elm = '<div class="col-md-12 margin-top3">\n' +
+            var elm = '<div class="col-md-12 margin-top3" style="width:87%;">\n' +
                 '                    <h3>Parrafo</h3>\n' +
-                '                    <div class="input_holder">\n' +
-                '                        <input class="email_input" style="color:black;border-color:black;height:200px;" type="search" name="paragraph_'+(++paragraph)+'">\n' +
-                '                    </div>\n' +
-                '                </div>';
+                '                    <div id="paragraph_'+(paragraph + 1)+'"></div>' +
+                '      </div>';
+
             $(elm).hide().appendTo('#questionnaire').fadeIn();
+            $('#paragraph_'+(++paragraph)).summernote({
+                lang: "es-ES",
+                toolbar: [
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    ['font', ['strikethrough', 'superscript', 'subscript']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['picture',['picture']],
+                    ['link',['link']],
+                    ['video',['video']]
+                ],
+                placeholder: 'Introduce tu párrafo',
+                tabsize: 2,
+                height: 200,
+            });
             elements.push('paragraph');
         });
 
         $("#addCode").click(function() {
-            var elm = '<div class="col-md-12 margin-top3">\n' +
-                '                    <h3>Codigo</h3>\n' +
-                '                    <div class="input_holder">\n' +
-                '                        <input class="email_input" style="color:black;border-color:black;height:350px;" type="search" name="code_'+(++code)+'">\n' +
-                '                    </div>\n' +
-                '                </div>';
+            var elm =   '<div class="col-md-12 margin-top3">\n'   +
+                            '<h3> Código</h3>' +
+                            '<div id="code_'+(code + 1)+'" style="width:87%;height:auto; line-height:1px;">' +
+                        '</div>';
             $(elm).hide().appendTo('#questionnaire').fadeIn();
+            editors[++code] = CodeMirror(document.getElementById("code_"+(code)), {
+                lineNumbers: true,
+                mode: "javascript",
+                keyMap: "sublime",
+                autoCloseBrackets: true,
+                matchBrackets: true,
+                showCursorWhenSelecting: true,
+                theme: "monokai",
+                tabSize: 2
+            });
             elements.push('code');
         });
 
@@ -111,12 +169,12 @@
                 }
                 if (elements[i] == 'paragraph') {
                     xmlContent += '<parrafo>\n';
-                    xmlContent += $('input[name=paragraph_' + (++p) + ']').val() + '\n';
+                    xmlContent += $('#paragraph_'+(++p)).summernote('code') + '\n';
                     xmlContent += '</parrafo>\n'
                 }
                 if (elements[i] == 'code') {
                     xmlContent += '<codigo>\n';
-                    xmlContent += $('input[name=code_' + (++c) + ']').val() + '\n';
+                    xmlContent += editors[++c].getValue();
                     xmlContent += '</codigo>\n'
                 }
             }
