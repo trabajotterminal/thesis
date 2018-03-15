@@ -10,7 +10,10 @@
     @include('layouts/menu', ['page' => 'login'])
 @endsection
 @section('content')
-
+    <section>
+        <div class="container" style="min-height:550px;">
+        </div>
+    </section>
 @endsection
 @section('footer')
     @include('layouts/footer')
