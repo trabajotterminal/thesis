@@ -11,22 +11,27 @@
         $ranking_table[$index++] = 'Sin registros';
     }
 @endphp
+<style>
+    .green-color{
+        background:   #2ecc71   !important;
+    }
+</style>
 <table id="table_groups" class="table table-striped" cellspacing="0" width="100%">
     <thead>
     <tr>
-        <th>Posición</th>
-        <th>Grupo</th>
-        <th>Puntuación</th>
-        <th></th>
+        <th class="green-color">Posición</th>
+        <th class="green-color">Grupo</th>
+        <th class="green-color">Puntuación</th>
+        <th class="green-color"></th>
     </tr>
     </thead>
     <tbody height="300px">
     @foreach($groups_table as $key => $user)
         <tr>
-            <td>{{$key + 1}}</td>
+            <td><h4>{{$key + 1}}</h4></td>
             <td>{{$groups_table[$key]}}</td>
             <td>{{$ranking_table[$key]}}</td>
-            <td><a href="{{ url('admin/statistics/group/'. $groups_table[$key]) }}"><button type="button" class="btn btn-default btn-xs">Perfil</button></a></td>
+            <td><a href="{{ url('admin/statistics/group/'. $groups_table[$key]) }}"><button type="button" class="btn btn-default btn-xs">Ver perfil</button></a></td>
         </tr>
     @endforeach
     </tbody>

@@ -15,14 +15,49 @@
 @endsection
 @section('content')
     <div class="row" style="min-height:550px;">
-        <div class="col-md-4">
-            <div id="users_ranking" class="margin-top3 margin-left-2" style="overflow: hidden;width:95%;"></div>
+        <div class="row">
+            <div class="col-md-11 col-centered">
+                <center>
+                    <h3 class="margin-top3">Mejores usuarios</h3>
+                    <br>
+                    <img src="{{ URL::asset('/images/cup.png')}}" style="width:100px;height:100px;"/>
+                </center>
+            </div>
         </div>
-        <div class="col-md-4">
-            <div id="groups_ranking" class="margin-top3 margin-left-2" style="overflow: hidden;width:95%;"></div>
+        <div class="row">
+            <div class="col-md-11 col-centered">
+                <div id="users_ranking"></div>
+            </div>
         </div>
-        <div class="col-md-4">
-            <div id="schools_ranking" class="margin-top3" style="overflow: hidden;width:95%;"></div>
+    </div>
+    <div class="row">
+        <div class="row">
+            <div class="col-md-11 col-centered">
+                <center>
+                    <h3 class="margin-top3">Mejores clubes</h3>
+                    <br>
+                    <img src="{{ URL::asset('/images/group.png')}}" style="width:100px;height:100px;"/>
+                </center>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-11 col-centered">
+                <div id="groups_ranking"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-11 col-centered">
+            <center>
+                <h3 class="margin-top3">Mejores escuelas</h3>
+                <br>
+                <img src="{{ URL::asset('/images/school.png')}}" style="width:100px;height:100px;"/>
+            </center>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-11 col-centered">
+            <div id="schools_ranking"></div>
         </div>
     </div>
 
@@ -32,7 +67,6 @@
 @section('footer')
     @include('layouts/footer')
 @endsection
-
 @section('statics-js')
     @include('layouts/statics-js-1')
     <script src="{{ asset('/js/dinatable.js')}}"></script>
