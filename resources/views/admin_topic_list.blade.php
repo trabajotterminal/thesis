@@ -18,7 +18,10 @@
                             {{(csrf_field())}}
                             <div class="col-md-4">
                                 <h3 class="editable-text" data-id="{{$topic}}">{{$topic}}</h3>
-                                <a href="{{url('/admin/topic/'.$topic)}}">Administrar contenido</a>
+                                <a href="{{url('/admin/topic/'.$topic)}}">
+                                    <img src="{{ URL::asset('/images/content.png')}}" style="width:35px;height:35px;margin-right: 10px;"/>
+                                    Administrar contenido
+                                </a>
                             </div>
                             <div class="col-md-4" >
                                 <h3 class="editable-select" data-id="{{$topic}}">{{$topics_categories[$key]}}</h3>

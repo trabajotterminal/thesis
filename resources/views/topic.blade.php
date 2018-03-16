@@ -11,13 +11,13 @@
     @include('layouts/menu', ['page' => 'category'])
 @endsection
 @section('content')
-    <h1 style="margin-left:30px;margin-top:30px;">{{$topic_name}}</h1>
     <section class="parallax-section11">
-        <div class="container sec-tpadding-3 sec-bpadding-2">
+        <h1 style="margin-left:30px;margin-top:30px;">{{$topic_name}}</h1>
+        <div class="container sec-tpadding-2">
             <div class="row">
                 <div class="col-md-4">
                     <div class="feature-box12">
-                        <div class="iconbox-small round gray center"><span class="icon-paperclip"></span></div>
+                        <center><img src="{{ URL::asset('/images/book_hand.png')}}" style="width:100px;height:100px;"/></center>
                         <h3 class="margin-top3">Teoria</h3>
                         <br/>
                         @if($references['T'])
@@ -31,7 +31,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="feature-box12">
-                        <div class="iconbox-small round gray center"><span class="icon-beaker"></span></div>
+                        <center><img src="{{ URL::asset('/images/chemistry.png')}}" style="width:100px;height:100px;"/></center>
                         <h3 class="margin-top3">Simulación</h3>
                         <br/>
                         @if($references['S'])
@@ -45,7 +45,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="feature-box12">
-                        <div class="iconbox-small round gray center"><span class=" icon-edit"></span></div>
+                        <center><img src="{{ URL::asset('/images/test.png')}}" style="width:100px;height:100px;"/></center>
                         <h3 class="margin-top3">Cuestionarios</h3>
                         <br/>
                         @if($references['C'])

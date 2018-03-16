@@ -10,26 +10,25 @@
     @include('layouts/menu', ['page' => 'category'])
 @endsection
 @section('content')
-    <section class="sec-padding">
+    <section class="section-less-padding">
         <div class="container">
             <div class="row">
                 <div class="col-xs-12 text-center">
-                    <h2 class="section-title-2 uppercase">{{$name}}</h2>
-                    <div class="title-line-8"></div>
+                    <h2 class="section-title-2">{{$name}}</h2>
                     <p class="sub-title">Sube los archivos de tu simulación.</p>
                 </div>
                 <div class="clearfix"></div>
                 <div class="col-md-6 col-centered">
-                    <div class="feature-box12 text-center bmargin" style="height:250px;">
+                    <div class="feature-box12 text-center bmargin" style="height:350px;margin-top:-40px;">
                         <h3 >Subir un archivo</h3>
-                        <i class="fa fa-file" style="font-size:30px;margin-bottom:20px;"></i>
+                        <center><img src="{{ URL::asset('/images/folder-circle.png')}}" style="width:100px;height:100px;margin-bottom:30px;"/></center>
                         <form enctype="multipart/form-data" method="post" action="{{ url('admin/topic/simulation/register/file') }}">
                             {{ csrf_field() }}
                             <center><input name="input_file" type="file" id="input_file"></center>
                             <input type="hidden" name="topic_name" value="{{$name}}">
                             <br>
                             <div class="form-group">
-                                <input class="form-control" type="submit" value="Subir archivo">
+                                <input class="form-control btn-danger" type="submit" value="Subir archivo">
                             </div>
                         </form>
                         <p></p>

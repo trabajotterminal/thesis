@@ -10,7 +10,7 @@
     @include('layouts/menu', ['page' => 'category'])
 @endsection
 @section('content')
-    <h1 style="margin-left:20px;margin-top:20px;">Categorias.</h1>
+    <h1 style="margin-left:20px;margin-top:20px;">Categorias</h1>
     <section>
         <div class="container" id="category_list" style="min-width: 600px;min-height:470px;"></div>
     </section>

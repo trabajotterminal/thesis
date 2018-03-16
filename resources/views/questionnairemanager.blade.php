@@ -10,40 +10,40 @@
     @include('layouts/menu', ['page' => 'category'])
 @endsection
 @section('content')
-    <section class="sec-padding">
+    <section class="section-less-padding">
         <div class="container">
             <div class="row">
                 <div class="col-xs-12 text-center">
-                    <h2 class="section-title-2 uppercase">{{$name}}</h2>
-                    <div class="title-line-8"></div>
+                    <h2 class="section-title-2">{{$name}}</h2>
                     <p class="sub-title">Elige la forma de subir un cuestionario para el tema.</p>
                 </div>
                 <div class="clearfix"></div>
                 <div class="col-md-6">
-                    <div class="feature-box12 text-center bmargin" style="height:250px;">
+                    <div class="feature-box12 text-center bmargin" style="height:350px;">
                         <h3 >Subir un archivo</h3>
-                        <i class="fa fa-file" style="font-size:30px;margin-bottom:20px;"></i>
+                        <center><img src="{{ URL::asset('/images/folder-circle.png')}}" style="width:100px;height:100px;margin-bottom:30px;margin-top:30px;"/></center>
                         <form enctype="multipart/form-data" method="post" action="{{ url('admin/topic/questionnaire/register/file') }}">
                             {{ csrf_field() }}
                             <center><input name="input_file" type="file" id="input_file"></center>
                             <input type="hidden" name="topic_name" value="{{$name}}">
-                            <br>
                             <div class="form-group">
-                                <input class="form-control" type="submit" value="Subir archivo">
+                                <input class="form-control btn-success" type="submit" style="margin-top:25px;" value="Subir archivo">
                             </div>
                         </form>
                         <p></p>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="feature-box12 text-center bmargin" style="height:250px;">
+                    <div class="feature-box12 text-center bmargin" style="height:350px;">
                         <h3>Ingresar datos manualmente</h3>
-                        <i class="fa fa-keyboard-o" style="font-size:50px;"></i>
+                        <center><img src="{{ URL::asset('/images/keyboard.png')}}" style="width:150px;height:150px;margin-bottom:35px;"/></center>
                         <br>
                         <form method="post" action="{{ url('admin/topic/questionnaire/register/manually') }}">
                             {{ csrf_field() }}
                             <input type="hidden" name="topic_name" value="{{$name}}">
-                            <input class="btn btn-primary" style="margin-top:45px;" type="submit" value="Comenzar"></a>
+                            <div class="form-group">
+                                <input class="form-control btn-success" type="submit" value="Comenzar">
+                            </div>
                         </form>
                         <br/>
                     </div>
