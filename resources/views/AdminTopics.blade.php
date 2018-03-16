@@ -1,9 +1,38 @@
+@php
+    $tags_array = [];
+    for($i = 0; $i < count($tags); $i++){
+        $tags_array[$i] = $tags[$i] -> name;
+    }
+@endphp
 @extends('layouts.app')
-
 @section('title', 'Temas')
-
 @section('statics-css')
-    @include('layouts/statics-css-1')
+   @include('layouts/statics-css-1')
+    <link rel="stylesheet" href="{{ URL::asset('/css/jquery.tagit.css')}}"  type="text/css" />
+    <link rel="stylesheet" href="{{ URL::asset('/css/tagit.ui-zendesk.css')}}"  type="text/css" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ URL::asset('/js/tag-it.js')}}"></script>
+    <style>
+        ::placeholder {
+            color: white;
+            opacity: 1;
+        }
+    </style>
+    <script>
+        $(function(){
+            var sampleTags = <?php echo json_encode($tags_array); ?>;
+            console.warn(sampleTags);
+            $('#methodTags').tagit({
+                availableTags: sampleTags
+            });
+            $('#allowSpacesTags').tagit({
+                availableTags: sampleTags,
+                allowSpaces: true,
+                removeConfirmation: true,
+            });
+        });
+    </script>
 @endsection
 
 @section('menu')
@@ -34,6 +63,12 @@
                             </select>
                             <input style="width:15%;" value="Agregar" class="email_submit" type="submit">
                         </form>
+                        <br><br><br><br>
+                        <form>
+                            <p style="color:white;">Tags:</p>
+                            <ul id="allowSpacesTags">
+                            </ul>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -48,14 +83,13 @@
 @endsection
 
 @section('statics-js')
-    @include('layouts/statics-js-1')
     <script>
         $(document).ready(function(){
             $('#topic_list').load('/admin/topics/list',function(){}).hide().fadeIn();
         });
-
         $("#addTopic").submit(function(e){
             e.preventDefault();
+            var tags = $('#allowSpacesTags').tagit('assignedTags');
             var category_name = $('#topicList').find(":selected").text();
             var topic_name = $("input[name='topic_name']").val();
             var url = $('#addTopic').attr('action');
@@ -64,7 +98,7 @@
                 beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
                 url: url,
                 type: 'POST',
-                data: {"category_name" : category_name, "topic_name": topic_name},
+                data: {"category_name" : category_name, "topic_name": topic_name, "tags": tags},
                 dataType: 'json',
                 success: function(data) {
                     if($.isEmptyObject(data.error)){

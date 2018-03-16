@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Group;
 use App\School;
+use App\Tag;
 use Illuminate\Http\Request;
 use \App\Category;
 use \App\Topic;
@@ -24,11 +25,12 @@ class Admin extends Controller{
 
     public function topics(){
         $C = Category::all();
+        $tags = Tag::all();
         $categories = [];
         for($i = 0; $i < count($C); $i++){
             $categories[$i] = $C[$i] -> name;
         }
-        return view('AdminTopics', compact('categories'));
+        return view('AdminTopics', compact(['categories', 'tags']));
     }
 
     public function statistics(){
@@ -415,17 +417,27 @@ class Admin extends Controller{
             'topic_name'    => 'required|new_topic|alpha_spaces',
             'category_name' => 'not_default',
         ], $messages);
-
         if ($validator->passes()) {
             $category = Category::where('name', '=', $request->category_name)->first();
             $topic = new Topic(['name' => $request->topic_name, 'category_id' => $category->id]);
             $topic->save();
+            if($request -> tags != null){
+                for($i = 0; $i < count($request -> tags); $i++){
+                    $tag = Tag::firstOrNew(array(
+                        'name'          => $request -> tags[$i],
+                    ));
+                    $tag -> save();
+                    $topic -> tags() -> attach($tag -> id, [
+                        'topic_id' => $topic -> id,
+                        'category_id' => $topic -> category_id
+                    ]);
+                }
+            }
             Storage::disk('local')->makeDirectory('public/' . $category->name . '/' . $topic->name);
             Storage::disk('local')->makeDirectory('public/' . $category->name . '/' . $topic->name . '/Simulacion');
             Storage::disk('local')->makeDirectory('public/' . $category->name . '/' . $topic->name . '/Teoria');
             Storage::disk('local')->makeDirectory('public/' . $category->name . '/' . $topic->name . '/Cuestionario');
             return response()->json(['success'=>'OK.']);
-
         }
         return response()->json(['error'=>$validator->errors()->all()]);
     }
