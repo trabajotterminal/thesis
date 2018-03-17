@@ -16,7 +16,12 @@ class CreateCategoriesTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned()->unique();
+            $table->integer('user_id') -> unsigned();
+            $table->integer('creator_id') -> unsigned();
             $table->string('name');
+            $table->foreign('creator_id')->references('id')->on('creators')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('user_id')->references('user_id')->on('creators')->onDelete('cascade')->onUpdate('cascade');
+
             $table->timestamps();
         });
     }

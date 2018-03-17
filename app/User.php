@@ -6,18 +6,18 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable{
-    protected $fillable = ['name', 'username', 'lastname', 'password', 'email', 'type', 'group_id', 'school_id'];
+    protected $fillable = ['username', 'password', 'email'];
 
-    public function links(){
-        return $this -> hasMany('\App\Link');
+    public function student(){
+            return $this -> hasOne('\App\Student');
     }
 
-    public function glances(){
-        return $this -> belongsToMany('\App\Glance');
+    public function admin(){
+        return $this -> hasOne('\App\Admin');
     }
 
-    public function marks(){
-        return $this -> hasMany('\App\Mark');
+    public function creator(){
+        return $this -> hasOne('\App\Creator');
     }
 
     protected $hidden = [

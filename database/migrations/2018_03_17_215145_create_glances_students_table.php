@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGlancesUsersTable extends Migration
+class CreateGlancesStudentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,19 @@ class CreateGlancesUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('glance_user', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
+        Schema::create('glance_student', function (Blueprint $table) {
             $table->increments('id')->unsigned()->unique();
             $table->integer('user_id') -> unsigned();
+            $table->integer('student_id') -> unsigned();
             $table->integer('group_id') -> unsigned();
             $table->integer('school_id') -> unsigned();
             $table->integer('glance_id') -> unsigned();
             $table->integer('topic_id') -> unsigned();
             $table->integer('category_id') -> unsigned();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('group_id')->references('group_id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('school_id')->references('school_id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('user_id')->references('user_id')->on('students')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('group_id')->references('group_id')->on('students')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('school_id')->references('school_id')->on('students')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('glance_id')->references('id')->on('glances')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('topic_id')->references('topic_id')->on('glances')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('category_id')->references('category_id')->on('glances')->onDelete('cascade')->onUpdate('cascade');
@@ -39,6 +40,6 @@ class CreateGlancesUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('glance_user');
+        Schema::dropIfExists('glance_student');
     }
 }

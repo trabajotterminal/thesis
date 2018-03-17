@@ -19,13 +19,15 @@ class CreateMarksTable extends Migration
             $table -> double('points');
             $table -> integer('try_number');
             $table -> integer('user_id') -> unsigned();
+            $table -> integer('student_id') -> unsigned();
             $table -> integer('group_id') -> unsigned();
             $table -> integer('school_id') -> unsigned();
             $table -> integer('topic_id') -> unsigned();
             $table -> integer('category_id') -> unsigned();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('group_id')->references('group_id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('school_id')->references('school_id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('user_id')->references('user_id')->on('students')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('group_id')->references('group_id')->on('students')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('school_id')->references('school_id')->on('students')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('topic_id')->references('id')->on('topics')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('category_id')->references('category_id')->on('topics')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
