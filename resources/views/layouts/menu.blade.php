@@ -34,11 +34,11 @@
                             @if($user_type == 'creator')
                                 <li class="dropdown"> <a href="#" class="dropdown-toggle  {{$menu_classes[1]}}">Administrar</a>
                                     <ul class="dropdown-menu" role="menu">
-                                        <li> <a href="/admin/categories">Categorias</a> </li>
-                                        <li> <a href="/admin/topics">Temas</a> </li>
+                                        <li> <a href="/creator/categories">Categorias</a> </li>
+                                        <li> <a href="/creator/topics">Temas</a> </li>
                                     </ul>
                                 </li>
-                                <li><a href="/admin/statistics" class="dropdown-toggle  {{$menu_classes[2]}}">Ver estadisticas</a></li>
+                                <li><a href="/creator/statistics" class="dropdown-toggle  {{$menu_classes[2]}}">Ver estadisticas</a></li>
                                 <li><a href="/logout" class="dropdown-toggle"  {{$menu_classes[3]}}">Cerrar Sesión</a></li>
                             @endif
                         @else

@@ -81,7 +81,7 @@
                     </div>
                 </div>
             </div>
-            <form action="{{url('admin/topic/questionnaire/register/manually/save')}}" method="POST" id="finish">
+            <form action="{{url('creator/topic/questionnaire/register/manually/save')}}" method="POST" id="finish">
                 <button class="btn btn-light" style="margin-top:30px;margin-left:50px;" id="addQuestion">Agregar otra pregunta</button>
                 {{ csrf_field() }}
                 <input type="submit" class="btn btn-success" style="margin-top:30px;margin-left:50px;" id="saveQuestionnaire" value="Guardar Cuestionario" />
@@ -215,7 +215,7 @@
                 data: {"xmlContent": xmlContent, "topic_name": topic_name},
                 dataType: 'json',
                 success: function( _response ){
-                    window.location.href = "/admin/topics";
+                    window.location.href = "/creator/topics";
                 },
                 error: function(xhr, status, error) {
                     alert(error);

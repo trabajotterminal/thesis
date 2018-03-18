@@ -5,7 +5,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-6">
-                            <form action ="{{url('admin/categories/edit')}}" method="post" class="editText">
+                            <form action ="{{url('creator/categories/edit')}}" method="post" class="editText">
                                 <h3 class="editable-text" data-id="{{$name}}">{{$name}}</h3>
                                 <input type="submit" style="position: absolute; left: -9999px"/>
                             </form>
@@ -15,7 +15,7 @@
                             <div class="input-group" style="float:right;">
                                 <input name="submit" value="Editar" class="btn btn-primary" type="submit" data-id="{{$name}}" data-key="{{($key + 1)}}">
                                 <span class="input-group-btn"></span>
-                                <form action="{{ url('admin/categories/delete') }}" method="POST" class="deleteCategory">
+                                <form action="{{ url('creator/categories/delete') }}" method="POST" class="deleteCategory">
                                     {{(csrf_field())}}
                                     <input type="hidden" name="deletedElementName" value="{{$name}}" >
                                     <input name="submit" value="Eliminar" class="btn btn-danger" type="submit" data-id="{{$name}}">
@@ -31,7 +31,7 @@
     <section>
         <div class="container">
             <div class="row text-center" style="margin-top:150px;">
-                <h1 style="font-size:60px;font-weight: 100">Aún no hay categorias.</h1>
+                <h1 style="font-size:60px;font-weight: 100">No has creado ninguna categoria.</h1>
             </div>
         </div>
     </section>
@@ -56,7 +56,7 @@
             var text = $('#editedText').val();
             $('#editedText').parent().text(text);
             $('#editedText').remove();
-            $("#category_list").fadeOut(300).load("/admin/categories/list", function(response, status, xhr) {
+            $("#category_list").fadeOut(300).load("/creator/categories/list", function(response, status, xhr) {
                 $(this).fadeIn(500);
             });
         });
@@ -75,7 +75,7 @@
             data: {"category_name" : category_name},
             dataType: 'json',
             success: function( _response ){
-                $("#category_list").fadeOut(300).load("/admin/categories/list", function(response, status, xhr) {
+                $("#category_list").fadeOut(300).load("/creator/categories/list", function(response, status, xhr) {
                     $(this).fadeIn(500);
                 });
             },
@@ -99,7 +99,7 @@
             dataType: 'json',
             success: function(data) {
                 if($.isEmptyObject(data.error)){
-                    $("#category_list").fadeOut(300).load("/admin/categories/list", function(response, status, xhr) {
+                    $("#category_list").fadeOut(300).load("/creator/categories/list", function(response, status, xhr) {
                         $(this).fadeIn(500);
                     });
                 }else{

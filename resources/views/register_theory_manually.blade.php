@@ -45,7 +45,7 @@
             <button class="btn btn-light" style="margin-top:30px;margin-left:50px;" id="addSubtitle">Agregar nuevo subtitulo</button>
             <button class="btn btn-light" style="margin-top:30px;margin-left:50px;" id="addParagraph">Agregar nuevo parrafo</button>
             <button class="btn btn-light" style="margin-top:30px;margin-left:50px;" id="addCode">Agregar código</button>
-            <form action="{{url('admin/topic/theory/register/manually/save')}}" method="POST" id="finish">
+            <form action="{{url('creator/topic/theory/register/manually/save')}}" method="POST" id="finish">
                 {{ csrf_field() }}
                 <input type="submit" class="btn btn-success" style="margin-top:30px;margin-left:50px;"  value="Finalizar teoría" />
                 <input type="hidden" value="{{$topic_name}}" id="hiddenTopicName">
@@ -187,7 +187,7 @@
                 data: {"xmlContent": xmlContent, "topic_name": topic_name},
                 dataType: 'json',
                 success: function( _response ){
-                    window.location.href = "/admin/topics";
+                    window.location.href = "/creator/topics";
                 },
                 error: function(xhr, status, error) {
                     alert(error);

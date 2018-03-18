@@ -22,7 +22,7 @@
                     <div class="feature-box12 text-center bmargin" style="height:350px;">
                         <h3 >Subir un archivo</h3>
                         <center><img src="{{ URL::asset('/images/folder-circle.png')}}" style="width:100px;height:100px;margin-bottom:30px;margin-top:30px;"/></center>
-                        <form enctype="multipart/form-data" method="post" action="{{ url('admin/topic/questionnaire/register/file') }}">
+                        <form enctype="multipart/form-data" method="post" action="{{ url('creator/topic/questionnaire/register/file') }}">
                             {{ csrf_field() }}
                             <center><input name="input_file" type="file" id="input_file"></center>
                             <input type="hidden" name="topic_name" value="{{$name}}">
@@ -38,7 +38,7 @@
                         <h3>Ingresar datos manualmente</h3>
                         <center><img src="{{ URL::asset('/images/keyboard.png')}}" style="width:150px;height:150px;margin-bottom:35px;"/></center>
                         <br>
-                        <form method="post" action="{{ url('admin/topic/questionnaire/register/manually') }}">
+                        <form method="post" action="{{ url('creator/topic/questionnaire/register/manually') }}">
                             {{ csrf_field() }}
                             <input type="hidden" name="topic_name" value="{{$name}}">
                             <div class="form-group">

@@ -14,11 +14,11 @@
             <div class="pagenation-holder">
                 <div class="container">
                     <div class="row">
-                        <form action ="{{url('admin/topics/edit')}}" method="post" class="editTopic">
+                        <form action ="{{url('creator/topics/edit')}}" method="post" class="editTopic">
                             {{(csrf_field())}}
                             <div class="col-md-4">
                                 <h3 class="editable-text" data-id="{{$topic}}">{{$topic}}</h3>
-                                <a href="{{url('/admin/topic/'.$topic)}}">
+                                <a href="{{url('/creator/topic/'.$topic)}}">
                                     <img src="{{ URL::asset('/images/content.png')}}" style="width:35px;height:35px;margin-right: 10px;"/>
                                     Administrar contenido
                                 </a>
@@ -32,7 +32,7 @@
                             <div class="input-group" style="float:right;">
                                 <input name="submit" value="Editar" class="btn btn-primary" type="submit" data-id="{{$topic}}"  data-key="{{($key + 1)}}">
                                 <span class="input-group-btn"></span>
-                                <form action="{{ url('admin/topics/delete') }}" method="POST" class="deleteTopic">
+                                <form action="{{ url('creator/topics/delete') }}" method="POST" class="deleteTopic">
                                     {{(csrf_field())}}
                                     <input type="hidden" name="deletedElementName" >
                                     <input name="submit" value="Eliminar" class="btn btn-danger" type="submit" data-id="{{$topic}}">
@@ -51,7 +51,7 @@
     <section>
         <div class="container">
             <div class="row text-center" style="margin-top:150px;">
-                <h1 style="font-size:60px;font-weight: 100">Aún no hay temas.</h1>
+                <h1 style="font-size:60px;font-weight: 100">No has creado ningún tema.</h1>
             </div>
         </div>
     </section>
@@ -76,7 +76,7 @@
             dataType: 'json',
             success: function(data) {
                 if($.isEmptyObject(data.error)){
-                    $("#topic_list").fadeOut(300).load("/admin/topics/list", function(response, status, xhr) {
+                    $("#topic_list").fadeOut(300).load("/creator/topics/list", function(response, status, xhr) {
                         $(this).fadeIn(500);
                     });
                 }else{
@@ -106,7 +106,7 @@
             data: {"topic_name" : topic_name},
             dataType: 'json',
             success: function( _response ){
-                $("#topic_list").fadeOut(300).load("/admin/topics/list", function(response, status, xhr) {
+                $("#topic_list").fadeOut(300).load("/creator/topics/list", function(response, status, xhr) {
                     $(this).fadeIn(500);
                 });
             },
@@ -132,7 +132,7 @@
         var select = $('<select id="editedList">');
         select.append('<option selected> Selecciona la categoria</option>');
         $.ajax ({
-            url: "/admin/categories/list/json",
+            url: "/creator/categories/list/json",
             datatype: "json",
             success: function(data) {
                 $.each(data.categories, function(index, value){

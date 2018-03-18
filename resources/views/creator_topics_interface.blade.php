@@ -53,7 +53,7 @@
                 <div class="clearfix"></div>
                 <div class="col-md-12">
                     <div class="input_holder">
-                        <form id="addTopic" action="{{url('admin/topics/register')}}">
+                        <form id="addTopic" action="{{url('creator/topics/register')}}">
                             <input style="width:50%;" class="email_input" type="search" name="topic_name" placeholder="Ingresa el nombre del tema">
                             <select id="topicList" style="width:30%; margin-right:20px;" class="email_input margin-left-3">
                                 <option selected>Selecciona la categoria</option>
@@ -85,7 +85,7 @@
 @section('statics-js')
     <script>
         $(document).ready(function(){
-            $('#topic_list').load('/admin/topics/list',function(){}).hide().fadeIn();
+            $('#topic_list').load('/creator/topics/list',function(){}).hide().fadeIn();
         });
         $("#addTopic").submit(function(e){
             e.preventDefault();
@@ -102,7 +102,7 @@
                 dataType: 'json',
                 success: function(data) {
                     if($.isEmptyObject(data.error)){
-                        $("#topic_list").fadeOut(300).load("/admin/topics/list", function(response, status, xhr) {
+                        $("#topic_list").fadeOut(300).load("/creator/topics/list", function(response, status, xhr) {
                             $(this).fadeIn(500);
                         });
                         $("input[name='topic_name']").val('');

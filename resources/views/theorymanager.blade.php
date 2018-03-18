@@ -21,7 +21,7 @@
                     <div class="feature-box12 text-center bmargin" style="height:350px;">
                         <h3>Subir un archivo</h3>
                         <center><img src="{{ URL::asset('/images/folder-circle.png')}}" style="width:100px;height:100px;margin-bottom:30px;"/></center>
-                        <form enctype="multipart/form-data" method="post" class="margin-top-1" action="{{ url('admin/topic/theory/register/file') }}">
+                        <form enctype="multipart/form-data" method="post" class="margin-top-1" action="{{ url('creator/topic/theory/register/file') }}">
                             {{ csrf_field() }}
                             <center><input class="btn btn-default" style="margin-bottom:10px;" name="input_file" type="file" id="input_file"></center>
                             <input type="hidden" name="topic_name" value="{{$name}}">
@@ -36,7 +36,7 @@
                     <div class="feature-box12 text-center bmargin" style="height:350px;">
                         <h3>Ingresar datos manualmente</h3>
                         <center><img src="{{ URL::asset('/images/keyboard.png')}}" style="width:150px;height:150px;margin-bottom:55px;"/></center>
-                        <form method="post" action="{{ url('admin/topic/theory/register/manually') }}">
+                        <form method="post" action="{{ url('creator/topic/theory/register/manually') }}">
                             {{ csrf_field() }}
                             <input type="hidden" name="topic_name" value="{{$name}}">
                             <div class="form-group">

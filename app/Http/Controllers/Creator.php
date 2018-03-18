@@ -18,19 +18,20 @@ Use DB;
 use ZipArchive;
 
 
-class Admin extends Controller{
+class Creator extends Controller{
     public function categories(){
-        return view('AdminCategories');
+        return view('creator_categories_interface');
     }
 
     public function topics(){
+        //COMMENT: filter by accepted status.
         $C = Category::all();
         $tags = Tag::all();
         $categories = [];
         for($i = 0; $i < count($C); $i++){
             $categories[$i] = $C[$i] -> name;
         }
-        return view('AdminTopics', compact(['categories', 'tags']));
+        return view('creator_topics_interface', compact(['categories', 'tags']));
     }
 
     public function statistics(){
@@ -330,16 +331,18 @@ class Admin extends Controller{
     }
 
     public function categoryList(){
-        $categories = Category::all();
+        $user_id = session('user_id');
+        $categories = Category::where('user_id', '=', $user_id) -> get();
         $names = [];
         for($i = 0; $i < count($categories); $i++){
             $names[$i] = $categories[$i] -> name;
         }
-        return view('admin_category_list', compact('names'));
+        return view('creator_category_list', compact('names'));
     }
 
     public function topicList(){
-        $T = Topic::all();
+        $user_id = session('user_id');
+        $T = Topic::where('user_id', '=',$user_id) -> get();
         $topics = [];
         $topics_categories = [];
         $categories = [];
@@ -352,7 +355,7 @@ class Admin extends Controller{
         for($i = 0; $i < count($C); $i++){
             $categories[$i] = $C[$i] -> name;
         }
-        return view('admin_topic_list', compact(['topics', 'topics_categories', 'categories']));
+        return view('creator_topic_list', compact(['topics', 'topics_categories', 'categories']));
     }
 
     public function categoryListJSON(){
@@ -381,8 +384,15 @@ class Admin extends Controller{
             'category_name' => 'required|new_category|alpha_spaces',
         ], $messages);
 
+        $user_id = session('user_id');
+        $creator = User::where('id', '=', $user_id) -> get() -> first() -> creator;
         if ($validator->passes()) {
-            $category = new Category(['name' => $request -> category_name]);
+            $category = new Category([
+                'user_id'       => $user_id,
+                'creator_id'    => $creator -> id,
+                'name'          => $request -> category_name,
+                'status'        => 'pending',
+            ]);
             $category -> save();
             Storage::disk('local') -> makeDirectory('public/'.$category -> name);
             return response()->json(['success'=>'OK.']);
@@ -418,8 +428,16 @@ class Admin extends Controller{
             'category_name' => 'not_default',
         ], $messages);
         if ($validator->passes()) {
+            $user_id = session('user_id');
+            $creator = User::where('id', '=', $user_id) -> get() -> first() -> creator;
             $category = Category::where('name', '=', $request->category_name)->first();
-            $topic = new Topic(['name' => $request->topic_name, 'category_id' => $category->id]);
+            $topic = new Topic([
+                'user_id'       => $user_id,
+                'creator_id'    => $creator -> id,
+                'name'          => $request->topic_name,
+                'status'        => 'pending',
+                'category_id'   => $category->id]
+            );
             $topic->save();
             if($request -> tags != null){
                 for($i = 0; $i < count($request -> tags); $i++){
@@ -584,7 +602,7 @@ class Admin extends Controller{
             $route -> category_id = $category -> id;
             $route -> topic_id = $topic -> id;
             $route -> save();
-            return redirect('admin/topic/'.$topic->name);
+            return redirect('creator/topic/'.$topic->name);
         }
     }
 
@@ -608,7 +626,7 @@ class Admin extends Controller{
             $reference -> topic_id = $topic -> id;
             $reference -> save();
         }
-        return redirect('admin/topic/'.$topic->name);
+        return redirect('creator/topic/'.$topic->name);
     }
 
     public function registerQuestionnaireFile(Request $request){
@@ -625,7 +643,7 @@ class Admin extends Controller{
             $route -> category_id = $category -> id;
             $route -> topic_id = $topic -> id;
             $route -> save();
-            return redirect('admin/topic/'.$topic->name);
+            return redirect('creator/topic/'.$topic->name);
         }
     }
 

@@ -51,7 +51,7 @@
     <script src="{{ asset('js/canvas.js')}}"></script>
     <script>
         $(document).ready(function(){
-            var url = "{{ url('/admin/group/statistics/' . $group_name . '/theory') }}";
+            var url = "{{ url('/creator/group/statistics/' . $group_name . '/theory') }}";
             $("#filter").val('0');
             $('#group_statistics_simulation').hide();
             $('#group_statistics_questionnaire').hide();
@@ -60,19 +60,19 @@
         $('#filter').on('change', function() {
             var index = this.value;
             if(index == 0){
-                var url = "{{ url('/admin/group/statistics/' . $group_name . '/theory') }}";
+                var url = "{{ url('/creator/group/statistics/' . $group_name . '/theory') }}";
                 $('#group_statistics_simulation').hide();
                 $('#group_statistics_questionnaire').hide();
                 $('#group_statistics_theory').load(encodeURI(url), function(){}).hide().fadeIn();
             }
             if(index == 1){
-                var url = "{{ url('/admin/group/statistics/' . $group_name . '/questionnaire') }}";
+                var url = "{{ url('/creator/group/statistics/' . $group_name . '/questionnaire') }}";
                 $('#group_statistics_simulation').hide();
                 $('#group_statistics_theory').hide();
                 $('#group_statistics_questionnaire').load(encodeURI(url), function(){}).hide().fadeIn();
             }
             if(index == 2){
-                var url = "{{ url('/admin/group/statistics/' . $group_name . '/simulation') }}";
+                var url = "{{ url('/creator/group/statistics/' . $group_name . '/simulation') }}";
                 $('#group_statistics_theory').hide();
                 $('#group_statistics_questionnaire').hide();
                 $('#group_statistics_simulation').load(encodeURI(url), function(){}).hide().fadeIn();

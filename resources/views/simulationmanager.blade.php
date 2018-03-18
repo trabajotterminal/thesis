@@ -22,7 +22,7 @@
                     <div class="feature-box12 text-center bmargin" style="height:350px;margin-top:-40px;">
                         <h3 >Subir un archivo</h3>
                         <center><img src="{{ URL::asset('/images/folder-circle.png')}}" style="width:100px;height:100px;margin-bottom:30px;"/></center>
-                        <form enctype="multipart/form-data" method="post" action="{{ url('admin/topic/simulation/register/file') }}">
+                        <form enctype="multipart/form-data" method="post" action="{{ url('creator/topic/simulation/register/file') }}">
                             {{ csrf_field() }}
                             <center><input name="input_file" type="file" id="input_file"></center>
                             <input type="hidden" name="topic_name" value="{{$name}}">

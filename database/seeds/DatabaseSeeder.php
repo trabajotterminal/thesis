@@ -43,5 +43,9 @@ class DatabaseSeeder extends Seeder
         $user       -> save();
         $admin      = new Admin(['user_id' => $user -> id]);
         $admin      -> save();
+        $user    = new User(['username' => 'secondcreator', 'password' => '123', 'email' => 'secondcreator@gmail.com']);
+        $user       -> save();
+        $creator    = new Creator(['user_id' => $user -> id]);
+        $creator    -> save();
     }
 }

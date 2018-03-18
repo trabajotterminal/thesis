@@ -31,7 +31,7 @@
             <td><h4>{{$key + 1}}</h4></td>
             <td>{{$users_table[$key]}}</td>
             <td>{{$ranking_table[$key]}}</td>
-            <td><a href="{{ url('admin/statistics/user/'. $users_table[$key]) }}"><button type="button" class="btn btn-default btn-xs">Ver perfil</button></a></td>
+            <td><a href="{{ url('creator/statistics/user/'. $users_table[$key]) }}"><button type="button" class="btn btn-default btn-xs">Ver perfil</button></a></td>
         </tr>
     @endforeach
     </tbody>

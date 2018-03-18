@@ -25,7 +25,7 @@
                             <a class="read-more black" href="#"> Archivo </a>
                         @else
                             <p>Sin archivo de teoria.</p>
-                            <a class="read-more black" href="{{url('admin/topic/'.$topic_name.'/theory')}}">Agregar Teoría</a>
+                            <a class="read-more black" href="{{url('creator/topic/'.$topic_name.'/theory')}}">Agregar Teoría</a>
                         @endif
                     </div>
                 </div>
@@ -39,7 +39,7 @@
                             <a class="read-more black" href="#">  </a>
                         @else
                             <p>Sin archivos de simulación.</p>
-                            <a class="read-more black" href="{{url('admin/topic/'.$topic_name.'/simulation')}}">Agregar Simulación</a>
+                            <a class="read-more black" href="{{url('creator/topic/'.$topic_name.'/simulation')}}">Agregar Simulación</a>
                         @endif
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                             <a class="read-more black" href="#"> Archivo</a>
                         @else
                             <p>Sin archivos de cuestionario.</p>
-                            <a class="read-more black" href="{{url('admin/topic/'.$topic_name.'/questionnaire')}}">Agregar Cuestionarios</a>
+                            <a class="read-more black" href="{{url('creator/topic/'.$topic_name.'/questionnaire')}}">Agregar Cuestionarios</a>
                         @endif
                     </div>
                 </div>
