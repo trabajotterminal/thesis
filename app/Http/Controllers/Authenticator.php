@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\School;
 use Illuminate\Http\Request;
 use App\User;
+use App\Student;
 
 class Authenticator extends Controller
 {
@@ -32,18 +34,14 @@ class Authenticator extends Controller
             return redirect('/login');
         }else{
             $user = new User([
-                'name' => '',
-                'usernam' => $request -> username,
-                'lastname' => '',
-                'password' => $request -> password,
-                'email' => $request -> email,
-                'type' => 'alumno',
-                'school_id' => 1,
-                'group_id'  => 1,
+                'username' => $request -> username,
+                'password' => $request -> register_password,
+                'email' => $request -> register_email,
             ]);
             $user -> save();
-            $result = User::where('email','=', $request -> email)->where('password', '=', $request -> password) -> get() -> first();
-            session(['user' => $result -> id, 'user_type' => $result -> type, 'user_id' => $result -> id]);
+            $student  = new Student(['user_id' => $user -> id,  'group_id' => 1, 'school_id' => 1]);
+            $student -> save();
+            session(['user' => $user -> username, 'user_type' => 'student', 'user_id' => $user-> id]);
             return redirect('/');
         }
     }
@@ -62,7 +60,17 @@ class Authenticator extends Controller
         ], $customMessages);
         $result = User::where('email','=', $request -> email)->where('password', '=', $request -> password) -> get() -> first();
         if($result){
-            session(['user' => $result -> id, 'user_type' => $result -> type, 'user_id' => $result -> id]);
+            $type = "";
+            $isStudent  = User::where('id', '=', $result -> id) -> get() -> first() -> student;
+            $isCreator  = User::where('id', '=', $result -> id) -> get() -> first() -> creator;
+            $isAdmin    = User::where('id', '=', $result -> id) -> get() -> first() -> admin;
+            if($isStudent)
+                $type = 'student';
+            if($isAdmin)
+                $type = 'admin';
+            if($isCreator)
+                $type = 'creator';
+            session(['user' => $result -> username, 'user_type' => $type, 'user_id' => $result -> id]);
             return redirect('/');
         }else{
             $request -> session() -> flash('wrong_credentials', 'Usuario y/o contraseña invalidos.');

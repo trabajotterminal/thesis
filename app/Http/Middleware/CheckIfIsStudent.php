@@ -16,7 +16,7 @@ class CheckIfIsStudent
     public function handle($request, Closure $next)
     {
         $user_type = session('user_type');
-        if($user_type == 'alumno')
+        if($user_type == 'student')
             return $next($request);
         else
             return redirect('/');

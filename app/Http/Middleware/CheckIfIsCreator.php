@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class CheckIfIsAdmin
+class CheckIfIsCreator
 {
     /**
      * Handle an incoming request.
@@ -16,7 +16,7 @@ class CheckIfIsAdmin
     public function handle($request, Closure $next)
     {
         $user_type = session('user_type');
-        if($user_type == 'administrador')
+        if($user_type == 'creator')
             return $next($request);
         else
             return redirect('/');

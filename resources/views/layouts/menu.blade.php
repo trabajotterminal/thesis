@@ -17,7 +17,7 @@
                     <ul class="nav pink-3 navbar-nav">
                         <li><a href="/" class="dropdown-toggle {{$menu_classes[0]}}">Inicio</a></li>
                         @if($user != null)
-                            @if($user_type == 'alumno')
+                            @if($user_type == 'student')
                                 <li class="dropdown"> <a href="#" class="dropdown-toggle {{$menu_classes[1]}}">Categorias</a>
                                     <ul class="dropdown-menu" role="menu">
                                         @foreach($categories as $category)
@@ -31,7 +31,7 @@
                                 <li><a href="/profile" class="dropdown-toggle {{$menu_classes[2]}}">Perfil</a></li>
                                 <li><a href="/logout" class="dropdown-toggle">Cerrar Sesión</a></li>
                             @endif
-                            @if($user_type == 'administrador')
+                            @if($user_type == 'creator')
                                 <li class="dropdown"> <a href="#" class="dropdown-toggle  {{$menu_classes[1]}}">Administrar</a>
                                     <ul class="dropdown-menu" role="menu">
                                         <li> <a href="/admin/categories">Categorias</a> </li>
