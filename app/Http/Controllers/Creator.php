@@ -444,17 +444,16 @@ class Creator extends Controller{
                 'category_id'   => $category->id]
             );
             $topic->save();
+            $tags_id = [];
             if($request -> tags != null){
                 for($i = 0; $i < count($request -> tags); $i++){
                     $tag = Tag::firstOrNew(array(
                         'name'          => $request -> tags[$i],
                     ));
                     $tag -> save();
-                    $topic -> tags() -> attach($tag -> id, [
-                        'topic_id' => $topic -> id,
-                        'category_id' => $topic -> category_id
-                    ]);
+                    $tags_id[$tag -> id] = array('topic_id' => $topic -> id , 'category_id' => $topic -> category_id);
                 }
+                $topic -> tags() -> sync($tags_id);
             }
             Storage::disk('local')->makeDirectory('public/' . $category->name . '/' . $topic->name);
             Storage::disk('local')->makeDirectory('public/' . $category->name . '/' . $topic->name . '/Simulacion');
@@ -514,67 +513,56 @@ class Creator extends Controller{
     }
 
     public function editTopic(Request $request){
-        $old_topic_name         = $request -> topic_name;
-        $new_topic_name         = $request -> new_topic_name;
-        $topic                  = Topic::where('name','=', $old_topic_name) -> first();
-        $old_category           = Category::where('id', '=', $topic -> category_id) -> first();
-        $category               = Category::where('name', '=', $request -> new_category_name) -> first();
-
-        Validator::extend('alpha_spaces', function($attribute, $value)
-        {
+        $old_topic_name                 = $request -> topic_name;
+        $new_topic_name                 = $request -> new_topic_name;
+        $new_category_name              = $request -> new_category_name;
+        Validator::extend('alpha_spaces', function($attribute, $value){
             return preg_match('/^[\pL\s]+$/u', $value);
         });
-
-        Validator::extend('not_default', function($field,$value,$parameters){
+        Validator::extend('not_default', function($field, $value, $parameters){
             return $value != 'Selecciona la categoria';
         });
-
         Validator::extend('valid_new_topic', function($field, $value, $parameters, $validator){
             $new_topic_name = $parameters[0];
             $old_topic_name = $parameters[1];
             $topic = Topic::where('name', '=',  $new_topic_name) -> first();
             return $new_topic_name == $old_topic_name || $topic == null;
         });
-
         $messages = array(
             'required'              => 'El nombre del tema es requerido.',
             'not_default'           => 'Selecciona una categoria.',
             'alpha_spaces'          => 'Solo se permiten letras y espacios.',
             'valid_new_topic'       => 'El nombre del tema ya existe, elige otro.'
         );
-
         $validator = Validator::make($request->all(), [
             'new_topic_name' => "required|alpha_spaces|valid_new_topic:$new_topic_name,$old_topic_name",
             'new_category_name' => 'not_default',
         ], $messages);
-
         if ($validator->passes()) {
-            $topic -> update(['category_id'   => $category -> id, 'name' => $request -> new_topic_name]);
-            $tags = $topic -> tags() -> get();
-            for($i = 0; $i < count($tags); $i++){
-                $topic -> tags() -> detach($tags[$i] -> id);
-            }
+            $topic                          = Topic::where('name','=', $old_topic_name) -> first();
+            $old_category                   = Category::where('id', '=', $topic -> category_id) -> first();
+            $new_category                   = Category::where('name', '=', $new_category_name) -> first();
+            $topic -> update([
+                'category_id'   => $new_category -> id,
+                'name'          => $request -> new_topic_name
+            ]);
+            $tags_id = [];
             if($request -> tags != null){
                 for($i = 0; $i < count($request -> tags); $i++){
                     $tag = Tag::firstOrNew(array(
                         'name'          => $request -> tags[$i],
                     ));
                     $tag -> save();
-                    if(!($topic -> tags -> contains($tag -> id))) {
-                        $topic -> tags() -> attach($tag -> id, [
-                            'topic_id' => $topic -> id,
-                            'category_id' => $topic -> category_id
-                        ]);
-                    }
+                    $tags_id[$tag -> id] = array('topic_id' => $topic -> id , 'category_id' => $topic -> category_id);
                 }
+                $topic -> tags() -> sync($tags_id);
             }
-            if($old_topic_name != $topic -> name && $old_category -> name != $category -> name)
-                Storage::move('public/' . $old_category->name . '/' . $old_topic_name, 'public/' . $category->name . '/' . $topic->name);
-            if($old_topic_name != $topic -> name && $old_category -> name == $category -> name)
+            if($old_topic_name != $new_topic_name && $old_category -> name != $new_category -> name)
+                Storage::move('public/' . $old_category->name . '/' . $old_topic_name, 'public/' . $new_category->name . '/' . $topic->name);
+            if($old_topic_name != $new_topic_name && $old_category -> name == $new_category -> name)
                 Storage::move('public/' . $old_category->name . '/' . $old_topic_name, 'public/' . $old_category->name . '/' . $topic->name);
-            if($old_topic_name == $topic -> name && $old_category -> name != $category -> name)
-                Storage::move('public/' . $old_category->name . '/' . $old_topic_name, 'public/' . $category->name . '/' . $old_topic_name);
-            $topic -> save();
+            if($old_topic_name == $new_topic_name && $old_category -> name != $new_category -> name)
+                Storage::move('public/' . $old_category->name . '/' . $old_topic_name, 'public/' . $new_category->name . '/' . $old_topic_name);
             return response() -> json(['success' => 'OK']);
         }
 

@@ -24,7 +24,6 @@ class CreateTopicsTable extends Migration
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('creator_id')->references('id')->on('creators')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('user_id')->references('user_id')->on('creators')->onDelete('cascade')->onUpdate('cascade');
-
             $table->timestamps();
         });
     }

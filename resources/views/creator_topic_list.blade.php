@@ -105,6 +105,7 @@
             dataType: 'json',
             success: function(data) {
                 if($.isEmptyObject(data.error)){
+                    console.warn(data);
                     $("#topic_list").fadeOut(300).load("/creator/topics/list", function(response, status, xhr) {
                         $(this).fadeIn(500);
                     });
