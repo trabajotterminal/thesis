@@ -560,10 +560,12 @@ class Creator extends Controller{
                         'name'          => $request -> tags[$i],
                     ));
                     $tag -> save();
-                    $topic -> tags() -> attach($tag -> id, [
-                        'topic_id' => $topic -> id,
-                        'category_id' => $topic -> category_id
-                    ]);
+                    if(!($topic -> tags -> contains($tag -> id))) {
+                        $topic -> tags() -> attach($tag -> id, [
+                            'topic_id' => $topic -> id,
+                            'category_id' => $topic -> category_id
+                        ]);
+                    }
                 }
             }
             if($old_topic_name != $topic -> name && $old_category -> name != $category -> name)
