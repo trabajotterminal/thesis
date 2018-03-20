@@ -13,7 +13,7 @@
                         </div>
                         <div class="col-md-6" >
                             <div class="input-group" style="float:right;">
-                                <input name="submit" value="Editar" class="btn btn-primary" type="submit" data-id="{{$name}}" data-key="{{($key + 1)}}">
+                                <input name="submit" class="editButton btn btn-primary" value="Editar" type="submit" data-id="{{$name}}" data-key="{{($key + 1)}}">
                                 <span class="input-group-btn"></span>
                                 <form action="{{ url('creator/categories/delete') }}" method="POST" class="deleteCategory">
                                     {{(csrf_field())}}
@@ -45,20 +45,18 @@
         buttonpressed = $(this).attr('data-id');
     });
 
-    $('.btn-primary').click(function() {
+    $('.editButton').click(function() {
+        $(this).replaceWith('<input name="submit" class="saveButton btn btn-success" style="width:112px;" value="Guardar" type="submit">');
+        $('.btn-danger').prop("disabled", true);
+        $('.editButton').prop("disabled", true);
         textPressed = $(this).attr('data-id');
         keyPressed  = $(this).attr('data-key');
         var category_name = textPressed;
         var input = $('<input id="editedText" name="editedText" type="text" value="' + category_name + '" />')
         $(".editable-text[data-id='"+category_name+"']").text('').append(input);
         input.select();
-        input.blur(function() {
-            var text = $('#editedText').val();
-            $('#editedText').parent().text(text);
-            $('#editedText').remove();
-            $("#category_list").fadeOut(300).load("/creator/categories/list", function(response, status, xhr) {
-                $(this).fadeIn(500);
-            });
+        $('.saveButton').click(function() {
+            $(".editText").submit();
         });
     });
 
@@ -102,6 +100,9 @@
                     $("#category_list").fadeOut(300).load("/creator/categories/list", function(response, status, xhr) {
                         $(this).fadeIn(500);
                     });
+                    var text = $('#editedText').val();
+                    $('#editedText').parent().text(text);
+                    $('#editedText').remove();
                 }else{
                     printErrorMsg(data.error, keyPressed);
                 }

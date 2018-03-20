@@ -341,21 +341,23 @@ class Creator extends Controller{
     }
 
     public function topicList(){
-        $user_id = session('user_id');
-        $T = Topic::where('user_id', '=',$user_id) -> get();
-        $topics = [];
-        $topics_categories = [];
-        $categories = [];
+        $user_id            = session('user_id');
+        $T                  = Topic::where('user_id', '=',$user_id) -> get();
+        $topics             = [];
+        $topics_categories  = [];
+        $topics_tags        = [];
+        $categories         = [];
         for($i = 0; $i < count($T); $i++){
             $topics[$i]             = $T[$i] -> name;
             $topics_categories[$i]  = Category::where('id', '=', $T[$i] -> category_id) -> first() -> name;
+            $topics_tags[$i]        = Topic::where('name', '=', $topics[$i]) -> get() -> first() -> tags() -> get();
         }
         $C = Category::all();
         $categories = [];
         for($i = 0; $i < count($C); $i++){
             $categories[$i] = $C[$i] -> name;
         }
-        return view('creator_topic_list', compact(['topics', 'topics_categories', 'categories']));
+        return view('creator_topic_list', compact(['topics', 'topics_categories', 'topics_tags', 'categories']));
     }
 
     public function categoryListJSON(){
@@ -510,6 +512,7 @@ class Creator extends Controller{
 
     public function editTopic(Request $request){
         $old_topic_name         = $request -> topic_name;
+        $new_topic_name         = $request -> new_topic_name;
         $topic                  = Topic::where('name','=', $old_topic_name) -> first();
         $old_category           = Category::where('id', '=', $topic -> category_id) -> first();
         $category               = Category::where('name', '=', $request -> new_category_name) -> first();
@@ -523,7 +526,7 @@ class Creator extends Controller{
             return $value != 'Selecciona la categoria';
         });
 
-        Validator::extend('valid_new_topic', function($field, $value, $parameters,  $validator){
+        Validator::extend('valid_new_topic', function($field, $value, $parameters, $validator){
             $new_topic_name = $parameters[0];
             $old_topic_name = $parameters[1];
             $topic = Topic::where('name', '=',  $new_topic_name) -> first();
@@ -538,12 +541,28 @@ class Creator extends Controller{
         );
 
         $validator = Validator::make($request->all(), [
-            'new_topic_name' => "required|alpha_spaces|valid_new_topic:$topic->name,$old_topic_name",
+            'new_topic_name' => "required|alpha_spaces|valid_new_topic:$new_topic_name,$old_topic_name",
             'new_category_name' => 'not_default',
         ], $messages);
 
         if ($validator->passes()) {
             $topic -> update(['category_id'   => $category -> id, 'name' => $request -> new_topic_name]);
+            $tags = $topic -> tags() -> get();
+            for($i = 0; $i < count($tags); $i++){
+                $topic -> tags() -> detach($tags[$i] -> id);
+            }
+            if($request -> tags != null){
+                for($i = 0; $i < count($request -> tags); $i++){
+                    $tag = Tag::firstOrNew(array(
+                        'name'          => $request -> tags[$i],
+                    ));
+                    $tag -> save();
+                    $topic -> tags() -> attach($tag -> id, [
+                        'topic_id' => $topic -> id,
+                        'category_id' => $topic -> category_id
+                    ]);
+                }
+            }
             if($old_topic_name != $topic -> name && $old_category -> name != $category -> name)
                 Storage::move('public/' . $old_category->name . '/' . $old_topic_name, 'public/' . $category->name . '/' . $topic->name);
             if($old_topic_name != $topic -> name && $old_category -> name == $category -> name)

@@ -22,10 +22,6 @@
     <script>
         $(function(){
             var sampleTags = <?php echo json_encode($tags_array); ?>;
-            console.warn(sampleTags);
-            $('#methodTags').tagit({
-                availableTags: sampleTags
-            });
             $('#allowSpacesTags').tagit({
                 availableTags: sampleTags,
                 allowSpaces: true,
