@@ -31,7 +31,7 @@
                                 </a>
                             </div>
                             <div class="col-md-4" >
-                                <h3 class="editable-select" data-id="{{$topic}}">{{$topics_categories[$key]}}</h3>
+                                <h3 class="editable-select" data-id="{{$topic}}">{{$topics_categories[$topic]}}</h3>
                                 <input type="submit" style="position: absolute; left: -9999px"/>
                             </div>
                         </form>
@@ -175,18 +175,23 @@
         });
         input.select();
         var select = $('<select id="editedList">');
+        var category_name = "";
         select.append('<option selected> Selecciona la categoria</option>');
         $.ajax ({
+            beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
+            type: 'GET',
+            data: {'topic': topic_name},
             url: "/creator/categories/list/json",
             datatype: "json",
             success: function(data) {
+                category_name = data.category_name;
                 $.each(data.categories, function(index, value){
                     select.append('<option id="' + index + '">' + value.name + '</option>');
                 });
+                $(".editable-select[data-id='"+ topic_name +"']").text('').append(select);
+                $(".editable-select[data-id='"+ topic_name +"'] select").val(category_name);
             }
         });
-        $(".editable-select[data-id='"+ topic_name +"']").text('').append(select);
-
         select.change(function () {
             var X = $('#editedList').val();
             new_category_name = X;

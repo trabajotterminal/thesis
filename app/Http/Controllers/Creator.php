@@ -349,7 +349,7 @@ class Creator extends Controller{
         $categories         = [];
         for($i = 0; $i < count($T); $i++){
             $topics[$i]             = $T[$i] -> name;
-            $topics_categories[$i]  = Category::where('id', '=', $T[$i] -> category_id) -> first() -> name;
+            $topics_categories[$topics[$i]]  = Category::where('id', '=', $T[$i] -> category_id) -> first() -> name;
             $topics_tags[$i]        = Topic::where('name', '=', $topics[$i]) -> get() -> first() -> tags() -> get();
         }
         $C = Category::all();
@@ -360,9 +360,12 @@ class Creator extends Controller{
         return view('creator_topic_list', compact(['topics', 'topics_categories', 'topics_tags', 'categories']));
     }
 
-    public function categoryListJSON(){
+    public function categoryListJSON(Request $request){
         $categories = Category::all();
-        return compact('categories');
+        $topic = Topic::where('name', '=', $request -> topic) -> get() -> first();
+        $category = Category::where('id', '=', $topic -> category_id) -> get() -> first();
+        $category_name = $category -> name;
+        return compact(['categories', 'category_name']);
     }
 
     public function registerCategory(Request $request){
