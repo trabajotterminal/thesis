@@ -109,7 +109,6 @@
                     }
                 },
             });
-
             function printErrorMsg (msg) {
                 $(".print-error-msg").find("ul").html('');
                 $(".print-error-msg").css('display','block');
@@ -117,7 +116,6 @@
                     $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
                 });
             }
-
             return false;
         });
     </script>

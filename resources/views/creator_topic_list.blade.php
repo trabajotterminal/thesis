@@ -20,11 +20,10 @@
             <div class="pagenation-holder">
                 <div class="container">
                     <div class="row">
-                        <form action ="{{url('creator/topics/edit')}}" method="post" class="editTopic">
+                        <form action ="{{url('creator/topics/edit')}}" method="post" id="editTopic_{{($key + 1)}}">
                             {{(csrf_field())}}
                             <div class="col-md-4">
                                 <h3 class="editable-text" data-id="{{$topic}}">{{$topic}}</h3>
-
                                 <a href="{{url('/creator/topic/'.$topic)}}">
                                     <img src="{{ URL::asset('/images/content.png')}}" style="width:35px;height:35px;margin-right: 10px;"/>
                                     Administrar contenido
@@ -90,72 +89,12 @@
     var topic_name      = "";
     var category_name   = "";
     var keyPressed = 0;
-    $(".editTopic").submit(function(e){
-        e.stopImmediatePropagation();
-        e.preventDefault();
-        topic_name      = document.getElementById('editedText').value;
-        category_name   = document.getElementById('editedList').value;
-        var url = $('.editTopic').attr('action');
-        var tags = $('#tag_input').tagit('assignedTags');
-        $.ajax({
-            beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
-            url: url,
-            type: 'POST',
-            data: {"topic_name" : textPressed, "new_topic_name": topic_name, "new_category_name": category_name, "tags": tags},
-            dataType: 'json',
-            success: function(data) {
-                if($.isEmptyObject(data.error)){
-                    console.warn(data);
-                    $("#topic_list").fadeOut(300).load("/creator/topics/list", function(response, status, xhr) {
-                        $(this).fadeIn(500);
-                    });
-                }else{
-                    printErrorMsg(data.error, keyPressed);
-                }
-            },
-        });
-        function printErrorMsg (msg, id) {
-            var div = "#error_"+id;
-            $(div).find("ul").html('');
-            $(div).css('display','block');
-            $.each( msg, function( key, value ) {
-                $(div).find("ul").append('<li>'+value+'</li>');
-            });
-        }
-        return false;
-    });
-
-    $(".deleteTopic").submit(function(e){
-        e.stopImmediatePropagation();
-        e.preventDefault();
-        var topic_name = buttonpressed;
-        var url = $('.deleteTopic').attr('action');
-        $.ajax({
-            beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
-            url: url,
-            type: 'POST',
-            data: {"topic_name" : topic_name},
-            dataType: 'json',
-            success: function( _response ){
-                $("#topic_list").fadeOut(300).load("/creator/topics/list", function(response, status, xhr) {
-                    $(this).fadeIn(500);
-                });
-            },
-            error: function(xhr, status, error) {
-
-            },
-        });
-        return false;
-    });
-
-    $('.btn-danger').click(function() {
-        buttonpressed = $(this).attr('data-id');
-    });
 
     $('.editButton').click(function() {
         $(this).replaceWith('<input name="submit" class="saveButton btn btn-success" style="width:112px;" value="Guardar" type="submit">');
         $('.btn-danger').prop("disabled", true);
         $('.editButton').prop("disabled", true);
+        $('.saveButton').unbind('submit').submit();
         textPressed = $(this).attr('data-id');
         keyPressed  = $(this).attr('data-key');
         topic_name = textPressed;
@@ -197,9 +136,71 @@
             var X = $('#editedList').val();
             new_category_name = X;
         });
-
         $('.saveButton').click(function() {
-            $(".editTopic").submit();
+            var topicToEdit = $('#editTopic_1');
+            $(topicToEdit).on('submit', function(e){
+                e.stopImmediatePropagation();
+                e.preventDefault();
+                topic_name      = document.getElementById('editedText').value;
+                category_name   = document.getElementById('editedList').value;
+                var url = $(topicToEdit).attr('action');
+                var tags = $('#tag_input').tagit('assignedTags');
+                $.ajax({
+                    beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
+                    url: url,
+                    type: 'POST',
+                    data: {"topic_name" : textPressed, "new_topic_name": topic_name, "new_category_name": category_name, "tags": tags},
+                    dataType: 'json',
+                    success: function(data) {
+                        if($.isEmptyObject(data.error)){
+                            console.warn(data);
+                            $("#topic_list").fadeOut(300).load("/creator/topics/list", function(response, status, xhr) {
+                                $(this).fadeIn(500);
+                            });
+                        }else{
+                            printErrorMsg(data.error, keyPressed);
+                        }
+                    },
+                });
+                function printErrorMsg (msg, id) {
+                    var div = "#error_"+id;
+                    $(div).find("ul").html('');
+                    $(div).css('display','block');
+                    $.each( msg, function( key, value ) {
+                        $(div).find("ul").append('<li>'+value+'</li>');
+                    });
+                }
+                return false;
+            });
+            topicToEdit.submit();
+            return false;
         });
+    });
+
+    $(".deleteTopic").submit(function(e){
+        e.stopImmediatePropagation();
+        e.preventDefault();
+        var topic_name = buttonpressed;
+        var url = $('.deleteTopic').attr('action');
+        $.ajax({
+            beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
+            url: url,
+            type: 'POST',
+            data: {"topic_name" : topic_name},
+            dataType: 'json',
+            success: function( _response ){
+                $("#topic_list").fadeOut(300).load("/creator/topics/list", function(response, status, xhr) {
+                    $(this).fadeIn(500);
+                });
+            },
+            error: function(xhr, status, error) {
+                console.warn('Something unexpected happened');
+            },
+        });
+        return false;
+    });
+
+    $('.btn-danger').click(function() {
+        buttonpressed = $(this).attr('data-id');
     });
 </script>

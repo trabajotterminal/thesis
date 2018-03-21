@@ -14,6 +14,7 @@ class CreateGlancesStudentsTable extends Migration
     public function up()
     {
         Schema::create('glance_student', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id')->unsigned()->unique();
             $table->integer('user_id') -> unsigned();
             $table->integer('student_id') -> unsigned();

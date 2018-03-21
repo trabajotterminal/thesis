@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 Use DB;
 use ZipArchive;
+use Log;
 
 
 class Creator extends Controller{
@@ -439,7 +440,7 @@ class Creator extends Controller{
             $topic = new Topic([
                 'user_id'       => $user_id,
                 'creator_id'    => $creator -> id,
-                'name'          => $request->topic_name,
+                'name'          => $request -> topic_name,
                 'status'        => 'pending',
                 'category_id'   => $category->id]
             );
@@ -447,18 +448,18 @@ class Creator extends Controller{
             $tags_id = [];
             if($request -> tags != null){
                 for($i = 0; $i < count($request -> tags); $i++){
-                    $tag = Tag::firstOrNew(array(
+                    $tag = Tag::firstOrCreate(array(
                         'name'          => $request -> tags[$i],
                     ));
                     $tag -> save();
-                    $tags_id[$tag -> id] = array('topic_id' => $topic -> id , 'category_id' => $topic -> category_id);
+                    $tags_id[$tag -> id] = array('topic_id' => $topic -> id);
                 }
-                $topic -> tags() -> sync($tags_id);
             }
             Storage::disk('local')->makeDirectory('public/' . $category->name . '/' . $topic->name);
             Storage::disk('local')->makeDirectory('public/' . $category->name . '/' . $topic->name . '/Simulacion');
             Storage::disk('local')->makeDirectory('public/' . $category->name . '/' . $topic->name . '/Teoria');
             Storage::disk('local')->makeDirectory('public/' . $category->name . '/' . $topic->name . '/Cuestionario');
+            $topic -> tags() -> sync($tags_id);
             return response()->json(['success'=>'OK.']);
         }
         return response()->json(['error'=>$validator->errors()->all()]);
@@ -474,6 +475,8 @@ class Creator extends Controller{
     public function deleteTopic(Request $request){
         $topic = Topic::where('name', '=', $request -> topic_name) -> first();
         $category = Category::where('id', '=', $topic->category_id) -> first();
+        Log::info('DELETING');
+        Log::info(json_encode($topic -> name));
         $topic -> delete();
         Storage::disk('local') -> deleteDirectory('public/'. $category -> name. '/'.$topic -> name);
         return response() -> json(['success' => 'OK']);
@@ -547,15 +550,20 @@ class Creator extends Controller{
                 'name'          => $request -> new_topic_name
             ]);
             $tags_id = [];
+            $topic -> tags() -> detach();
             if($request -> tags != null){
                 for($i = 0; $i < count($request -> tags); $i++){
-                    $tag = Tag::firstOrNew(array(
+                    $tag = Tag::firstOrCreate(array(
                         'name'          => $request -> tags[$i],
                     ));
                     $tag -> save();
-                    $tags_id[$tag -> id] = array('topic_id' => $topic -> id , 'category_id' => $topic -> category_id);
+                    $hasTag = DB::select('SELECT * FROM tag_topic WHERE topic_id = ? and tag_id = ?', [$topic -> id, $tag -> id]);
+                    if(count($hasTag) == 0){
+                        $topic -> tags() -> attach($tag -> id, [
+                            'topic_id' => $topic -> id,
+                        ]);
+                    }
                 }
-                $topic -> tags() -> sync($tags_id);
             }
             if($old_topic_name != $new_topic_name && $old_category -> name != $new_category -> name)
                 Storage::move('public/' . $old_category->name . '/' . $old_topic_name, 'public/' . $new_category->name . '/' . $topic->name);
