@@ -86,6 +86,8 @@
 
 
     $(".editText").submit(function(e){
+        e.preventDefault();
+        e.stopImmediatePropagation();
         var url = $('.editText').attr('action');
         var category_name = textPressed;
         var newCategoryName = document.getElementById('editedText').value;
@@ -117,7 +119,6 @@
                 $(div).find("ul").append('<li>'+value+'</li>');
             });
         }
-
         return false;
     });
 

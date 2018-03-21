@@ -112,7 +112,7 @@
 
     $T = str_replace('<teoria>', '', $T);
     $T = str_replace('</teoria>', '', $T);
-    $user            = session('user');
+    $user_id            = session('user_id');
     $user_type       = session('user_type');
 @endphp
 @extends('layouts.app')
@@ -153,10 +153,10 @@
         </div>
     </section>
 
-    @if($user != null && $user_type == 'alumno')
+    @if($user_id != null && $user_type == 'student')
         <form id="updateGlance" method="POST" action="{{url('/theory/updateGlance')}}">
             {{(csrf_field())}}
-            <input type="hidden" id="user_id" value="{{$user}}" />
+            <input type="hidden" id="user_id" value="{{$user_id}}" />
             <input type="hidden" id="topic_name" value="{{$topic_name}}" />
             <input type="submit" style="display:none"/>
         </form>

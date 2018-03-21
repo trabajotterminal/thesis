@@ -10,6 +10,7 @@ use App\Topic;
 use App\Glance;
 use App\User;
 Use DB;
+use Log;
 
 class Theory extends Controller
 {
@@ -25,7 +26,8 @@ class Theory extends Controller
     }
 
     public function updateGlance(Request $request){
-        $user = User::where('id', '=', $request -> user_id) -> first();
+        Log::debug(json_encode($request -> user_id));
+        $student = User::where('id', '=', $request -> user_id) -> first() -> student;
         $topic = Topic::where('name', '=', $request -> topic_name) -> first();
         $glance = Glance::firstOrNew(array(
             'type'          => $request -> type,
@@ -33,15 +35,9 @@ class Theory extends Controller
             'category_id'   => $topic -> category_id,
         ));
         $glance -> save();
-        $hasGlance = DB::select('SELECT G.type FROM glances G, glance_user Gu where Gu.user_id = ? and G.type = ? and G.topic_id = ? and G.id = Gu.glance_id', [$user -> id, $request -> type, $topic -> id]);
+        $hasGlance = DB::select('SELECT G.type FROM glances G, glance_student Gu where Gu.student_id = ? and G.type = ? and G.topic_id = ? and G.id = Gu.glance_id', [$student -> id, $request -> type, $topic -> id]);
         if(count($hasGlance) == 0){
-            $user -> glances() -> attach($glance -> id, [
-                'user_id' => $user ->id,
-                'group_id' => $user -> group_id,
-                'school_id' => $user -> school_id,
-                'topic_id' => $topic -> id,
-                'category_id' => $topic -> category_id
-            ]);
+            $student -> glances() -> attach($glance -> id);
         }
         return response() -> json(['success' => 'Glance saved.']);
     }
