@@ -26,7 +26,6 @@ class Theory extends Controller
     }
 
     public function updateGlance(Request $request){
-        Log::debug(json_encode($request -> user_id));
         $student = User::where('id', '=', $request -> user_id) -> first() -> student;
         $topic = Topic::where('name', '=', $request -> topic_name) -> first();
         $glance = Glance::firstOrNew(array(
