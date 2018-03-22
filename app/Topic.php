@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 class Topic extends Model{
-    protected $fillable = [ 'user_id', 'creator_id', 'name', 'category_id'];
+    protected $fillable = [ 'user_id', 'creator_id', 'pending_name', 'approved_name', 'has_been_approved', 'category_id'];
 
     public function references(){
         return $this -> hasMany('\App\Reference');
@@ -25,5 +25,9 @@ class Topic extends Model{
 
     public function tags(){
         return $this->belongsToMany('App\Tag', 'tag_topic');
+    }
+
+    public function notifications(){
+        return $this->hasMany('\App\Notification');
     }
 }

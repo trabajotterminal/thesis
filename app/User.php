@@ -20,6 +20,9 @@ class User extends Authenticatable{
         return $this -> hasOne('\App\Creator');
     }
 
+    public function notifications(){
+        return $this -> hasMany('\App\Notification');
+    }
     protected $hidden = [
         'password', 'remember_token',
     ];

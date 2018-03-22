@@ -12,15 +12,28 @@
                             <div id="error_{{($key + 1)}}" style="display:none;color:red;"><ul></ul></div>
                         </div>
                         <div class="col-md-6" >
-                            <div class="input-group" style="float:right;">
-                                <input name="submit" class="editButton btn btn-primary" value="Editar" type="submit" data-id="{{$name}}" data-key="{{($key + 1)}}">
-                                <span class="input-group-btn"></span>
-                                <form action="{{ url('creator/categories/delete') }}" method="POST" class="deleteCategory">
-                                    {{(csrf_field())}}
-                                    <input type="hidden" name="deletedElementName" value="{{$name}}" >
-                                    <input name="submit" value="Eliminar" class="btn btn-danger" type="submit" data-id="{{$name}}">
-                                </form>
-                            </div>
+                            @if(!$is_approval_pending[$key])
+                                <div class="input-group" style="float:right;">
+                                    <input name="submit" class="editButton btn btn-primary" value="Editar" type="submit" data-id="{{$name}}" data-key="{{($key + 1)}}">
+                                    <span class="input-group-btn"></span>
+                                    <form action="{{ url('creator/categories/delete') }}" method="POST" class="deleteCategory">
+                                        {{(csrf_field())}}
+                                        <input type="hidden" name="deletedElementName" value="{{$name}}" >
+                                        <input name="submit" value="Solicitar eliminación" class="btn btn-danger" type="submit" data-id="{{$name}}">
+                                    </form>
+                                    <span class="input-group-btn"></span>
+                                    @if($needs_revision[$key])
+                                        <span class="input-group-btn"></span>
+                                        <form action="{{ url('creator/categories/submitReview') }}" method="POST" class="reviewCategory">
+                                            {{(csrf_field())}}
+                                            <input type="hidden" name="reviewElementName" value="{{$name}}" >
+                                            <input name="submit" value="Enviar revisión" class="btn btn-warning" type="submit" data-id="{{$name}}">
+                                        </form>
+                                    @endif
+                                </div>
+                            @else
+                                <span style="float:right;"><u>La categoría está en proceso de aprobación.</u></span>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -45,10 +58,15 @@
         buttonpressed = $(this).attr('data-id');
     });
 
+    $('.btn-warning').click(function() {
+        buttonpressed = $(this).attr('data-id');
+    });
+
     $('.editButton').click(function() {
         $(this).replaceWith('<input name="submit" class="saveButton btn btn-success" style="width:112px;" value="Guardar" type="submit">');
         $('.btn-danger').prop("disabled", true);
         $('.editButton').prop("disabled", true);
+        $('.btn-warning').prop("disabled", true);
         textPressed = $(this).attr('data-id');
         keyPressed  = $(this).attr('data-key');
         var category_name = textPressed;
@@ -72,6 +90,28 @@
             type: 'POST',
             data: {"category_name" : category_name},
             dataType: 'json',
+            success: function( _response ){
+                $("#category_list").fadeOut(300).load("/creator/categories/list", function(response, status, xhr) {
+                    $(this).fadeIn(500);
+                });
+            },
+            error: function(xhr, status, error) {
+                alert(error);
+            },
+        });
+        return false;
+    });
+
+    $(".reviewCategory").submit(function(e){
+        e.preventDefault();
+        var category_name = buttonpressed;
+        var url = $('.reviewCategory').attr('action');
+        $.ajax({
+            beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
+            url: url,
+            type: 'POST',
+            data: {"category_name" : category_name},
+            dataType: 'text',
             success: function( _response ){
                 $("#category_list").fadeOut(300).load("/creator/categories/list", function(response, status, xhr) {
                     $(this).fadeIn(500);

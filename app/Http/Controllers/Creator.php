@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Group;
+use App\Notification;
 use App\School;
 use App\Tag;
 use Illuminate\Http\Request;
@@ -11,6 +12,8 @@ use \App\Topic;
 use Illuminate\Support\Traits\CapsuleManagerTrait;
 use \App\Reference;
 use \App\User;
+use \App\Admin;
+use Mockery\Tests\React_WritableStreamInterface;
 use Monolog\Processor\TagProcessor;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -335,10 +338,13 @@ class Creator extends Controller{
         $user_id = session('user_id');
         $categories = Category::where('user_id', '=', $user_id) -> get();
         $names = [];
+        $needs_revision = [];
         for($i = 0; $i < count($categories); $i++){
-            $names[$i] = $categories[$i] -> name;
+            $names[$i] = $categories[$i] -> pending_name;
+            $needs_revision[$i] = $categories[$i] -> needs_approval;
+            $is_approval_pending[$i] = $categories[$i] -> is_approval_pending;
         }
-        return view('creator_category_list', compact('names'));
+        return view('creator_category_list', compact(['names', 'needs_revision', 'is_approval_pending']));
     }
 
     public function topicList(){
@@ -365,13 +371,13 @@ class Creator extends Controller{
         $categories = Category::all();
         $topic = Topic::where('name', '=', $request -> topic) -> get() -> first();
         $category = Category::where('id', '=', $topic -> category_id) -> get() -> first();
-        $category_name = $category -> name;
+        $category_name = $category -> pending_name;
         return compact(['categories', 'category_name']);
     }
 
     public function registerCategory(Request $request){
         Validator::extend('new_category', function($field,$value,$parameters){
-            $category = Category::where('name', '=', $value) -> first();
+            $category = Category::where('approved_name', '=', $value) -> orWhere('pending_name', '=', $value) -> first();
             return $category ==  null;
         });
 
@@ -396,11 +402,10 @@ class Creator extends Controller{
             $category = new Category([
                 'user_id'       => $user_id,
                 'creator_id'    => $creator -> id,
-                'name'          => $request -> category_name,
-                'status'        => 'pending',
+                'pending_name'  => $request -> category_name,
             ]);
             $category -> save();
-            Storage::disk('local') -> makeDirectory('public/'.$category -> name);
+            Storage::disk('local') -> makeDirectory('public/'.$category -> pending_name);
             return response()->json(['success'=>'OK.']);
         }
         return response()->json(['error'=>$validator->errors()->all()]);
@@ -440,8 +445,7 @@ class Creator extends Controller{
             $topic = new Topic([
                 'user_id'       => $user_id,
                 'creator_id'    => $creator -> id,
-                'name'          => $request -> topic_name,
-                'status'        => 'pending',
+                'pending_name'  => $request -> topic_name,
                 'category_id'   => $category->id]
             );
             $topic->save();
@@ -466,7 +470,7 @@ class Creator extends Controller{
     }
 
     public function deleteCategory(Request $request){
-        $category = Category::where('name', '=', $request -> category_name) -> first();
+        $category = Category::where('pending_name', '=', $request -> category_name) -> orWhere('approved_name', '=', $request -> category_name) -> first();
         $category -> delete();
         Storage::disk('local') -> deleteDirectory('public/'.$category -> name);
         return response() -> json(['success' => 'OK']);
@@ -486,7 +490,7 @@ class Creator extends Controller{
         Validator::extend('new_category', function($field,$value,$parameters){
             $old = $parameters[0];
             $new = $parameters[1];
-            $category = Category::where('name', '=', $new) -> first();
+            $category = Category::where('pending_name', '=', $new) -> orWhere('approved_name', '=', $new) -> first();
             return $old == $new || $category == null;
         });
 
@@ -505,11 +509,11 @@ class Creator extends Controller{
             'new_category_name' => "required|new_category:$old,$new|alpha_spaces",
         ], $messages);
         if ($validator->passes()) {
-            $category = Category::where('name', '=', $request -> category_name)->first();
-            $category->update(['name' => $request->new_category_name]);
+            $category = Category::where('pending_name', '=', $request -> category_name)->first();
+            $category->update(['pending_name' => $request->new_category_name, 'needs_approval' => true]);
             $category->save();
             if($old != $new)
-                Storage::move('public/' . $request->category_name, 'public/' . $category->name);
+                Storage::move('public/' . $request->category_name, 'public/' . $category->pending_name);
             return response()->json(['success'=>'OK.']);
         }
         return response()->json(['error'=>$validator->errors()->all()]);
@@ -706,6 +710,29 @@ class Creator extends Controller{
         $reference -> topic_id = $topic -> id;
         $reference -> save();
         return response() -> json(['success' => 'OK']);
+    }
+
+    public function submitCategoryReview(Request $request){
+        $category_name                      = $request -> category_name;
+        $category                           = Category::where('pending_name', '=', $category_name) -> first();
+        $category -> is_approval_pending    = true;
+        $sender_id                          = session('user_id');
+        $admin                              = Admin::where('id', '=', 1) -> first();
+        $type                               = "";
+        if($category -> approved_name == ''){
+            $type = 'A';
+        }else{
+            $type = 'E';
+        }
+        $notification = new Notification([
+            'message'       => 'Agregando',
+            'sender_id'     => $sender_id,
+            'recipient_id'  => $admin -> user_id,
+            'type'          => $type,
+            'category_id'   => $category -> id,
+        ]);
+        $category -> save();
+        $notification -> save();
     }
 
 }

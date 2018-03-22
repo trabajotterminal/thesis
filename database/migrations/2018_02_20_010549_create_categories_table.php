@@ -18,8 +18,10 @@ class CreateCategoriesTable extends Migration
             $table->increments('id')->unsigned()->unique();
             $table->integer('user_id') -> unsigned();
             $table->integer('creator_id') -> unsigned();
-            $table->string('name');
-            $table->enum('status', ['pending', 'accepted']);
+            $table->string('pending_name');
+            $table->string('approved_name')->default('');
+            $table->boolean('needs_approval')->default(true);
+            $table->boolean('is_approval_pending')->default(false);
             $table->foreign('creator_id')->references('id')->on('creators')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('user_id')->references('user_id')->on('creators')->onDelete('cascade')->onUpdate('cascade');
 

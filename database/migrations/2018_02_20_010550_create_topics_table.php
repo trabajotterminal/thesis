@@ -18,8 +18,9 @@ class CreateTopicsTable extends Migration
             $table->increments('id')->unsigned()->unique();
             $table->integer('user_id') -> unsigned();
             $table->integer('creator_id') -> unsigned();
-            $table->string('name');
-            $table->enum('status', ['pending', 'accepted']);
+            $table->string('pending_name');
+            $table->string('approved_name')->default('');
+            $table->boolean('needs_approval')->default(true);
             $table->integer('category_id')->unsigned();
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('creator_id')->references('id')->on('creators')->onDelete('cascade')->onUpdate('cascade');
