@@ -13,7 +13,7 @@ class User extends Authenticatable{
     }
 
     public function admin(){
-        return $this -> hasOne('\App\Creator');
+        return $this -> hasOne('\App\Admin');
     }
 
     public function creator(){

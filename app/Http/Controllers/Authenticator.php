@@ -6,6 +6,7 @@ use App\School;
 use Illuminate\Http\Request;
 use App\User;
 use App\Student;
+use Log;
 
 class Authenticator extends Controller
 {
@@ -70,6 +71,7 @@ class Authenticator extends Controller
                 $type = 'admin';
             if($isCreator)
                 $type = 'creator';
+            Log::debug($type);
             session(['user' => $result -> username, 'user_type' => $type, 'user_id' => $result -> id]);
             return redirect('/');
         }else{

@@ -7,6 +7,14 @@
     $user            = session('user');
     $user_type       = session('user_type');
 @endphp
+<style>
+
+    .navbar-default .dropdown-menu.notify-drop {
+        background-color: #fff;
+        max-height: 360px;
+        overflow-y: scroll;
+    }
+</style>
 <div id="header" style="background-color:#f6f6f6">
     <div class="container orange2" >
         <div class="navbar lightblue-3 navbar-default yamm">
@@ -40,6 +48,37 @@
                                 </li>
                                 <li><a href="/creator/statistics" class="dropdown-toggle  {{$menu_classes[2]}}">Ver estadisticas</a></li>
                                 <li><a href="/logout" class="dropdown-toggle"  {{$menu_classes[3]}}">Cerrar Sesión</a></li>
+                            @endif
+                            @if($user_type == 'admin')
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle">Notificaciones (<b>2</b>)</a>
+                                        <ul class="dropdown-menu notify-drop">
+                                            <div class="drop-content">
+                                                <li>
+                                                    <div class="col-md-3 col-sm-3 col-xs-3" style="width:60px;height:60px;">
+                                                        <center><span style="font-size:40px;text-align: center;vertical-align: middle;line-height: 40px;">J</span></center>
+                                                    </div>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                                        <p>jairsaidds ha realizado un cambio en X de Y.</p>
+                                                        <p><u><a href="#" style="color: #34495e ">Revisar ahora</a></u></p>
+                                                        <hr>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="col-md-3 col-sm-3 col-xs-3" style="width:60px;height:60px;">
+                                                        <center><span style="font-size:40px;text-align: center;vertical-align: middle;line-height: 40px;">B</span></center>
+                                                    </div>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                                        <p>bolitas ha realizado un cambio en X de Y.</p>
+                                                        <p><u><a href="#" style="color: #34495e ">Revisar ahora</a></u></p>
+                                                        <hr>
+                                                    </div>
+                                                </li>
+                                            </div>
+                                        </ul>
+                                    </li>
+                                    <li><a href="/logout" class="dropdown-toggle"  {{$menu_classes[3]}}">Cerrar Sesión</a></li>
+
                             @endif
                         @else
                             <li class="dropdown"> <a href="#" class="dropdown-toggle {{$menu_classes[1]}}">Categorias</a>
