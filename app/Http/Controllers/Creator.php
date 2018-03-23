@@ -29,11 +29,11 @@ class Creator extends Controller{
 
     public function topics(){
         //COMMENT: filter by accepted status.
-        $C = Category::all();
+        $C = Category::where('is_approval_pending', '=', false) -> get();
         $tags = Tag::all();
         $categories = [];
         for($i = 0; $i < count($C); $i++){
-            $categories[$i] = $C[$i] -> name;
+            $categories[$i] = $C[$i] -> approved_name;
         }
         return view('creator_topics_interface', compact(['categories', 'tags']));
     }
@@ -348,30 +348,34 @@ class Creator extends Controller{
     }
 
     public function topicList(){
-        $user_id            = session('user_id');
-        $T                  = Topic::where('user_id', '=',$user_id) -> get();
-        $topics             = [];
-        $topics_categories  = [];
-        $topics_tags        = [];
-        $categories         = [];
+        $user_id                = session('user_id');
+        $T                      = Topic::where('user_id', '=',$user_id) -> get();
+        $topics                 = [];
+        $topics_categories      = [];
+        $topics_tags            = [];
+        $categories             = [];
+        $needs_approval         = [];
+        $is_approval_pending    = [];
         for($i = 0; $i < count($T); $i++){
-            $topics[$i]             = $T[$i] -> name;
-            $topics_categories[$topics[$i]]  = Category::where('id', '=', $T[$i] -> category_id) -> first() -> name;
-            $topics_tags[$i]        = Topic::where('name', '=', $topics[$i]) -> get() -> first() -> tags() -> get();
+            $topics[$i]                         = $T[$i] -> pending_name;
+            $topics_categories[$topics[$i]]     = Category::where('id', '=', $T[$i] -> category_id) -> first() -> approved_name;
+            $topics_tags[$i]                    = Topic::where('approved_name', '=', $topics[$i]) -> orWhere('pending_name', '=', $topics[$i]) -> get() -> first() -> tags() -> get();
+            $needs_approval[$i]                 = $T[$i] -> needs_approval;
+            $is_approval_pending[$i]            = $T[$i] -> is_approval_pending;
         }
         $C = Category::all();
         $categories = [];
         for($i = 0; $i < count($C); $i++){
-            $categories[$i] = $C[$i] -> name;
+            $categories[$i] = $C[$i] -> approved_name;
         }
-        return view('creator_topic_list', compact(['topics', 'topics_categories', 'topics_tags', 'categories']));
+        return view('creator_topic_list', compact(['topics', 'topics_categories', 'topics_tags', 'categories', 'needs_approval', 'is_approval_pending']));
     }
 
     public function categoryListJSON(Request $request){
         $categories = Category::all();
-        $topic = Topic::where('name', '=', $request -> topic) -> get() -> first();
+        $topic = Topic::where('pending_name', '=', $request -> topic) -> orWhere('pending_name', '=', $request -> topic) -> get() -> first();
         $category = Category::where('id', '=', $topic -> category_id) -> get() -> first();
-        $category_name = $category -> pending_name;
+        $category_name = $category -> approved_name;
         return compact(['categories', 'category_name']);
     }
 
@@ -414,7 +418,7 @@ class Creator extends Controller{
     public function registerTopic(Request $request){
 
         Validator::extend('new_topic', function($field,$value,$parameters){
-            $topic = Topic::where('name', '=', $value) -> first();
+            $topic = Topic::where('pending_name', '=', $value) -> orWhere('approved_name', '=', $value) -> first();
             return $topic ==  null;
         });
 
@@ -441,13 +445,13 @@ class Creator extends Controller{
         if ($validator->passes()) {
             $user_id = session('user_id');
             $creator = User::where('id', '=', $user_id) -> get() -> first() -> creator;
-            $category = Category::where('name', '=', $request->category_name)->first();
+            $category = Category::where('approved_name', '=', $request->category_name)->first();
             $topic = new Topic([
-                'user_id'       => $user_id,
-                'creator_id'    => $creator -> id,
-                'pending_name'  => $request -> topic_name,
-                'category_id'   => $category->id]
-            );
+                'user_id'               => $user_id,
+                'creator_id'            => $creator -> id,
+                'pending_name'          => $request -> topic_name,
+                'category_id'           => $category->id,
+            ]);
             $topic->save();
             $tags_id = [];
             if($request -> tags != null){
@@ -459,10 +463,10 @@ class Creator extends Controller{
                     $tags_id[$tag -> id] = array('topic_id' => $topic -> id);
                 }
             }
-            Storage::disk('local')->makeDirectory('public/' . $category->name . '/' . $topic->name);
-            Storage::disk('local')->makeDirectory('public/' . $category->name . '/' . $topic->name . '/Simulacion');
-            Storage::disk('local')->makeDirectory('public/' . $category->name . '/' . $topic->name . '/Teoria');
-            Storage::disk('local')->makeDirectory('public/' . $category->name . '/' . $topic->name . '/Cuestionario');
+            Storage::disk('local')->makeDirectory('public/' . $category->approved_name . '/' . $topic->pending_name);
+            Storage::disk('local')->makeDirectory('public/' . $category->approved_name . '/' . $topic->pending_name . '/Simulacion');
+            Storage::disk('local')->makeDirectory('public/' . $category->approved_name . '/' . $topic->pending_name . '/Teoria');
+            Storage::disk('local')->makeDirectory('public/' . $category->approved_name . '/' . $topic->pending_name . '/Cuestionario');
             $topic -> tags() -> sync($tags_id);
             return response()->json(['success'=>'OK.']);
         }
@@ -532,7 +536,7 @@ class Creator extends Controller{
         Validator::extend('valid_new_topic', function($field, $value, $parameters, $validator){
             $new_topic_name = $parameters[0];
             $old_topic_name = $parameters[1];
-            $topic = Topic::where('name', '=',  $new_topic_name) -> first();
+            $topic = Topic::where('pending_name', '=',  $new_topic_name) -> orWhere('approved_name', '=', $new_topic_name)-> first();
             return $new_topic_name == $old_topic_name || $topic == null;
         });
         $messages = array(
@@ -546,12 +550,12 @@ class Creator extends Controller{
             'new_category_name' => 'not_default',
         ], $messages);
         if ($validator->passes()) {
-            $topic                          = Topic::where('name','=', $old_topic_name) -> first();
+            $topic                          = Topic::where('pending_name','=', $old_topic_name) -> first();
             $old_category                   = Category::where('id', '=', $topic -> category_id) -> first();
-            $new_category                   = Category::where('name', '=', $new_category_name) -> first();
+            $new_category                   = Category::where('approved_name', '=', $new_category_name) -> first();
             $topic -> update([
                 'category_id'   => $new_category -> id,
-                'name'          => $request -> new_topic_name
+                'pending_name'  => $request -> new_topic_name
             ]);
             $tags_id = [];
             $topic -> tags() -> detach();
@@ -569,12 +573,12 @@ class Creator extends Controller{
                     }
                 }
             }
-            if($old_topic_name != $new_topic_name && $old_category -> name != $new_category -> name)
-                Storage::move('public/' . $old_category->name . '/' . $old_topic_name, 'public/' . $new_category->name . '/' . $topic->name);
-            if($old_topic_name != $new_topic_name && $old_category -> name == $new_category -> name)
-                Storage::move('public/' . $old_category->name . '/' . $old_topic_name, 'public/' . $old_category->name . '/' . $topic->name);
-            if($old_topic_name == $new_topic_name && $old_category -> name != $new_category -> name)
-                Storage::move('public/' . $old_category->name . '/' . $old_topic_name, 'public/' . $new_category->name . '/' . $old_topic_name);
+            if($old_topic_name != $new_topic_name && $old_category -> approved_name != $new_category -> approved_name)
+                Storage::move('public/' . $old_category -> approved_name . '/' . $old_topic_name, 'public/' . $new_category-> approved_name . '/' . $topic-> pending_name);
+            if($old_topic_name != $new_topic_name && $old_category -> approved_name == $new_category -> approved_name)
+                Storage::move('public/' . $old_category->approved_name . '/' . $old_topic_name, 'public/' . $old_category-> approved_name . '/' . $topic-> pending_name);
+            if($old_topic_name == $new_topic_name && $old_category -> approved_name != $new_category -> approved_name)
+                Storage::move('public/' . $old_category->approved_name . '/' . $old_topic_name, 'public/' . $new_category-> approved_name . '/' . $old_topic_name);
             return response() -> json(['success' => 'OK']);
         }
 
@@ -732,6 +736,29 @@ class Creator extends Controller{
             'category_id'   => $category -> id,
         ]);
         $category -> save();
+        $notification -> save();
+    }
+
+    public function submitTopicReview(Request $request){
+        $topic_name                         = $request -> topic_name;
+        $topic                              = Topic::where('pending_name', '=', $topic_name) -> first();
+        $topic -> is_approval_pending       = true;
+        $sender_id                          = session('user_id');
+        $admin                              = Admin::where('id', '=', 1) -> first();
+        $type                               = "";
+        if($topic -> approved_name == ''){
+            $type = 'A';
+        }else{
+            $type = 'E';
+        }
+        $notification = new Notification([
+            'message'       => 'Agregando',
+            'sender_id'     => $sender_id,
+            'recipient_id'  => $admin -> user_id,
+            'type'          => $type,
+            'topic_id'      => $topic -> id,
+        ]);
+        $topic -> save();
         $notification -> save();
     }
 

@@ -76,4 +76,5 @@ Route::group(['prefix' => 'creator',  'middleware' => 'checkIfIsCreator'], funct
     Route::post('/topic/theory/register/manually/save', 'Creator@saveTheoryManually');
     Route::post('/topic/questionnaire/register/manually/save', 'Creator@saveQuestionnaireManually');
     Route::post('/categories/submitReview', 'Creator@submitCategoryReview');
+    Route::post('/topics/submitReview', 'Creator@submitTopicReview');
 });

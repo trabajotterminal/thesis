@@ -3,6 +3,9 @@
         color: black;
         background: none;
     }
+    .btn-space {
+        margin-right: 5px;
+    }
 </style>
 @if($topics)
     <section>
@@ -35,15 +38,27 @@
                             </div>
                         </form>
                         <div class="col-md-4" >
-                            <div class="input-group" style="float:right;">
-                                <input name="submit" value="Editar" class="editButton btn btn-primary" type="submit" data-id="{{$topic}}"  data-key="{{($key + 1)}}">
-                                <span class="input-group-btn"></span>
-                                <form action="{{ url('creator/topics/delete') }}" method="POST" class="deleteTopic">
-                                    {{(csrf_field())}}
-                                    <input type="hidden" name="deletedElementName" >
-                                    <input name="submit" value="Eliminar" class="btn btn-danger" type="submit" data-id="{{$topic}}">
-                                </form>
-                            </div>
+                            @if($is_approval_pending[$key])
+                                <span style="float:right;"><u>El tema está en proceso de aprobación.</u></span>
+                            @else
+                                <div class="input-group" style="float:right;">
+                                    <input name="submit" value="Editar" class="editButton btn btn-primary btn-space" type="submit" data-id="{{$topic}}"  data-key="{{($key + 1)}}">
+                                    @if($needs_approval[$key])
+                                        <span class="input-group-btn"></span>
+                                        <form action="{{ url('creator/topics/submitReview') }}" method="POST" class="reviewTopic">
+                                            {{(csrf_field())}}
+                                            <input type="hidden" name="reviewElementName" value="{{$topic}}" >
+                                            <input name="submit" value="Enviar revisión" class="btn btn-warning btn-space" type="submit" data-id="{{$topic}}">
+                                        </form>
+                                    @endif
+                                    <span class="input-group-btn"></span>
+                                    <form action="{{ url('creator/topics/delete') }}" method="POST" class="deleteTopic">
+                                        {{(csrf_field())}}
+                                        <input type="hidden" name="deletedElementName" >
+                                        <input name="submit" value="Eliminar" class="btn btn-danger btn-space" type="submit" data-id="{{$topic}}">
+                                    </form>
+                                </div>
+                            @endif
                         </div>
                     </div>
                     <div class="row">
@@ -91,8 +106,9 @@
     var keyPressed = 0;
 
     $('.editButton').click(function() {
-        $(this).replaceWith('<input name="submit" class="saveButton btn btn-success" style="width:112px;" value="Guardar" type="submit">');
+        $(this).replaceWith('<input name="submit" class="saveButton btn btn-success btn-space" style="width:112px;" value="Guardar" type="submit">');
         $('.btn-danger').prop("disabled", true);
+        $('.btn-warning').prop("disabled", true);
         $('.editButton').prop("disabled", true);
         $('.saveButton').unbind('submit').submit();
         textPressed = $(this).attr('data-id');
@@ -126,7 +142,7 @@
             success: function(data) {
                 category_name = data.category_name;
                 $.each(data.categories, function(index, value){
-                    select.append('<option id="' + index + '">' + value.name + '</option>');
+                    select.append('<option id="' + index + '">' + value.approved_name + '</option>');
                 });
                 $(".editable-select[data-id='"+ topic_name +"']").text('').append(select);
                 $(".editable-select[data-id='"+ topic_name +"'] select").val(category_name);
@@ -202,5 +218,30 @@
 
     $('.btn-danger').click(function() {
         buttonpressed = $(this).attr('data-id');
+    });
+
+    $('.btn-warning').click(function() {
+        topic_name = $(this).attr('data-id');
+    });
+
+    $(".reviewTopic").submit(function(e){
+        e.preventDefault();
+        var url = $('.reviewTopic').attr('action');
+        $.ajax({
+            beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
+            url: url,
+            type: 'POST',
+            data: {"topic_name" : topic_name},
+            dataType: 'text',
+            success: function( _response ){
+                $("#topic_list").fadeOut(300).load("/creator/topics/list", function(response, status, xhr) {
+                    $(this).fadeIn(500);
+                });
+            },
+            error: function(xhr, status, error) {
+                alert(error);
+            },
+        });
+        return false;
     });
 </script>

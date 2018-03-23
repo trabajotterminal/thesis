@@ -21,6 +21,7 @@ class CreateTopicsTable extends Migration
             $table->string('pending_name');
             $table->string('approved_name')->default('');
             $table->boolean('needs_approval')->default(true);
+            $table->boolean('is_approval_pending')->default(false);
             $table->integer('category_id')->unsigned();
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('creator_id')->references('id')->on('creators')->onDelete('cascade')->onUpdate('cascade');
