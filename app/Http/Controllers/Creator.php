@@ -29,7 +29,7 @@ class Creator extends Controller{
 
     public function topics(){
         //COMMENT: filter by accepted status.
-        $C = Category::where('is_approval_pending', '=', false) -> get();
+        $C = Category::where('approved_name', '!=', '') -> get();
         $tags = Tag::all();
         $categories = [];
         for($i = 0; $i < count($C); $i++){
@@ -339,12 +339,14 @@ class Creator extends Controller{
         $categories = Category::where('user_id', '=', $user_id) -> get();
         $names = [];
         $needs_revision = [];
+        $has_been_approved_once = [];
         for($i = 0; $i < count($categories); $i++){
             $names[$i] = $categories[$i] -> pending_name;
             $needs_revision[$i] = $categories[$i] -> needs_approval;
             $is_approval_pending[$i] = $categories[$i] -> is_approval_pending;
+            $has_been_approved_once[$i] = $categories[$i] -> approved_name ? true : false;
         }
-        return view('creator_category_list', compact(['names', 'needs_revision', 'is_approval_pending']));
+        return view('creator_category_list', compact(['names', 'needs_revision', 'is_approval_pending', 'has_been_approved_once']));
     }
 
     public function topicList(){
@@ -356,19 +358,21 @@ class Creator extends Controller{
         $categories             = [];
         $needs_approval         = [];
         $is_approval_pending    = [];
+        $has_been_approved_once = [];
         for($i = 0; $i < count($T); $i++){
             $topics[$i]                         = $T[$i] -> pending_name;
             $topics_categories[$topics[$i]]     = Category::where('id', '=', $T[$i] -> category_id) -> first() -> approved_name;
             $topics_tags[$i]                    = Topic::where('approved_name', '=', $topics[$i]) -> orWhere('pending_name', '=', $topics[$i]) -> get() -> first() -> tags() -> get();
             $needs_approval[$i]                 = $T[$i] -> needs_approval;
             $is_approval_pending[$i]            = $T[$i] -> is_approval_pending;
+            $has_been_approved_once[$i]         = $T[$i] -> approved_name ? true : false;
         }
         $C = Category::all();
         $categories = [];
         for($i = 0; $i < count($C); $i++){
             $categories[$i] = $C[$i] -> approved_name;
         }
-        return view('creator_topic_list', compact(['topics', 'topics_categories', 'topics_tags', 'categories', 'needs_approval', 'is_approval_pending']));
+        return view('creator_topic_list', compact(['topics', 'topics_categories', 'topics_tags', 'categories', 'needs_approval', 'is_approval_pending', 'has_been_approved_once']));
     }
 
     public function categoryListJSON(Request $request){
@@ -514,7 +518,10 @@ class Creator extends Controller{
         ], $messages);
         if ($validator->passes()) {
             $category = Category::where('pending_name', '=', $request -> category_name)->first();
-            $category->update(['pending_name' => $request->new_category_name, 'needs_approval' => true]);
+            $category->update([
+                'pending_name' => $request->new_category_name,
+                'needs_approval' => true
+            ]);
             $category->save();
             if($old != $new)
                 Storage::move('public/' . $request->category_name, 'public/' . $category->pending_name);
@@ -555,7 +562,8 @@ class Creator extends Controller{
             $new_category                   = Category::where('approved_name', '=', $new_category_name) -> first();
             $topic -> update([
                 'category_id'   => $new_category -> id,
-                'pending_name'  => $request -> new_topic_name
+                'pending_name'  => $request -> new_topic_name,
+                'needs_approval' => true,
             ]);
             $tags_id = [];
             $topic -> tags() -> detach();
@@ -581,7 +589,6 @@ class Creator extends Controller{
                 Storage::move('public/' . $old_category->approved_name . '/' . $old_topic_name, 'public/' . $new_category-> approved_name . '/' . $old_topic_name);
             return response() -> json(['success' => 'OK']);
         }
-
         return response()->json(['error'=>$validator->errors()->all()]);
     }
 
@@ -720,6 +727,7 @@ class Creator extends Controller{
         $category_name                      = $request -> category_name;
         $category                           = Category::where('pending_name', '=', $category_name) -> first();
         $category -> is_approval_pending    = true;
+        $category -> needs_approval         = false;
         $sender_id                          = session('user_id');
         $admin                              = Admin::where('id', '=', 1) -> first();
         $type                               = "";
@@ -743,6 +751,7 @@ class Creator extends Controller{
         $topic_name                         = $request -> topic_name;
         $topic                              = Topic::where('pending_name', '=', $topic_name) -> first();
         $topic -> is_approval_pending       = true;
+        $topic -> needs_approval            = false;
         $sender_id                          = session('user_id');
         $admin                              = Admin::where('id', '=', 1) -> first();
         $type                               = "";

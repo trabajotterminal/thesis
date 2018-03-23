@@ -25,12 +25,15 @@
                     <div class="row">
                         <form action ="{{url('creator/topics/edit')}}" method="post" id="editTopic_{{($key + 1)}}">
                             {{(csrf_field())}}
+
                             <div class="col-md-4">
                                 <h3 class="editable-text" data-id="{{$topic}}">{{$topic}}</h3>
-                                <a href="{{url('/creator/topic/'.$topic)}}">
-                                    <img src="{{ URL::asset('/images/content.png')}}" style="width:35px;height:35px;margin-right: 10px;"/>
-                                    Administrar contenido
-                                </a>
+                                @if($has_been_approved_once[$key])
+                                    <a href="{{url('/creator/topic/'.$topic)}}">
+                                        <img src="{{ URL::asset('/images/content.png')}}" style="width:35px;height:35px;margin-right: 10px;"/>
+                                        Administrar contenido
+                                    </a>
+                                @endif
                             </div>
                             <div class="col-md-4" >
                                 <h3 class="editable-select" data-id="{{$topic}}">{{$topics_categories[$topic]}}</h3>
@@ -51,12 +54,14 @@
                                             <input name="submit" value="Enviar revisión" class="btn btn-warning btn-space" type="submit" data-id="{{$topic}}">
                                         </form>
                                     @endif
-                                    <span class="input-group-btn"></span>
-                                    <form action="{{ url('creator/topics/delete') }}" method="POST" class="deleteTopic">
-                                        {{(csrf_field())}}
-                                        <input type="hidden" name="deletedElementName" >
-                                        <input name="submit" value="Eliminar" class="btn btn-danger btn-space" type="submit" data-id="{{$topic}}">
-                                    </form>
+                                    @if($has_been_approved_once[$key])
+                                        <span class="input-group-btn"></span>
+                                        <form action="{{ url('creator/topics/delete') }}" method="POST" class="deleteTopic">
+                                            {{(csrf_field())}}
+                                            <input type="hidden" name="deletedElementName" >
+                                            <input name="submit" value="Eliminar" class="btn btn-danger btn-space" type="submit" data-id="{{$topic}}">
+                                        </form>
+                                    @endif
                                 </div>
                             @endif
                         </div>
@@ -140,6 +145,7 @@
             url: "/creator/categories/list/json",
             datatype: "json",
             success: function(data) {
+                console.warn(data);
                 category_name = data.category_name;
                 $.each(data.categories, function(index, value){
                     select.append('<option id="' + index + '">' + value.approved_name + '</option>');
@@ -169,7 +175,6 @@
                     dataType: 'json',
                     success: function(data) {
                         if($.isEmptyObject(data.error)){
-                            console.warn(data);
                             $("#topic_list").fadeOut(300).load("/creator/topics/list", function(response, status, xhr) {
                                 $(this).fadeIn(500);
                             });

@@ -15,19 +15,20 @@
                             @if(!$is_approval_pending[$key])
                                 <div class="input-group" style="float:right;">
                                     <input name="submit" class="editButton btn btn-primary" value="Editar" type="submit" data-id="{{$name}}" data-key="{{($key + 1)}}">
-                                    <span class="input-group-btn"></span>
-                                    <form action="{{ url('creator/categories/delete') }}" method="POST" class="deleteCategory">
-                                        {{(csrf_field())}}
-                                        <input type="hidden" name="deletedElementName" value="{{$name}}" >
-                                        <input name="submit" value="Solicitar eliminación" class="btn btn-danger" type="submit" data-id="{{$name}}">
-                                    </form>
-                                    <span class="input-group-btn"></span>
                                     @if($needs_revision[$key])
                                         <span class="input-group-btn"></span>
                                         <form action="{{ url('creator/categories/submitReview') }}" method="POST" class="reviewCategory">
                                             {{(csrf_field())}}
                                             <input type="hidden" name="reviewElementName" value="{{$name}}" >
                                             <input name="submit" value="Enviar revisión" class="btn btn-warning" type="submit" data-id="{{$name}}">
+                                        </form>
+                                    @endif
+                                    @if($has_been_approved_once[$key])
+                                        <span class="input-group-btn"></span>
+                                        <form action="{{ url('creator/categories/delete') }}" method="POST" class="deleteCategory">
+                                            {{(csrf_field())}}
+                                            <input type="hidden" name="deletedElementName" value="{{$name}}" >
+                                            <input name="submit" value="Solicitar eliminación" class="btn btn-danger" type="submit" data-id="{{$name}}">
                                         </form>
                                     @endif
                                 </div>
