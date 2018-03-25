@@ -467,10 +467,16 @@ class Creator extends Controller{
                     $tags_id[$tag -> id] = array('topic_id' => $topic -> id);
                 }
             }
-            Storage::disk('local')->makeDirectory('public/' . $category->approved_name . '/' . $topic->pending_name);
-            Storage::disk('local')->makeDirectory('public/' . $category->approved_name . '/' . $topic->pending_name . '/Simulacion');
-            Storage::disk('local')->makeDirectory('public/' . $category->approved_name . '/' . $topic->pending_name . '/Teoria');
-            Storage::disk('local')->makeDirectory('public/' . $category->approved_name . '/' . $topic->pending_name . '/Cuestionario');
+            $category_path = "";
+            if($category -> needs_approval || $category -> is_approval_pending){
+                $category_path = $category -> pending_name;
+            }else{
+                $category_path = $category -> approved_name;
+            }
+            Storage::disk('local')->makeDirectory('public/' . $category_path . '/' . $topic->pending_name);
+            Storage::disk('local')->makeDirectory('public/' . $category_path . '/' . $topic->pending_name . '/Simulacion');
+            Storage::disk('local')->makeDirectory('public/' . $category_path . '/' . $topic->pending_name . '/Teoria');
+            Storage::disk('local')->makeDirectory('public/' . $category_path . '/' . $topic->pending_name . '/Cuestionario');
             $topic -> tags() -> sync($tags_id);
             return response()->json(['success'=>'OK.']);
         }
@@ -581,17 +587,25 @@ class Creator extends Controller{
                     }
                 }
             }
-            $new_category_path  = "";
-            $old_category_path  = "";
-            $new_topic_path     = "";
-            $old_topic_path     = "";
+
+            if($new_category -> needs_approval || $new_category -> is_approval_pending){
+                $new_category_path = $new_category -> pending_name;
+            }else{
+                $new_category_path = $new_category -> approved_name;
+            }
+
+            if($old_category -> needs_approval || $old_category -> is_approval_pending){
+                $old_category_path = $old_category -> pending_name;
+            }else{
+                $old_category_path = $old_category -> approved_name;
+            }
 
             if($old_topic_name != $new_topic_name && $old_category -> approved_name != $new_category -> approved_name)
-                Storage::move('public/' . $old_category -> approved_name . '/' . $old_topic_name, 'public/' . $new_category-> approved_name . '/' . $topic-> pending_name);
+                Storage::move('public/' . $old_category_path . '/' . $old_topic_name, 'public/' . $new_category_path . '/' . $topic-> pending_name);
             if($old_topic_name != $new_topic_name && $old_category -> approved_name == $new_category -> approved_name)
-                Storage::move('public/' . $old_category->approved_name . '/' . $old_topic_name, 'public/' . $old_category-> approved_name . '/' . $topic-> pending_name);
+                Storage::move('public/' . $old_category_path . '/' . $old_topic_name, 'public/' . $old_category_path . '/' . $topic-> pending_name);
             if($old_topic_name == $new_topic_name && $old_category -> approved_name != $new_category -> approved_name)
-                Storage::move('public/' . $old_category->approved_name . '/' . $old_topic_name, 'public/' . $new_category-> approved_name . '/' . $old_topic_name);
+                Storage::move('public/' . $old_category_path . '/' . $old_topic_name, 'public/' . $new_category_path . '/' . $old_topic_name);
             return response() -> json(['success' => 'OK']);
         }
         return response()->json(['error'=>$validator->errors()->all()]);
