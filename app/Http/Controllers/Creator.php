@@ -648,8 +648,18 @@ class Creator extends Controller{
             $topic = Topic::where('approved_name', '=', $request -> topic_name) -> orWhere('pending_name', '=', $request -> topic_name) -> first();
             $category   = Category::where('id', '=', $topic -> category_id) -> first();
             $name = $request -> file('input_file') -> getClientOriginalName();
-            $category_path  = $category -> needs_approval ? $category -> pending_name : $category -> approved_name;
-            $topic_path     = $topic    -> needs_approval ? $topic -> pending_name : $topic -> approved_name;
+            $category_path  = "";
+            $topic_path     = "";
+            if($category -> needs_approval || $category -> is_approval_pending){
+                $category_path = $category -> pending_name;
+            }else{
+                $category_path = $category -> approved_name;
+            }
+            if($topic -> needs_approval || $topic -> is_approval_pending){
+                $topic_path = $topic -> pending_name;
+            }else{
+                $topic_path = $topic -> approved_name;
+            }
             $destinationPath = public_path('storage/'.$category_path.'/'.$topic_path.'/Teoria/');
             $request -> input_file -> move($destinationPath, $name);
             $route = new Reference();
@@ -658,16 +668,28 @@ class Creator extends Controller{
             $route -> category_id = $category -> id;
             $route -> topic_id = $topic -> id;
             $route -> save();
-            return redirect('creator/topic/'.$topic->approved_name);
+            return redirect('creator/topic/'.$topic->pending_name);
         }
     }
 
     public function registerSimulationFile(Request $request){
-        $topic = Topic::where('name', '=', $request -> topic_name) -> first();
+        $topic = Topic::where('approved_name', '=', $request -> topic_name) -> orWhere('pending_name', '=', $request -> topic_name) -> first();
         $category   = Category::where('id', '=', $topic -> category_id) -> first();
         $file = $request -> file('input_file');
         $name = $request -> file('input_file')->getClientOriginalName();
-        $destinationPath = public_path('storage/'.$category -> name.'/'.$topic -> name.'/Simulacion/');
+        $category_path  = "";
+        $topic_path     = "";
+        if($category -> needs_approval || $category -> is_approval_pending){
+            $category_path = $category -> pending_name;
+        }else{
+            $category_path = $category -> approved_name;
+        }
+        if($topic -> needs_approval || $topic -> is_approval_pending){
+            $topic_path = $topic -> pending_name;
+        }else{
+            $topic_path = $topic -> approved_name;
+        }
+        $destinationPath = public_path('storage/'.$category_path.'/'.$topic_path.'/Simulacion/');
         $request -> input_file -> move($destinationPath, 'archivo.zip');
         $zip = new ZipArchive();
         $zip_reference = $zip->open($destinationPath.'archivo.zip');
@@ -682,16 +704,26 @@ class Creator extends Controller{
             $reference -> topic_id = $topic -> id;
             $reference -> save();
         }
-        return redirect('creator/topic/'.$topic->name);
+        return redirect('creator/topic/'.$topic->pending_name);
     }
 
     public function registerQuestionnaireFile(Request $request){
         if ($request->hasFile('input_file')) {
-            $topic = Topic::where('name', '=', $request -> topic_name) -> first();
+            $topic = Topic::where('approved_name', '=', $request -> topic_name) -> orWhere('pending_name', '=', $request -> topic_name) -> first();
             $category   = Category::where('id', '=', $topic -> category_id) -> first();
-            $file = $request -> file('input_file');
-            $name = $request -> file('input_file')->getClientOriginalName();
-            $destinationPath = public_path('storage/'.$category -> name.'/'.$topic -> name.'/Cuestionario/');
+            $category_path  = "";
+            $topic_path     = "";
+            if($category -> needs_approval || $category -> is_approval_pending){
+                $category_path = $category -> pending_name;
+            }else{
+                $category_path = $category -> approved_name;
+            }
+            if($topic -> needs_approval || $topic -> is_approval_pending){
+                $topic_path = $topic -> pending_name;
+            }else{
+                $topic_path = $topic -> approved_name;
+            }
+            $destinationPath = public_path('storage/'.$category_path.'/'.$topic_path.'/Cuestionario/');
             $request -> input_file -> move($destinationPath, 'cuestionario.xml');
             $route = new Reference();
             $route -> type = 'C';
@@ -699,7 +731,7 @@ class Creator extends Controller{
             $route -> category_id = $category -> id;
             $route -> topic_id = $topic -> id;
             $route -> save();
-            return redirect('creator/topic/'.$topic->name);
+            return redirect('creator/topic/'. $topic->pending_name);
         }
     }
 
