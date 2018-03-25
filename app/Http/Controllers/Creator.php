@@ -581,6 +581,11 @@ class Creator extends Controller{
                     }
                 }
             }
+            $new_category_path  = "";
+            $old_category_path  = "";
+            $new_topic_path     = "";
+            $old_topic_path     = "";
+
             if($old_topic_name != $new_topic_name && $old_category -> approved_name != $new_category -> approved_name)
                 Storage::move('public/' . $old_category -> approved_name . '/' . $old_topic_name, 'public/' . $new_category-> approved_name . '/' . $topic-> pending_name);
             if($old_topic_name != $new_topic_name && $old_category -> approved_name == $new_category -> approved_name)
@@ -595,7 +600,7 @@ class Creator extends Controller{
     public function displayTopic($name){
         $topic_name = $name;
         $urls       = [];
-        $topic = Topic::where('name', '=', $topic_name) -> first();
+        $topic = Topic::where('approved_name', '=', $topic_name) -> orWhere('pending_name', '=', $topic_name) -> first();
         $R = Reference::where('topic_id', '=', $topic ->id) -> get();
         $references = [];
         $references['T'] = false;
@@ -626,10 +631,12 @@ class Creator extends Controller{
 
     public function registerTheoryFile(Request $request){
         if ($request->hasFile('input_file')) {
-            $topic = Topic::where('name', '=', $request -> topic_name) -> first();
+            $topic = Topic::where('approved_name', '=', $request -> topic_name) -> orWhere('pending_name', '=', $request -> topic_name) -> first();
             $category   = Category::where('id', '=', $topic -> category_id) -> first();
             $name = $request -> file('input_file') -> getClientOriginalName();
-            $destinationPath = public_path('storage/'.$category -> name.'/'.$topic -> name.'/Teoria/');
+            $category_path  = $category -> needs_approval ? $category -> pending_name : $category -> approved_name;
+            $topic_path     = $topic    -> needs_approval ? $topic -> pending_name : $topic -> approved_name;
+            $destinationPath = public_path('storage/'.$category_path.'/'.$topic_path.'/Teoria/');
             $request -> input_file -> move($destinationPath, $name);
             $route = new Reference();
             $route -> type = 'T';
@@ -637,7 +644,7 @@ class Creator extends Controller{
             $route -> category_id = $category -> id;
             $route -> topic_id = $topic -> id;
             $route -> save();
-            return redirect('creator/topic/'.$topic->name);
+            return redirect('creator/topic/'.$topic->approved_name);
         }
     }
 

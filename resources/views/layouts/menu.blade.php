@@ -76,7 +76,7 @@
                                                                     $object = ' contenido de un tema';
                                                             @endphp
                                                             <p>{{$sender_names[$key]}} {{$action}} {{$object}}</p>
-                                                            <p><u><a href="#" style="color: #34495e ">Revisar ahora</a></u></p>
+                                                            <p><u><a href="{{url('admin/notification/'.$notification -> id)}}" style="color: #34495e ">Revisar ahora</a></u></p>
                                                             <hr>
                                                         </div>
                                                     </li>

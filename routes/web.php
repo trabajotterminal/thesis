@@ -15,11 +15,9 @@
 
 
 Route::group(['middleware' => 'web'], function(){
-
     Route::get('/', function () {
         return view('index');
     });
-
     Route::get('/category/{name}', 'Category@category');
     Route::get('/login', 'Login@index');
     Route::post('/register/user',  ['as' => 'register/user', 'uses' => 'Authenticator@register']);
@@ -35,6 +33,13 @@ Route::get('/questionnaire/{name}', 'Questionnaire@showQuestionnaire') -> middle
 Route::get('/profile/', 'User@profile') -> middleware('checkIfIsStudent');
 Route::post('/questionnaire/{name}/evaluate', 'Questionnaire@evaluate') -> middleware('checkIfIsStudent');
 Route::post('/questionnaire/answers', 'Questionnaire@getAnswers') -> middleware('checkIfIsStudent');
+
+
+Route::group(['prefix' => 'admin', 'middleware' => 'checkIfIsAdmin'], function(){
+    Route::get('/notification/{id}', 'Admin@viewNotification');
+    Route::post('/notification/resolve', 'Admin@resolveNotification');
+
+});
 
 Route::group(['prefix' => 'creator',  'middleware' => 'checkIfIsCreator'], function(){
     Route::get('/categories', 'Creator@categories');
