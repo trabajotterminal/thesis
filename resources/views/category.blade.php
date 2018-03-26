@@ -52,24 +52,24 @@
                                 <div class="feature-box9 text-center bmargin">
                                     <div class="iconbox-xlarge grayoutline2" style="line-height: 200px;vertical-align: middle;width:200px;height:200px;background-color:{{$colors[$color]}}; color: {{$textcolors[$color]}}">
                                         @php
-                                            $firstChar = strtr($topics[$i] -> name, $unwanted_array)[0];
+                                            $firstChar = strtr($topics[$i] -> approved_name, $unwanted_array)[0];
                                         @endphp
                                         <span style="font-size:70px;font-weight:100;">{{$firstChar}}</span>
                                     </div>
                                     <br/>
 
-                                    <h3>{{$topics[$i] -> name}}</h3>
+                                    <h3>{{$topics[$i] -> approved_name}}</h3>
                                     <p style="color">
                                         @if(strlen($routeS))
-                                            <u><h5><a href={{ url('/simulation', $topics[$i] -> name) }}>Simulación</a></h5></u>
+                                            <u><h5><a href={{ url('/simulation', $topics[$i] -> approved_name) }}>Simulación</a></h5></u>
                                         @endif
 
                                         @if(strlen($routeT))
-                                            <u><h5><a href={{ url('/theory', $topics[$i] -> name) }}>Teoría</a></h5></u>
+                                            <u><h5><a href={{ url('/theory', $topics[$i] -> approved_name) }}>Teoría</a></h5></u>
                                         @endif
                                         @if(strlen($routeQ))
                                             @if($user)
-                                            <u><h5><a href={{ url('/questionnaire', $topics[$i] -> name) }}>Cuestionario</a></h5></u>
+                                            <u><h5><a href={{ url('/questionnaire', $topics[$i] -> approved_name) }}>Cuestionario</a></h5></u>
                                             @endif
                                         @endif
                                     </p>

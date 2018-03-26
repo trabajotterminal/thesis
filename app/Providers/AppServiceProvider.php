@@ -30,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
                 $view -> with('notifications', $notifications);
                 $view -> with('sender_names', $sender_names);
             }
-            $view -> with('categories', Category::all());
+            $view -> with('categories', Category::where('approved_name','!=', '') -> get());
         });
     }
 

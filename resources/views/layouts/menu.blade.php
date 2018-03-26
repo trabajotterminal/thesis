@@ -28,7 +28,7 @@
                                 <li class="dropdown"> <a href="#" class="dropdown-toggle {{$menu_classes[1]}}">Categorias</a>
                                     <ul class="dropdown-menu" role="menu">
                                         @foreach($categories as $category)
-                                            <li class="dropdown-submenu"><a href="{{ url('/category/'.$category -> name)}}">{{$category -> name}}</li>
+                                            <li class="dropdown-submenu"><a href="{{ url('/category/'.$category -> approved_name)}}">{{$category -> approved_name}}</li>
                                         @endforeach
                                         <li class="dropdown-submenu mul" style="display:none;">
                                             <a tabindex="-1" href="#">No idea</a>
@@ -90,7 +90,7 @@
                             <li class="dropdown"> <a href="#" class="dropdown-toggle {{$menu_classes[1]}}">Categorias</a>
                                 <ul class="dropdown-menu" role="menu">
                                     @foreach($categories as $category)
-                                        <li class="dropdown-submenu"><a href="{{ url('/category/'.$category -> name)}}">{{$category -> name}}</li>
+                                        <li class="dropdown-submenu"><a href="{{ url('/category/'.$category -> approved_name)}}">{{$category -> approved_name}}</li>
                                     @endforeach
                                     <li class="dropdown-submenu mul" style="display:none;">
                                         <a tabindex="-1" href="#">No idea</a>
