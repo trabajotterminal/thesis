@@ -475,8 +475,12 @@ class Creator extends Controller{
             }
             Storage::disk('local')->makeDirectory('public/' . $category_path . '/' . $topic->pending_name);
             Storage::disk('local')->makeDirectory('public/' . $category_path . '/' . $topic->pending_name . '/Simulacion');
-            Storage::disk('local')->makeDirectory('public/' . $category_path . '/' . $topic->pending_name . '/Teoria');
-            Storage::disk('local')->makeDirectory('public/' . $category_path . '/' . $topic->pending_name . '/Cuestionario');
+            Storage::disk('local')->makeDirectory('public/' . $category_path . '/' . $topic->pending_name . '/Simulacion/latest');
+            Storage::disk('local')->makeDirectory('public/' . $category_path . '/' . $topic->pending_name . '/Simulacion/changes');
+            Storage::disk('local')->makeDirectory('public/' . $category_path . '/' . $topic->pending_name . '/Teoria/latest');
+            Storage::disk('local')->makeDirectory('public/' . $category_path . '/' . $topic->pending_name . '/Teoria/changes');
+            Storage::disk('local')->makeDirectory('public/' . $category_path . '/' . $topic->pending_name . '/Cuestionario/latest');
+            Storage::disk('local')->makeDirectory('public/' . $category_path . '/' . $topic->pending_name . '/Cuestionario/changes');
             $topic -> tags() -> sync($tags_id);
             return response()->json(['success'=>'OK.']);
         }
@@ -660,14 +664,16 @@ class Creator extends Controller{
             }else{
                 $topic_path = $topic -> approved_name;
             }
-            $destinationPath = public_path('storage/'.$category_path.'/'.$topic_path.'/Teoria/');
+            $destinationPath = public_path('storage/'.$category_path.'/'.$topic_path.'/Teoria/changes');
             $request -> input_file -> move($destinationPath, $name);
-            $route = new Reference();
-            $route -> type = 'T';
-            $route -> route = $destinationPath;
-            $route -> category_id = $category -> id;
-            $route -> topic_id = $topic -> id;
-            $route -> save();
+            $reference = new Reference();
+            $reference -> type                  = 'T';
+            $reference -> pending_route         = $destinationPath;
+            $reference -> needs_approval        = true;
+            $reference -> is_approval_pending   = false;
+            $reference -> category_id           = $category -> id;
+            $reference -> topic_id              = $topic -> id;
+            $reference -> save();
             return redirect('creator/topic/'.$topic->pending_name);
         }
     }
@@ -689,17 +695,19 @@ class Creator extends Controller{
         }else{
             $topic_path = $topic -> approved_name;
         }
-        $destinationPath = public_path('storage/'.$category_path.'/'.$topic_path.'/Simulacion/');
+        $destinationPath = public_path('storage/'.$category_path.'/'.$topic_path.'/Simulacion/changes/');
         $request -> input_file -> move($destinationPath, 'archivo.zip');
         $zip = new ZipArchive();
         $zip_reference = $zip->open($destinationPath.'archivo.zip');
         if ($zip_reference){
-            $zip->extractTo($destinationPath); // change this to the correct site path
+            $zip->extractTo($destinationPath);
             $zip->close();
             unlink($destinationPath.'archivo.zip');
             $reference = new Reference();
             $reference -> type = 'S';
-            $reference -> route = $destinationPath;
+            $reference -> pending_route = $destinationPath;
+            $reference -> needs_approval = true;
+            $reference -> is_approval_pending = false;
             $reference -> category_id = $category -> id;
             $reference -> topic_id = $topic -> id;
             $reference -> save();
@@ -723,14 +731,16 @@ class Creator extends Controller{
             }else{
                 $topic_path = $topic -> approved_name;
             }
-            $destinationPath = public_path('storage/'.$category_path.'/'.$topic_path.'/Cuestionario/');
+            $destinationPath = public_path('storage/'.$category_path.'/'.$topic_path.'/Cuestionario/changes');
             $request -> input_file -> move($destinationPath, 'cuestionario.xml');
-            $route = new Reference();
-            $route -> type = 'C';
-            $route -> route = $destinationPath;
-            $route -> category_id = $category -> id;
-            $route -> topic_id = $topic -> id;
-            $route -> save();
+            $reference = new Reference();
+            $reference -> type = 'C';
+            $reference -> pending_route         = $destinationPath;
+            $reference -> needs_approval        = true;
+            $reference -> is_approval_pending   = false;
+            $reference -> category_id = $category -> id;
+            $reference -> topic_id = $topic -> id;
+            $reference -> save();
             return redirect('creator/topic/'. $topic->pending_name);
         }
     }
@@ -751,22 +761,22 @@ class Creator extends Controller{
     public function saveTheoryManually(Request $request){
         $topic = Topic::where('name', '=', $request -> topic_name) -> first();
         $category = Category::where('id', '=', $topic -> category_id) -> first();
-        $destination_path = public_path('storage/'.$category -> name.'/'.$topic -> name.'/Teoria/teoria.xml');
-        Storage::disk('local')->put('public/'.$category->name.'/'.$topic->name.'/Teoria/teoria.xml', $request -> xmlContent);
+        $destination_path = public_path('storage/'.$category -> name.'/'.$topic -> name.'/Teoria/changes/teoria.xml');
+        Storage::disk('local')->put('public/'.$category->name.'/'.$topic->name.'/Teoria/changes/teoria.xml', $request -> xmlContent);
         $reference = new Reference();
         $reference -> type = 'T';
         $reference -> route = $destination_path;
         $reference -> category_id = $category -> id;
         $reference -> topic_id = $topic -> id;
         $reference -> save();
-        return response() -> json(['success' => $destination_path.' '.$request->xmlContent]);
+        return response() -> json(['success' => 'OK']);
     }
 
     public function saveQuestionnaireManually(Request $request){
         $topic = Topic::where('name', '=', $request -> topic_name) -> first();
         $category = Category::where('id', '=', $topic -> category_id) -> first();
-        $destination_path = public_path('storage/'.$category -> name.'/'.$topic -> name.'/Cuestionario/cuestionario.xml');
-        Storage::disk('local')->put('public/'.$category->name.'/'.$topic->name.'/Cuestionario/cuestionario.xml', $request -> xmlContent);
+        $destination_path = public_path('storage/'.$category -> name.'/'.$topic -> name.'/Cuestionario/changes/cuestionario.xml');
+        Storage::disk('local')->put('public/'.$category->name.'/'.$topic->name.'/Cuestionario/changes/cuestionario.xml', $request -> xmlContent);
         $reference = new Reference();
         $reference -> type = 'C';
         $reference -> route = $destination_path;
