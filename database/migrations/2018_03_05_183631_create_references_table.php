@@ -17,7 +17,10 @@ class CreateReferencesTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->enum('type', ['T', 'C', 'S', 'i']);
-            $table->string('route');
+            $table->string('pending_route');
+            $table->string('approved_route')->default('');
+            $table->boolean('needs_approval')->default(true);
+            $table->boolean('is_approval_pending')->default(false);
             $table->integer('topic_id')->unsigned();
             $table->integer('category_id')->unsigned();
             $table->foreign('topic_id')->references('id')->on('topics')->onDelete('cascade')->onUpdate('cascade');
