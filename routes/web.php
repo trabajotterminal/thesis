@@ -82,4 +82,7 @@ Route::group(['prefix' => 'creator',  'middleware' => 'checkIfIsCreator'], funct
     Route::post('/topic/questionnaire/register/manually/save', 'Creator@saveQuestionnaireManually');
     Route::post('/categories/submitReview', 'Creator@submitCategoryReview');
     Route::post('/topics/submitReview', 'Creator@submitTopicReview');
+    Route::post('/topic/theory/submitReview', 'Creator@submitTopicTheoryReview');
+    Route::post('/topic/simulation/submitReview', 'Creator@submitTopicSimulationReview');
+    Route::post('/topic/questionnaire/submitReview','Creator@submitTopicQuestionnaireReview');
 });

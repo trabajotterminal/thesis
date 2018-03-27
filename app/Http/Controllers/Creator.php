@@ -591,19 +591,16 @@ class Creator extends Controller{
                     }
                 }
             }
-
             if($new_category -> needs_approval || $new_category -> is_approval_pending){
                 $new_category_path = $new_category -> pending_name;
             }else{
                 $new_category_path = $new_category -> approved_name;
             }
-
             if($old_category -> needs_approval || $old_category -> is_approval_pending){
                 $old_category_path = $old_category -> pending_name;
             }else{
                 $old_category_path = $old_category -> approved_name;
             }
-
             if($old_topic_name != $new_topic_name && $old_category -> approved_name != $new_category -> approved_name)
                 Storage::move('public/' . $old_category_path . '/' . $old_topic_name, 'public/' . $new_category_path . '/' . $topic-> pending_name);
             if($old_topic_name != $new_topic_name && $old_category -> approved_name == $new_category -> approved_name)
@@ -616,23 +613,35 @@ class Creator extends Controller{
     }
 
     public function displayTopic($name){
-        $topic_name = $name;
-        $urls       = [];
-        $topic = Topic::where('approved_name', '=', $topic_name) -> orWhere('pending_name', '=', $topic_name) -> first();
-        $R = Reference::where('topic_id', '=', $topic ->id) -> get();
-        $references = [];
-        $references['T'] = false;
-        $references['C'] = false;
-        $references['S'] = false;
+        $topic_name             = $name;
+        $urls                   = [];
+        $topic                  = Topic::where('approved_name', '=', $topic_name) -> orWhere('pending_name', '=', $topic_name) -> first();
+        $R                      = $topic -> references() -> get();
+        $references             = [];
+        $creation_type          = [];
+        $needs_approval         = [];
+        $is_approval_pending    = [];
         for($i = 0; $i < count($R); $i++){
-            if($R[$i] -> type == 'C')
+            if($R[$i] -> type == 'C') {
                 $references['C'] = true;
-            if($R[$i] -> type == 'T')
+                $creation_type['C'] = $R[$i] -> uploaded_using_file ? 'file' : 'interface';
+                $needs_approval['C'] = $R[$i] -> needs_approval;
+                $is_approval_pending['C'] = $R[$i] -> is_approval_pending;
+            }
+            if($R[$i] -> type == 'T') {
                 $references['T'] = true;
-            if($R[$i] -> type == 'S')
+                $creation_type['T'] = $R[$i] -> uploaded_using_file ? 'file' : 'interface';
+                $needs_approval['T'] = $R[$i] -> needs_approval;
+                $is_approval_pending['T'] = $R[$i] -> is_approval_pending;
+            }
+            if($R[$i] -> type == 'S') {
                 $references['S'] = true;
+                $creation_type['S'] = $R[$i]->uploaded_using_file ? 'file' : 'interface';
+                $needs_approval['S'] = $R[$i]->needs_approval;
+                $is_approval_pending['S'] = $R[$i]->is_approval_pending;
+            }
         }
-        return view('topic', compact(['topic_name', 'references']));
+        return view('topic', compact(['topic_name', 'references', 'creation_type', 'needs_approval', 'is_approval_pending']));
     }
 
     public function topicTheoryManager($name){
@@ -673,6 +682,7 @@ class Creator extends Controller{
             $reference -> is_approval_pending   = false;
             $reference -> category_id           = $category -> id;
             $reference -> topic_id              = $topic -> id;
+            $reference -> uploaded_using_file   = true;
             $reference -> save();
             return redirect('creator/topic/'.$topic->pending_name);
         }
@@ -708,6 +718,7 @@ class Creator extends Controller{
             $reference -> pending_route = $destinationPath;
             $reference -> needs_approval = true;
             $reference -> is_approval_pending = false;
+            $reference -> uploaded_using_file   = true;
             $reference -> category_id = $category -> id;
             $reference -> topic_id = $topic -> id;
             $reference -> save();
@@ -738,6 +749,7 @@ class Creator extends Controller{
             $reference -> pending_route         = $destinationPath;
             $reference -> needs_approval        = true;
             $reference -> is_approval_pending   = false;
+            $reference -> uploaded_using_file   = true;
             $reference -> category_id = $category -> id;
             $reference -> topic_id = $topic -> id;
             $reference -> save();
@@ -768,6 +780,7 @@ class Creator extends Controller{
         $reference -> route = $destination_path;
         $reference -> category_id = $category -> id;
         $reference -> topic_id = $topic -> id;
+        $reference -> uploaded_using_file   = false;
         $reference -> save();
         return response() -> json(['success' => 'OK']);
     }
@@ -780,6 +793,7 @@ class Creator extends Controller{
         $reference = new Reference();
         $reference -> type = 'C';
         $reference -> route = $destination_path;
+        $reference -> uploaded_using_file   = false;
         $reference -> category_id = $category -> id;
         $reference -> topic_id = $topic -> id;
         $reference -> save();
@@ -834,4 +848,81 @@ class Creator extends Controller{
         $notification -> save();
     }
 
+    public function submitTopicTheoryReview(Request $request){
+        $topic_name     = $request -> topic_name;
+        $sender_id                          = session('user_id');
+        $admin                              = Admin::where('id', '=', 1) -> first();
+        $topic                              = Topic::where('pending_name','=', $topic_name) -> orWhere('approved_name', '=', $topic_name) -> first();
+        $reference                          = Reference::where('topic_id', '=', $topic -> id) -> where('type', '=', 'T') -> first();
+        $reference -> is_approval_pending   = true;
+        $reference -> needs_approval        = false;
+        $action_type    = '';
+        if($reference -> approved_route == ''){
+            $action_type = 'A';
+        }else{
+            $action_type = 'E';
+        }
+        $notification = new Notification([
+            'message'       => 'Agregando',
+            'sender_id'     => $sender_id,
+            'recipient_id'  => $admin -> user_id,
+            'type'          => $action_type,
+            'reference_id'  => $reference -> id,
+        ]);
+        $notification   -> save();
+        $reference      -> save();
+        return redirect()->to(redirect()->getUrlGenerator()->previous());
+    }
+
+    public function submitTopicSimulationReview(Request $request){
+        $topic_name     = $request -> topic_name;
+        $sender_id                          = session('user_id');
+        $admin                              = Admin::where('id', '=', 1) -> first();
+        $topic                              = Topic::where('pending_name','=', $topic_name) -> orWhere('approved_name', '=', $topic_name) -> first();
+        $reference                          = Reference::where('topic_id', '=', $topic -> id) -> where('type', '=', 'S') -> first();
+        $reference -> is_approval_pending   = true;
+        $reference -> needs_approval        = false;
+        $action_type    = '';
+        if($reference -> approved_route == ''){
+            $action_type = 'A';
+        }else{
+            $action_type = 'E';
+        }
+        $notification = new Notification([
+            'message'       => 'Agregando',
+            'sender_id'     => $sender_id,
+            'recipient_id'  => $admin -> user_id,
+            'type'          => $action_type,
+            'reference_id'  => $reference -> id,
+        ]);
+        $notification   -> save();
+        $reference      -> save();
+        return redirect()->to(redirect()->getUrlGenerator()->previous());
+    }
+
+    public function submitTopicQuestionnaireReview(Request $request){
+        $topic_name     = $request -> topic_name;
+        $sender_id                          = session('user_id');
+        $admin                              = Admin::where('id', '=', 1) -> first();
+        $topic                              = Topic::where('pending_name','=', $topic_name) -> orWhere('approved_name', '=', $topic_name) -> first();
+        $reference                          = Reference::where('topic_id', '=', $topic -> id) -> where('type', '=', 'C') -> first();
+        $reference -> is_approval_pending   = true;
+        $reference -> needs_approval        = false;
+        $action_type    = '';
+        if($reference -> approved_route == ''){
+            $action_type = 'A';
+        }else{
+            $action_type = 'E';
+        }
+        $notification = new Notification([
+            'message'       => 'Agregando',
+            'sender_id'     => $sender_id,
+            'recipient_id'  => $admin -> user_id,
+            'type'          => $action_type,
+            'reference_id'  => $reference -> id,
+        ]);
+        $notification   -> save();
+        $reference      -> save();
+        return redirect()->to(redirect()->getUrlGenerator()->previous());
+    }
 }

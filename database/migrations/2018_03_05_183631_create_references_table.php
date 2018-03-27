@@ -21,6 +21,7 @@ class CreateReferencesTable extends Migration
             $table->string('approved_route')->default('');
             $table->boolean('needs_approval')->default(true);
             $table->boolean('is_approval_pending')->default(false);
+            $table->integer('uploaded_using_file')->default(true);
             $table->integer('topic_id')->unsigned();
             $table->integer('category_id')->unsigned();
             $table->foreign('topic_id')->references('id')->on('topics')->onDelete('cascade')->onUpdate('cascade');
