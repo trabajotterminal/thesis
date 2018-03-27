@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Validator;
 Use DB;
 use ZipArchive;
 use Log;
+use File;
 
 
 class Creator extends Controller{
@@ -688,6 +689,97 @@ class Creator extends Controller{
             $reference -> uploaded_using_file   = true;
             $reference -> save();
             return redirect('creator/topic/'.$topic->pending_name);
+        }
+    }
+
+    public function editTopicTheoryFile(Request $request){
+        if ($request->hasFile('input_file')) {
+            $topic = Topic::where('approved_name', '=', $request -> topic_name) -> orWhere('pending_name', '=', $request -> topic_name) -> first();
+            $category   = Category::where('id', '=', $topic -> category_id) -> first();
+            $name = $request -> file('input_file') -> getClientOriginalName();
+            $category_path  = "";
+            $topic_path     = "";
+            if($category -> needs_approval || $category -> is_approval_pending){
+                $category_path = $category -> pending_name;
+            }else{
+                $category_path = $category -> approved_name;
+            }
+            if($topic -> needs_approval || $topic -> is_approval_pending){
+                $topic_path = $topic -> pending_name;
+            }else{
+                $topic_path = $topic -> approved_name;
+            }
+            $destinationPath = public_path('storage/'.$category_path.'/'.$topic_path.'/Teoria/changes');
+            File::cleanDirectory($destinationPath);
+            $request -> input_file -> move($destinationPath, $name);
+            $reference = Reference::where('topic_id', '=', $topic ->id) -> where('type', '=', 'T') -> first();
+            $reference -> needs_approval        = true;
+            $reference -> is_approval_pending   = false;
+            $reference -> save();
+            return redirect('creator/topic/'.$topic->pending_name);
+        }
+    }
+
+
+    public function editTopicSimulationFile(Request $request){
+        $topic = Topic::where('approved_name', '=', $request -> topic_name) -> orWhere('pending_name', '=', $request -> topic_name) -> first();
+        $category   = Category::where('id', '=', $topic -> category_id) -> first();
+        $file = $request -> file('input_file');
+        $name = $request -> file('input_file')->getClientOriginalName();
+        $category_path  = "";
+        $topic_path     = "";
+        if($category -> needs_approval || $category -> is_approval_pending){
+            $category_path = $category -> pending_name;
+        }else{
+            $category_path = $category -> approved_name;
+        }
+        if($topic -> needs_approval || $topic -> is_approval_pending){
+            $topic_path = $topic -> pending_name;
+        }else{
+            $topic_path = $topic -> approved_name;
+        }
+        $destinationPath = public_path('storage/'.$category_path.'/'.$topic_path.'/Simulacion/changes/');
+        File::cleanDirectory($destinationPath);
+        $request -> input_file -> move($destinationPath, 'archivo.zip');
+        $zip = new ZipArchive();
+        $zip_reference = $zip->open($destinationPath.'archivo.zip');
+        if ($zip_reference){
+            $zip->extractTo($destinationPath);
+            $zip->close();
+            unlink($destinationPath.'archivo.zip');
+            $reference = Reference::where('topic_id', '=', $topic ->id) -> where('type', '=', 'S') -> first();
+            $reference -> needs_approval = true;
+            $reference -> is_approval_pending = false;
+            $reference -> save();
+        }
+        return redirect('creator/topic/'.$topic->pending_name);
+    }
+
+    public function editTopicQuestionnaireFile(Request $request){
+        if ($request->hasFile('input_file')) {
+            $topic = Topic::where('approved_name', '=', $request -> topic_name) -> orWhere('pending_name', '=', $request -> topic_name) -> first();
+            $category   = Category::where('id', '=', $topic -> category_id) -> first();
+            $name = $request -> file('input_file') -> getClientOriginalName();
+            $category_path  = "";
+            $topic_path     = "";
+            if($category -> needs_approval || $category -> is_approval_pending){
+                $category_path = $category -> pending_name;
+            }else{
+                $category_path = $category -> approved_name;
+            }
+            if($topic -> needs_approval || $topic -> is_approval_pending){
+                $topic_path = $topic -> pending_name;
+            }else{
+                $topic_path = $topic -> approved_name;
+            }
+            $destinationPath = public_path('storage/'.$category_path.'/'.$topic_path.'/Cuestionario/changes');
+            File::cleanDirectory($destinationPath);
+            $request -> input_file -> move($destinationPath, $name);
+            $reference = Reference::where('topic_id', '=', $topic ->id) -> where('type', '=', 'C') -> first();
+            $reference -> needs_approval        = true;
+            $reference -> is_approval_pending   = false;
+            $reference -> save();
+            return redirect('creator/topic/'. $topic->pending_name);
         }
     }
 

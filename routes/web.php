@@ -74,8 +74,11 @@ Route::group(['prefix' => 'creator',  'middleware' => 'checkIfIsCreator'], funct
     Route::post('/categories/edit', 'Creator@editCategory');
     Route::post('/topics/edit', 'Creator@editTopic');
     Route::post('/topic/theory/register/file', 'Creator@registerTheoryFile');
+    Route::post('/topic/theory/edit/file','Creator@editTopicTheoryFile');
     Route::post('/topic/questionnaire/register/file', 'Creator@registerQuestionnaireFile');
+    Route::post('/topic/questionnaire/edit/file', 'Creator@editTopicQuestionnaireFile');
     Route::post('/topic/simulation/register/file', 'Creator@registerSimulationFile');
+    Route::post('topic/simulation/edit/file', 'Creator@editTopicSimulationFile');
     Route::post('/topic/theory/register/manually', 'Creator@registerTheoryManually');
     Route::post('/topic/questionnaire/register/manually', 'Creator@registerQuestionnaireManually');
     Route::post('/topic/theory/register/manually/save', 'Creator@saveTheoryManually');

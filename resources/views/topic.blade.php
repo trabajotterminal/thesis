@@ -32,7 +32,14 @@
                                         </div>
                                     </form>
                                 @else
-                                    <a class="read-more black" href="#">Editar teoría.</a>
+                                    <br><br><br><br>
+                                    <form  method="post" class="margin-top-1" action="{{ url('creator/topic/theory/edit/manually') }}">
+                                        {{ csrf_field() }}
+                                        <input type="hidden" name="topic_name" value="{{$topic_name}}">
+                                        <div class="form-group">
+                                            <input class="form-control btn-primary margin-top" style="margin-top:33px;" type="submit" value="Editar teoría">
+                                        </div>
+                                    </form>
                                 @endif
                                 @if($needs_approval['T'])
                                     <form  method="post" class="margin-top-1" action="{{ url('creator/topic/theory/submitReview') }}">
@@ -104,7 +111,14 @@
                                         </div>
                                     </form>
                                 @else
-                                    <a class="read-more black" href="#"> Editar cuestionario.</a>
+                                    <br><br><br><br>
+                                    <form  method="post" class="margin-top-1" action="{{ url('creator/topic/questionnaire/edit/manually') }}">
+                                        {{ csrf_field() }}
+                                        <input type="hidden" name="topic_name" value="{{$topic_name}}">
+                                        <div class="form-group">
+                                            <input class="form-control btn-primary margin-top" style="margin-top:33px;" type="submit" value="Editar cuestionario">
+                                        </div>
+                                    </form>
                                 @endif
                                 @if($needs_approval['C'])
                                     <form  method="post" class="margin-top-1" action="{{ url('creator/topic/questionnaire/submitReview') }}">
