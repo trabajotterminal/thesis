@@ -618,6 +618,9 @@ class Creator extends Controller{
         $topic                  = Topic::where('approved_name', '=', $topic_name) -> orWhere('pending_name', '=', $topic_name) -> first();
         $R                      = $topic -> references() -> get();
         $references             = [];
+        $references['T']        = false;
+        $references['S']        = false;
+        $references['C']        = false;
         $creation_type          = [];
         $needs_approval         = [];
         $is_approval_pending    = [];
@@ -764,20 +767,20 @@ class Creator extends Controller{
 
     public function registerQuestionnaireManually(Request $request){
         $topic_name = $request -> topic_name;
-        $topic = Topic::where('name', '=', $topic_name) -> first();
+        $topic = Topic::where('pending_name', '=', $topic_name) ->orWhere('approved_name', '=', $topic_name) -> first();
         $category = Category::where('id', '=', $topic -> category_id) -> first();
         $category_name = $category -> name;
         return view('register_questionnaire_manually', compact(['topic_name', 'category_name']));
     }
 
     public function saveTheoryManually(Request $request){
-        $topic = Topic::where('name', '=', $request -> topic_name) -> first();
+        $topic = Topic::where('pending_name', '=', $request -> topic_name) -> orWhere('approved_name', '=', $request -> topic_name) -> first();
         $category = Category::where('id', '=', $topic -> category_id) -> first();
         $destination_path = public_path('storage/'.$category -> name.'/'.$topic -> name.'/Teoria/changes/teoria.xml');
         Storage::disk('local')->put('public/'.$category->name.'/'.$topic->name.'/Teoria/changes/teoria.xml', $request -> xmlContent);
         $reference = new Reference();
         $reference -> type = 'T';
-        $reference -> route = $destination_path;
+        $reference -> pending_route = $destination_path;
         $reference -> category_id = $category -> id;
         $reference -> topic_id = $topic -> id;
         $reference -> uploaded_using_file   = false;
@@ -786,13 +789,13 @@ class Creator extends Controller{
     }
 
     public function saveQuestionnaireManually(Request $request){
-        $topic = Topic::where('name', '=', $request -> topic_name) -> first();
+        $topic = Topic::where('pending_name', '=', $request -> topic_name) -> orWhere('approved_name', '=', $request -> topic_name) -> first();
         $category = Category::where('id', '=', $topic -> category_id) -> first();
         $destination_path = public_path('storage/'.$category -> name.'/'.$topic -> name.'/Cuestionario/changes/cuestionario.xml');
         Storage::disk('local')->put('public/'.$category->name.'/'.$topic->name.'/Cuestionario/changes/cuestionario.xml', $request -> xmlContent);
         $reference = new Reference();
         $reference -> type = 'C';
-        $reference -> route = $destination_path;
+        $reference -> pending_route = $destination_path;
         $reference -> uploaded_using_file   = false;
         $reference -> category_id = $category -> id;
         $reference -> topic_id = $topic -> id;
