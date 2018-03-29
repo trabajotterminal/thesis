@@ -36,9 +36,15 @@ Route::post('/questionnaire/answers', 'Questionnaire@getAnswers') -> middleware(
 
 
 Route::group(['prefix' => 'admin', 'middleware' => 'checkIfIsAdmin'], function(){
+    // for categories and topics / crud.
     Route::get('/notification/{id}', 'Admin@viewNotification');
+    // for more specific editions.
+    Route::get('/notification/theory/{id}', 'Admin@viewTheoryNotification');
+    Route::get('/notification/questionnaire/{id}', 'Admin@viewQuestionnaireNotification');
+    Route::get('/notification/simulation/{id}', 'Admin@viewSimulationNotification');
     Route::post('/notification/resolve', 'Admin@resolveNotification');
-
+    Route::post('/notification/theory/resolve', 'Admin@resolveTheoryNotification');
+    Route::post('/notification/simulation/resolve', 'Admin@resolveSimulationNotification');
 });
 
 Route::group(['prefix' => 'creator',  'middleware' => 'checkIfIsCreator'], function(){
@@ -75,6 +81,7 @@ Route::group(['prefix' => 'creator',  'middleware' => 'checkIfIsCreator'], funct
     Route::post('/topics/edit', 'Creator@editTopic');
     Route::post('/topic/theory/register/file', 'Creator@registerTheoryFile');
     Route::post('/topic/theory/edit/file','Creator@editTopicTheoryFile');
+    Route::post('/topic/theory/edit/manually','Creator@editTopicTheoryManually');
     Route::post('/topic/questionnaire/register/file', 'Creator@registerQuestionnaireFile');
     Route::post('/topic/questionnaire/edit/file', 'Creator@editTopicQuestionnaireFile');
     Route::post('/topic/simulation/register/file', 'Creator@registerSimulationFile');

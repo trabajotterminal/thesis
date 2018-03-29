@@ -66,7 +66,7 @@
             for($j = $startingPosition; $j <= $closingPosition; $j++){
                 $stringToRemove.= $htmlFile[$j];
             }
-            $htmlFile = str_replace($stringToRemove, "<link rel='stylesheet' href='".asset('storage/'.$category_name.'/'.$topic_name.'/Simulacion/css/'.$css_file_names[$k])."'  type='text/css' />", $htmlFile);
+            $htmlFile = str_replace($stringToRemove, "<link rel='stylesheet' href='".asset('storage/'.$category_name.'/'.$topic_name.'/Simulacion/changes/css/'.$css_file_names[$k])."'  type='text/css' />", $htmlFile);
         }
     }
 
@@ -99,32 +99,49 @@
             for($j = $startingPosition; $j <= $closingPosition; $j++){
                 $stringToRemove.= $htmlFile[$j];
             }
-            $htmlFile = str_replace($stringToRemove, "<script src='".asset('storage/'.$category_name.'/'.$topic_name.'/Simulacion/js/'.$js_file_names[$k])."'></script>", $htmlFile);
+            $htmlFile = str_replace($stringToRemove, "<script src='".asset('storage/'.$category_name.'/'.$topic_name.'/Simulacion/changes/js/'.$js_file_names[$k])."'></script>", $htmlFile);
         }
     }
-@endphp
 
+@endphp
 @extends('layouts.app')
 @section('title', 'Revisión.')
 @section('statics-css')
     @include('layouts/statics-css-1')
+    <style>
+        body{
+            overflow-x: hidden;
+        }
+    </style>
 @endsection
-
 @section('menu')
     @include('layouts/menu', ['page' => 'category'])
 @endsection
 @section('content')
-    <div id="content" style="height:590px;">
-        <iframe width="100%" height="100%;" frameborder="0" id="iFrameContent"></iframe>
-        @if($user != null && $user_type == 'alumno')
-            <form id="updateGlance" method="POST" action="{{url('/simulation/updateGlance')}}">
-                {{(csrf_field())}}
-                <input type="hidden" id="user_id" value="{{$user}}" />
-                <input type="hidden" id="topic_name" value="{{$topic_name}}" />
-                <input type="submit" style="display:none"/>
-            </form>
-        @endif
-    </div>
+    <section>
+        <h4 class="margin-left-5 margin-top3">Simulación {{$action}} por {{ucwords($creator_username)}}</h4>
+        <div class="row">
+            <div class="col-md-12">
+                <div id="content" style="height:590px;">
+                    <iframe width="100%" height="100%;" frameborder="0" id="iFrameContent"></iframe>
+                </div>
+            </div>
+        </div>
+        <div class="row margin-top3" style="margin-bottom:30px;">
+            <div class="col-md-12">
+                <center>
+                    <div class="form-group" style="margin:0px;padding:0px;">
+                        <form action="{{url('admin/notification/simulation/resolve')}}" id="notificationForm" method="POST">
+                            <textarea class="form-control" rows="2" style="width:450px;" name="comment" placeholder="Escribe una retroalimentación para {{$creator_username}}."></textarea>
+                            <br>
+                            <input type="submit" name="accept" class="btn btn-success" value="Aceptar contenido">
+                            <input type="submit" name="decline" class="btn btn-danger" style="margin-left:30px;" value="Rechazar contenido">
+                        </form>
+                    </div>
+                </center>
+            </div>
+        </div>
+    </section>
 @endsection
 @section('footer')
     @include('layouts/footer')
@@ -133,41 +150,35 @@
 @section('statics-js')
     @include('layouts/statics-js-1')
     <script>
-        $("#updateGlance").submit(function(e){
-            e.preventDefault();
-            var url = $('#updateGlance').attr('action');
-            var user_id = $('#user_id').val();
-            var topic_name = $('#topic_name').val();
-            $.ajax({
-                beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
-                type: "POST",
-                url: url,
-                data: {"topic_name": topic_name, "user_id": user_id, "type": 'S'},
-                error: function(data){
-                    console.warn('Error occurred while saving some data to server');
-                },
-                success: function(){
-                    console.warn('Data saved...');
-                }
-            });
-            return false;
-        });
-
-        function runAjax(){
-            var form = document.getElementById('updateGlance');
-            if(form){
-                $('#updateGlance').submit();
-            }
-        }
-
         $(document).ready(function() {
             var iframe = document.getElementById('iFrameContent');
             var htmlFile = <?php echo json_encode($htmlFile); ?>;
             iframe = iframe.contentWindow || ( iframe.contentDocument.document || iframe.contentDocument);
             iframe.document.open();iframe.document.write(htmlFile);iframe.document.close();
-            setTimeout(function() {
-                runAjax();
-            }, 10000);
+        });
+
+        var action  = "";
+        var message = $('textarea[name="comment"]').val();
+        var notification_id = <?php echo json_encode($notification -> id) ?>;
+        var url = $("#notificationForm").attr('action');
+        $("#notificationForm").submit(function(e){
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            $.ajax ({
+                beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
+                type: 'POST',
+                data: {'notification_id': notification_id, 'action': action.name, 'message': message},
+                url: url,
+                datatype: "json",
+                success: function(data) {
+                    window.location = "/";
+                }
+            });
+            return false;
+        });
+
+        $(".btn").click(function(e){
+            action = this;
         });
     </script>
 @endsection

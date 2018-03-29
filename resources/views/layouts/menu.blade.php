@@ -72,11 +72,25 @@
                                                                     $object = " una categoria.";
                                                                 if($notification -> topic_id)
                                                                     $object = ' un tema';
-                                                                if($notification -> reference_id)
+                                                                if($notification -> reference_id){
                                                                     $object = ' contenido de un tema';
+                                                                }
                                                             @endphp
                                                             <p>{{$sender_names[$key]}} {{$action}} {{$object}}</p>
-                                                            <p><u><a href="{{url('admin/notification/'.$notification -> id)}}" style="color: #34495e ">Revisar ahora</a></u></p>
+                                                            @if($notification -> reference_id)
+                                                                @if($reference_type[$key] == 'T')
+                                                                    <p><u><a href="{{url('admin/notification/theory/'.$notification -> id)}}" style="color: #34495e ">Revisar ahora</a></u></p>
+                                                                @endif
+                                                                @if($reference_type[$key] == 'C')
+                                                                    <p><u><a href="{{url('admin/notification/questionnaire/'.$notification -> id)}}" style="color: #34495e ">Revisar ahora</a></u></p>
+                                                                @endif
+                                                                @if($reference_type[$key] == 'S')
+                                                                    <p><u><a href="{{url('admin/notification/simulation/'.$notification -> id)}}" style="color: #34495e ">Revisar ahora</a></u></p>
+                                                                @endif
+                                                            @else
+                                                                <p><u><a href="{{url('admin/notification/'.$notification -> id)}}" style="color: #34495e ">Revisar ahora</a></u></p>
+                                                            @endif
+
                                                             <hr>
                                                         </div>
                                                     </li>
