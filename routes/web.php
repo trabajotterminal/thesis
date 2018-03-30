@@ -45,6 +45,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'checkIfIsAdmin'], function()
     Route::post('/notification/resolve', 'Admin@resolveNotification');
     Route::post('/notification/theory/resolve', 'Admin@resolveTheoryNotification');
     Route::post('/notification/simulation/resolve', 'Admin@resolveSimulationNotification');
+    Route::post('/notification/questionnaire/resolve', 'Admin@resolveQuestionnaireNotification');
 });
 
 Route::group(['prefix' => 'creator',  'middleware' => 'checkIfIsCreator'], function(){

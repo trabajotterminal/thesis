@@ -58,7 +58,38 @@ class Admin extends Controller{
     }
 
     public function viewQuestionnaireNotification($id){
-        return view('view_questionnaire_notification');
+        $notification_id    = $id;
+        $notification       = Notification::where('id', '=', $notification_id) -> first();
+        $reference          = Reference::where('id', '=', $notification -> reference_id) -> first();
+        $topic              = Topic::where('id', '=', $reference -> topic_id) -> first();
+        $category           = Category::where('id', '=', $topic -> category_id) -> first();
+        $category_path      = "";
+        $topic_path         = "";
+        if($category -> needs_approval || $category -> is_approval_pending){
+            $category_path = $category -> pending_name;
+        }else{
+            $category_path = $category -> approved_name;
+        }
+        if($topic -> needs_approval || $topic -> is_approval_pending){
+            $topic_path = $topic -> pending_name;
+        }else{
+            $topic_path = $topic -> approved_name;
+        }
+        $topic_name = $topic_path;
+        $category_name = $category_path;
+        $creator_user_id    = $notification -> sender_id;
+        $creator_username   = User::where('id', '=', $creator_user_id) -> first() -> username;
+        $action = "";
+        if($notification -> type == 'A'){
+            $action = 'creado';
+        }
+        if($notification -> type == 'E'){
+            $action = 'actualizado';
+        }
+        if($notification -> type == 'D'){
+            $action = 'eliminado';
+        }
+        return view('view_questionnaire_notification', compact(['topic_name', 'category_name', 'creator_username', 'action', 'notification']));
     }
 
     public function viewSimulationNotification($id){
@@ -155,6 +186,28 @@ class Admin extends Controller{
     }
 
     public function resolveSimulationNotification(Request $request){
+        $notification_id   = $request -> notification_id;
+        $message           = $request -> message;
+        $action            = $request -> action;
+        if($action == 'accept'){
+            $notification = Notification::where('id', '=', $notification_id) -> first();
+            if($notification -> reference_id){
+                $reference = Reference::where('id', '=', $notification -> reference_id) -> first();
+                $reference -> needs_approval = false;
+                $reference -> is_approval_pending = false;
+                $reference -> approved_route = $reference-> pending_route;
+                $reference -> save();
+            }
+        }else{
+            if($action == 'decline'){
+
+            }
+        }
+        $notification -> delete();
+        return response()->json(['success'=>'OK.']);
+    }
+
+    public function resolveQuestionnaireNotification(Request $request){
         $notification_id   = $request -> notification_id;
         $message           = $request -> message;
         $action            = $request -> action;

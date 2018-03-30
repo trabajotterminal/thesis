@@ -796,7 +796,7 @@ class Creator extends Controller{
             }
             $destinationPath = public_path('storage/'.$category_path.'/'.$topic_path.'/Cuestionario/changes');
             File::cleanDirectory($destinationPath);
-            $request -> input_file -> move($destinationPath, $name);
+            $request -> input_file -> move($destinationPath, 'cuestionario.xml');
             $reference = Reference::where('topic_id', '=', $topic ->id) -> where('type', '=', 'C') -> first();
             $reference -> needs_approval        = true;
             $reference -> is_approval_pending   = false;
