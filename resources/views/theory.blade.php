@@ -62,13 +62,13 @@
     $code_closing = [];
     $phi = [];
 
-    $P = "<texto>";
+    $P = "<parrafo>";
     $phi = [];
     preProcess($P, $phi);
     KMPSearch($P, $T, $phi, $text_opening);
 
 
-    $P = "</texto>";
+    $P = "</parrafo>";
     $phi = [];
     preProcess($P,  $phi);
     KMPSearch($P, $T, $phi, $text_closing);
@@ -104,8 +104,8 @@
     $T = str_replace('<subtitulo>', '<h4>', $T);
     $T = str_replace('</subtitulo>', '</h4>', $T);
 
-    $T = str_replace('<texto>', '<p>', $T);
-    $T = str_replace('</texto>', '</p><br>', $T);
+    $T = str_replace('<parrafo>', '<p>', $T);
+    $T = str_replace('</parrafo>', '</p><br>', $T);
 
     $T = str_replace('<codigo>', '<pre><code>', $T);
     $T = str_replace('</codigo>', '</pre></code><br>', $T);

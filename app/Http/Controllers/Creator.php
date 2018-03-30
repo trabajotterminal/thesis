@@ -737,8 +737,9 @@ class Creator extends Controller{
             $topic_path = $topic -> approved_name;
         }
         $path = 'public/'.$category_path.'/'.$topic_path.'/Teoria/changes/';
-        $xmlFilePath = Storage::allFiles($path);$category_id        = $topic -> category_id;
-        return view('edit_topic_manually', compact['xmlFilePath']);
+        $xmlFilePath = Storage::allFiles($path);
+        $topic_name = $topic_path;
+        return view('edit_topic_manually', compact(['xmlFilePath', 'topic_name']));
     }
 
 
@@ -913,6 +914,30 @@ class Creator extends Controller{
         return response() -> json(['success' => 'OK']);
     }
 
+    public function updateTopicTheoryManually(Request $request){
+        $topic = Topic::where('pending_name', '=', $request -> topic_name) -> orWhere('approved_name', '=', $request -> topic_name) -> first();
+        $category = Category::where('id', '=', $topic -> category_id) -> first();
+        $category_path  = "";
+        $topic_path     = "";
+        if($category -> needs_approval || $category -> is_approval_pending){
+            $category_path = $category -> pending_name;
+        }else{
+            $category_path = $category -> approved_name;
+        }
+        if($topic -> needs_approval || $topic -> is_approval_pending){
+            $topic_path = $topic -> pending_name;
+        }else{
+            $topic_path = $topic -> approved_name;
+        }
+        $destinationPath = public_path('storage/'.$category_path.'/'.$topic_path.'/Teoria/changes/teoria.xml');
+        Storage::disk('local')->put('public/'.$category_path.'/'.$topic_path.'/Teoria/changes/teoria.xml', $request -> xmlContent);
+        $reference = Reference::where('topic_id','=', $topic -> id) -> where('type', '=', 'T') -> first();
+        $reference -> pending_route  = $destinationPath;
+        $reference -> needs_approval = true;
+        $reference -> is_approval_pending = false;
+        $reference -> save();
+        return response() -> json(['success' => 'OK']);
+    }
     public function saveQuestionnaireManually(Request $request){
         $topic = Topic::where('pending_name', '=', $request -> topic_name) -> orWhere('approved_name', '=', $request -> topic_name) -> first();
         $category = Category::where('id', '=', $topic -> category_id) -> first();
