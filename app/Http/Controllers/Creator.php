@@ -739,7 +739,27 @@ class Creator extends Controller{
         $path = 'public/'.$category_path.'/'.$topic_path.'/Teoria/changes/';
         $xmlFilePath = Storage::allFiles($path);
         $topic_name = $topic_path;
-        return view('edit_topic_manually', compact(['xmlFilePath', 'topic_name']));
+        return view('edit_theory_manually', compact(['xmlFilePath', 'topic_name']));
+    }
+
+    public function editTopicQuestionnaireManually(Request $request){
+        $topic              = Topic::where('pending_name', '=', $request -> topic_name) -> orWhere('approved_name', '=', $request -> topic_name) -> first();
+        $category           = Category::where('id', '=', $topic -> category_id) -> first();
+        $category_path      = "";
+        $topic_path         = "";
+        if($category -> needs_approval || $category -> is_approval_pending){
+            $category_path = $category -> pending_name;
+        }else{
+            $category_path = $category -> approved_name;
+        }
+        if($topic -> needs_approval || $topic -> is_approval_pending){
+            $topic_path = $topic -> pending_name;
+        }else{
+            $topic_path = $topic -> approved_name;
+        }
+        $topic_name = $topic_path;
+        $category_name = $category_path;
+        return view('edit_questionnaire_manually', compact('topic_name', 'category_name'));
     }
 
 
@@ -955,12 +975,10 @@ class Creator extends Controller{
         }
         $destinationPath = public_path('storage/'.$category_path.'/'.$topic_path.'/Cuestionario/changes/cuestionario.xml');
         Storage::disk('local')->put('public/'.$category_path.'/'.$topic_path.'/Cuestionario/changes/cuestionario.xml', $request -> xmlContent);
-        $reference = new Reference();
-        $reference -> type = 'C';
+        $reference = Reference::where('topic_id', '=', $topic -> id) -> where('type', '=', 'C') -> first();
         $reference -> pending_route = $destinationPath;
+        $reference -> needs_approval = true;
         $reference -> uploaded_using_file   = false;
-        $reference -> category_id = $category -> id;
-        $reference -> topic_id = $topic -> id;
         $reference -> save();
         return response() -> json(['success' => 'OK']);
     }

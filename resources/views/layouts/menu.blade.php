@@ -1,11 +1,17 @@
 @php
-    $menu_classes    = [];
-    $menu_classes[0] = $page == 'index' ? 'active' : '';
-    $menu_classes[1] = $page == 'category' ? 'active' : '';
-    $menu_classes[2] = $page == 'login' ? 'active' : '';
-    $menu_classes[3] = $page == 'login' ? 'active' : '';
-    $user            = session('user');
-    $user_type       = session('user_type');
+    $menu_classes       = [];
+    $menu_classes[0]    = $page == 'index' ? 'active' : '';
+    $menu_classes[1]    = $page == 'category' ? 'active' : '';
+    $menu_classes[2]    = $page == 'login' ? 'active' : '';
+    $menu_classes[3]    = $page == 'login' ? 'active' : '';
+    $user               = session('user');
+    $user_type          = session('user_type');
+    $notification_count = count($notifications);
+    if($notification_count){
+        $notification_count = '('.$notification_count.')';
+    }else{
+        $notification_count = '';
+    }
 @endphp
 <style>
     .navbar-default .dropdown-menu.notify-drop {
@@ -41,8 +47,8 @@
                             @if($user_type == 'creator')
                                 <li class="dropdown"> <a href="#" class="dropdown-toggle  {{$menu_classes[1]}}">Administrar</a>
                                     <ul class="dropdown-menu" role="menu">
-                                        <li> <a href="/creator/categories">Categorias</a> </li>
-                                        <li> <a href="/creator/topics">Temas</a> </li>
+                                        <li> <a href="/creator/categories">Mis categorias</a> </li>
+                                        <li> <a href="/creator/topics">Mis temas</a> </li>
                                     </ul>
                                 </li>
                                 <li><a href="/creator/statistics" class="dropdown-toggle  {{$menu_classes[2]}}">Ver estadisticas</a></li>
@@ -50,9 +56,12 @@
                             @endif
                             @if($user_type == 'admin')
                                     <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle">Notificaciones (<b>{{count($notifications)}}</b>)</a>
+                                        <a href="#" class="dropdown-toggle">Notificaciones <b>{{$notification_count}}</b></a>
                                         <ul class="dropdown-menu notify-drop">
                                             <div class="drop-content">
+                                                @if($notification_count == '')
+                                                    <li style="margin-left:20px;">Sin notificaciones</li>
+                                                @endif
                                                 @foreach($notifications as $key => $notification)
                                                     <li>
                                                         <div class="col-md-3 col-sm-3 col-xs-3" style="width:60px;height:60px;">

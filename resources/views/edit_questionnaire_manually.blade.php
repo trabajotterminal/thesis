@@ -1,10 +1,44 @@
+@php
+    $xmlstring      = file_get_contents('storage/'.$category_name.'/'.$topic_name.'/Cuestionario/changes/cuestionario.xml');
+    $xml            = simplexml_load_string($xmlstring);
+    $questions      = [];
+    $feedbacks      = [];
+    $simulations    = [];
+    $options        = [];
+    $options_length = [];
+    $options_length[0] = 1;
+    $options_length[1] = 2;
+    $options_length[2] = 3;
+    $options_length[3] = 4;
+    $right_answers  = [];
+    $tries          = $xml['cuestionarios'];
+    $number_of_questionnaires       = $tries;
+    $questions_per_questionnaire    = $xml['preguntas_por_cuestionario'];
+    $i = 0;
+    for($k = 0; $k < $tries; $k++){
+        foreach($xml->children()[$k] as $index => $bloque) {
+            array_push($questions, $bloque -> pregunta);
+            array_push($feedbacks, $bloque -> retroalimentacion);
+            array_push($simulations, $bloque -> simulacion);
+            $option_list = [];
+            $j = 0;
+            foreach($bloque -> opcion  as $option){
+                array_push($option_list, $option);
+                if($option['value'] == 'true'){
+                    $right_answers[$i] = $j + 1;
+                }
+                ++$j;
+            }
+            array_push($options, $option_list);
+            ++$i;
+        }
+    }
+@endphp
 @extends('layouts.app')
-@section('title', 'Registro')
-
+@section('title', 'Edición')
 @section('statics-css')
     @include('layouts/statics-css-1')
 @endsection
-
 @section('menu')
     @include('layouts/menu', ['page' => 'category'])
 @endsection
@@ -18,73 +52,62 @@
                 <div class="col-md-4">
                     <label for="exampleFormControlSelect1">Número de cuestionarios.</label>
                     <select class="form-control" id="questionnaire_number" style="width:200px;">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
                     </select>
                 </div>
                 <div class="col-md-4">
                     <label for="exampleFormControlSelect1">Número de preguntas por cuestionario.</label>
                     <select class="form-control" id="questions_per_questionnaire" style="width:280px;">
-                        <option>5</option>
-                        <option>6</option>
-                        <option>7</option>
-                        <option>8</option>
-                        <option>9</option>
-                        <option>10</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
                     </select>
                 </div>
             </div>
             <br>
             <div class="row" id="questionnaire">
-                <u><h4 style="margin-left:15px;">Cuestionario 1</h4></u>
-                <div class="col-md-12">
-                    <h3>Pregunta 1:</h3>
-                    <div class="input_holder">
-                        <input class="email_input" style="color:black;border-color:black;" type="search" name="question_1" id="question_1">
+                @foreach($questions as $key => $question)
+                    <div class="col-md-12">
+                        <h3>Pregunta {{($key + 1)}}:</h3>
+                        <div class="input_holder">
+                            <input class="email_input" style="color:black;border-color:black;" type="search" name="question_{{($key + 1)}}" id="question_{{($key + 1)}}" value="{{$questions[$key]}}">
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-12 margin-top3">
-                    <h3>Retroalimentación</h3>
-                    <div class="input_holder">
-                        <input class="email_input" style="color:black;border-color:black;" type="search" id="feedback_1">
+                    <div class="col-md-12 margin-top3">
+                        <h3>Retroalimentación</h3>
+                        <div class="input_holder">
+                            <input class="email_input" style="color:black;border-color:black;" type="search" id="feedback_{{($key + 1)}}" value="{{$feedbacks[$key]}}">
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-12 margin-top3">
-                    <h3>Simulación</h3>
-                    <div class="input_holder">
-                        <input class="email_input" style="color:black;border-color:black;height:150px;" type="search" id="simulation_1">
+                    <div class="col-md-12 margin-top3">
+                        <h3>Simulación</h3>
+                        <div class="input_holder">
+                            <input class="email_input" style="color:black;border-color:black;height:150px;" type="search" id="simulation_{{$key + 1}}" value="{{$simulations[$key]}}">
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-12 margin-top3" id="options_1">
-                    <h3>Opciones</h3>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="options_1" id="inlineRadio1" value="1" checked>
-                        <input type="text" class="form-check-label" for="inlineRadio1" id='option_1_1' value="Primera Opción"/>
+                    <div class="col-md-12 margin-top3" id="options_{{($key + 1)}}">
+                        <h3>Opciones</h3>
+                        @foreach($options[$key] as $secondKey => $option)
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="options_{{($key + 1)}}" id="inlineRadio{{($key + 1)}}" value="{{($key + 1)}}" checked>
+                                <input type="text" class="form-check-label" for="inlineRadio{{($key + 1)}}" id='option_{{($key + 1)}}_{{($secondKey + 1)}}' value="{{$option}}"/>
+                            </div>
+                            <br>
+                        @endforeach
                     </div>
-                    <br>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="options_1" id="inlineRadio2" value="2">
-                        <input type="text" class="form-check-label" for="inlineRadio2" id='option_1_2' value="Segunda Opción"/>
-                    </div>
-                    <br>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="options_1" id="inlineRadio3" value="3">
-                        <input type="text" class="form-check-label" for="inlineRadio3" id='option_1_3' value="Tercera Opción"/>
-                    </div>
-                    <br>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="options_1" id="inlineRadio4" value="4">
-                        <input type="text" class="form-check-label" for="inlineRadio4" id='option_1_4' value="Cuarta Opción"/>
-                    </div>
-                </div>
+                @endforeach
             </div>
             <form action="{{url('creator/topic/questionnaire/register/manually/save')}}" method="POST" id="finish">
                 <button class="btn btn-light" style="margin-top:30px;margin-left:50px;" id="addQuestion">Agregar otra pregunta</button>
                 {{ csrf_field() }}
-                <input type="submit" class="btn btn-success" style="margin-top:30px;margin-left:50px;" id="saveQuestionnaire" value="Guardar Cuestionario" />
+                <input type="submit" class="btn btn-success" style="margin-top:30px;margin-left:50px;" id="saveQuestionnaire" value="Actualizar cuestionarios" />
                 <input type="hidden" value="{{$topic_name}}" id="hiddenTopicName">
             </form>
         </div>
@@ -97,16 +120,35 @@
 @section('statics-js')
     @include('layouts/statics-js-1')
     <script>
-        var questions       = 1;
-        var simulations     = 1;
-        var feedbacks       = 1;
+        var questions_per_questionnaire_php = 0;
+        var number_of_questionnaires_php = 0;
+        var numberOfQuestionnaires = 0;
+        var questionsPerQuestionnaire = 0;
+        var requiredQuestions = 0;
+        var questions       = <?php  echo json_decode(count($questions)); ?>;
+        var simulations     = <?php  echo json_decode(count($simulations)); ?>;
+        var feedbacks       = <?php  echo json_decode(count($feedbacks)); ?>;
         var options         = [];
-        options[0]          = 4;
+        $( document ).ready(function() {
+            questions_per_questionnaire_php = <?php echo json_decode($questions_per_questionnaire); ?>;
+            number_of_questionnaires_php = <?php echo json_decode($number_of_questionnaires); ?>;
+            $("#questions_per_questionnaire").val(questions_per_questionnaire_php);
+            $("#questionnaire_number").val(number_of_questionnaires_php);
+            numberOfQuestionnaires = number_of_questionnaires_php;
+            questionsPerQuestionnaire = questions_per_questionnaire_php;
+            requiredQuestions = numberOfQuestionnaires * questionsPerQuestionnaire;
+            $('#addQuestion').hide();
+            $('#finish').hide();
+            if(questions < requiredQuestions){
+                $('#addQuestion').show();
+            }else{
+                $('#finish').show();
+            }
+        });
+        for(var i = 0; i < questions; i++){
+            options[i] = 4;
+        }
         var title_id        = 1;
-        var numberOfQuestionnaires = $("#questionnaire_number").val();
-        var questionsPerQuestionnaire = $("#questions_per_questionnaire").val();
-        var requiredQuestions = $("#questionnaire_number").val() * $("#questions_per_questionnaire").val();
-        $("#saveQuestionnaire").hide();
         $('#questionnaire_number').change(function(){
             numberOfQuestionnaires = $("#questionnaire_number").val();
             requiredQuestions = $("#questionnaire_number").val() * $("#questions_per_questionnaire").val();
@@ -234,7 +276,6 @@
             e.preventDefault();
             return 0;
         });
-
     </script>
 @endsection
 

@@ -22,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
         view() -> composer('layouts.menu', function($view){
             $user_id = session('user_id');
+            $notifications = [];
             if($user_id){
                 $notifications  = DB::select('SELECT * FROM notifications WHERE recipient_id = ?', [$user_id]);
                 $reference_type = [];
@@ -32,10 +33,10 @@ class AppServiceProvider extends ServiceProvider
                         $reference_type[$i] = Reference::where('id', '=', $notifications[$i] -> reference_id) -> first() -> type;
                     }
                 }
-                $view -> with('notifications', $notifications);
                 $view -> with('sender_names', $sender_names);
                 $view -> with('reference_type', $reference_type);
             }
+            $view -> with('notifications', $notifications);
             $view -> with('categories', Category::where('approved_name','!=', '') -> get());
         });
     }

@@ -35,7 +35,7 @@
     @include('layouts/menu', ['page' => 'category'])
 @endsection
 @section('content')
-    <h1 style="margin-left:20px;margin-top:20px;">Temas</h1>
+    <h1 style="margin-left:20px;margin-top:20px;">Mis temas</h1>
     <section>
         <div class="container" id="topic_list" style="min-width: 600px;min-height:470px;"></div>
     </section>
