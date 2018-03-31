@@ -49,6 +49,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'checkIfIsAdmin'], function()
 });
 
 Route::group(['prefix' => 'creator',  'middleware' => 'checkIfIsCreator'], function(){
+    Route::get('/notification/{id}', 'Creator@viewNotification');
     Route::get('/categories', 'Creator@categories');
     Route::get('/topics', 'Creator@topics');
     Route::get('/statistics', 'Creator@statistics');
@@ -88,7 +89,7 @@ Route::group(['prefix' => 'creator',  'middleware' => 'checkIfIsCreator'], funct
     Route::post('/topic/questionnaire/edit/file', 'Creator@editTopicQuestionnaireFile');
     Route::post('/topic/questionnaire/edit/manually','Creator@editTopicQuestionnaireManually');
     Route::post('/topic/simulation/register/file', 'Creator@registerSimulationFile');
-    Route::post('topic/simulation/edit/file', 'Creator@editTopicSimulationFile');
+    Route::post('/topic/simulation/edit/file', 'Creator@editTopicSimulationFile');
     Route::post('/topic/theory/register/manually', 'Creator@registerTheoryManually');
     Route::post('/topic/questionnaire/register/manually', 'Creator@registerQuestionnaireManually');
     Route::post('/topic/theory/register/manually/save', 'Creator@saveTheoryManually');

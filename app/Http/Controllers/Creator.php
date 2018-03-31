@@ -1111,4 +1111,27 @@ class Creator extends Controller{
         $reference      -> save();
         return redirect()->to(redirect()->getUrlGenerator()->previous());
     }
+
+    public function viewNotification($id){
+        $notification_id    = $id;
+        $notification       = Notification::where('id', '=', $notification_id) -> first();
+        $topic_name         = "";
+        $category_name      = "";
+        $reference          = Reference::where('id', '=', $notification -> reference_id) -> first();
+        if($notification -> topic_id){
+            $topic_name = Topic::where('id', '=', $notification -> topic_id) -> first() -> approved_name;
+        }
+        if($notification -> category_id){
+            $category_name = Category::where('id', '=', $notification -> category_id) -> first() -> approved_name;
+        }
+        $reference_type     = "";
+        if($notification -> reference_id){
+            $topic_name = Topic::where('id', '=', $reference -> topic_id) -> first() -> approved_name;
+            $category_name = Category::where('id', '=', $reference -> category_id) -> first() -> approved_name;
+            Log::debug($topic_name);
+            $reference_type = $reference -> type;
+        }
+        $sender             = User::where('id', '=', $notification -> sender_id) -> first();
+        return view('creator_view_notification', compact(['notification', 'sender', 'topic', 'category', 'reference', 'topic_name', 'category_name', 'reference_type']));
+    }
 }

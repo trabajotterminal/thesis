@@ -15,12 +15,13 @@ class CreateNotificationsTable extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('message');
+            $table->string('message')->nullable();
             $table->integer('sender_id') -> unsigned();
             $table->foreign('sender_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('recipient_id') -> unsigned();
             $table->foreign('recipient_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->enum('type', ['A', 'E','D']);
+            $table->enum('type', ['A', 'E','D', 'MP', 'MN']);
+            $table->string('additional_params') -> nullable();
             $table->integer('topic_id') -> unsigned()-> nullable();
             $table->foreign('topic_id')->references('id')->on('topics')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('category_id') -> unsigned() -> nullable();

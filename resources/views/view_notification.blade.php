@@ -159,9 +159,10 @@
     @include('layouts/statics-js-1')
     <script>
         var action  = "";
-        var message = $('textarea[name="comment"]').val();
         var notification_id = <?php echo json_encode($notification -> id) ?>;
+        var message = "";
         $("#notificationForm").submit(function(e){
+            message = $('textarea[name="comment"]').val();
             e.preventDefault();
             e.stopImmediatePropagation();
             $.ajax ({

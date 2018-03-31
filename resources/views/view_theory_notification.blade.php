@@ -92,6 +92,7 @@
         var notification_id = <?php echo json_encode($notification -> id) ?>;
         var url = $("#notificationForm").attr('action');
         $("#notificationForm").submit(function(e){
+        message = $('textarea[name="comment"]').val();
         e.preventDefault();
         e.stopImmediatePropagation();
         $.ajax ({

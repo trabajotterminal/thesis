@@ -51,7 +51,63 @@
                                         <li> <a href="/creator/topics">Mis temas</a> </li>
                                     </ul>
                                 </li>
-                                <li><a href="/creator/statistics" class="dropdown-toggle  {{$menu_classes[2]}}">Ver estadisticas</a></li>
+                                <!--<li><a href="/creator/statistics" class="dropdown-toggle  {{$menu_classes[2]}}">Ver estadisticas</a></li>-->
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle">Notificaciones <b>{{$notification_count}}</b></a>
+                                    <ul class="dropdown-menu notify-drop">
+                                        <div class="drop-content">
+                                            @if($notification_count == '')
+                                                <li style="margin-left:20px;">Sin notificaciones</li>
+                                            @endif
+                                            @foreach($notifications as $key => $notification)
+                                                <li>
+                                                    <div class="col-md-3 col-sm-3 col-xs-3" style="width:60px;height:60px;">
+                                                        @if($notification -> type == 'MP')
+                                                            <center><img src="{{ URL::asset('/images/accepted.png')}}" style="width:25px;height:25px;margin-top:10px;"/></center>
+                                                        @endif
+                                                    </div>
+                                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                                        @php
+                                                            $action = "";
+                                                            $object = "";
+                                                            $image  = "";
+                                                            if($notification -> type == 'MP'){
+                                                                $action = "aprobo";
+                                                            }
+                                                            if($notification -> type == 'MN'){
+                                                                $action = "rechazó";
+                                                            }
+                                                            if($notification -> additional_params == 'E'){
+                                                                $action.= " la edición";
+                                                            }
+                                                            if($notification -> additional_params == 'A'){
+                                                                $action.= " la creación";
+                                                            }
+                                                            if($notification -> additional_params == 'D'){
+                                                                $action.= " la eliminación";
+                                                            }
+
+                                                            if($notification -> topic_id){
+                                                                $object = " de un tema";
+                                                            }
+                                                            if($notification -> category_id){
+                                                                $object = "de una categoria";
+                                                            }
+                                                            if($notification -> reference_id){
+                                                                $object = "del contenido de un tema";
+                                                            }
+                                                        @endphp
+                                                        <p>
+                                                            {{$sender_names[$key]}} <span>{{$action}}</span> {{$object}}.
+                                                        </p>
+                                                        <p><u><a href="{{url('creator/notification/'.$notification -> id)}}" style="color: #34495e ">Ver más</a></u></p>
+                                                        <hr>
+                                                    </div>
+                                                </li>
+                                            @endforeach
+                                        </div>
+                                    </ul>
+                                </li>
                                 <li><a href="/logout" class="dropdown-toggle"  {{$menu_classes[3]}}">Cerrar Sesión</a></li>
                             @endif
                             @if($user_type == 'admin')

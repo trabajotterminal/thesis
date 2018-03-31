@@ -18,6 +18,7 @@ class CreateMarksTable extends Migration
             $table -> increments('id')->unsigned()->unique();
             $table -> double('points');
             $table -> integer('try_number');
+            $table -> integer('user_id') -> unsigned();
             $table -> integer('student_id') -> unsigned();
             $table -> integer('group_id') -> unsigned();
             $table -> integer('school_id') -> unsigned();

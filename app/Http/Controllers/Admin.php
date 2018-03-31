@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use File;
 use Log;
+use Mockery\Matcher\Not;
 
 class Admin extends Controller{
     public function viewNotification($id){
@@ -139,11 +140,20 @@ class Admin extends Controller{
          $action            = $request -> action;
          if($action == 'accept'){
             $notification = Notification::where('id', '=', $notification_id) -> first();
+            $notification_to_send = new Notification([
+                'message'           => $message,
+                'sender_id'         => $notification -> recipient_id,
+                'recipient_id'      => $notification -> sender_id,
+                'type'              => 'MP',
+                'additional_params' => $notification -> type,
+             ]);
             if($notification -> topic_id){
                 $topic      = Topic::where('id', '=', $notification -> topic_id) -> first();
                 $topic -> needs_approval = false;
                 $topic -> is_approval_pending = false;
                 $topic -> approved_name = $topic -> pending_name;
+                $object = $notification -> topic_id;
+                $notification_to_send -> topic_id = $notification -> topic_id;
                 $topic -> save();
             }
              if($notification -> category_id){
@@ -151,8 +161,10 @@ class Admin extends Controller{
                 $category -> needs_approval = false;
                 $category -> is_approval_pending = false;
                 $category -> approved_name = $category -> pending_name;
+                $notification_to_send -> category_id = $notification -> category_id;
                 $category -> save();
              }
+             $notification_to_send -> save();
          }else{
              if($action == 'decline'){
 
@@ -194,6 +206,15 @@ class Admin extends Controller{
                 $reference -> is_approval_pending = false;
                 $reference -> approved_route = $reference-> pending_route;
                 File::copyDirectory(public_path($path_changes), public_path($path_latest), true);
+                $notification_to_send = new Notification([
+                    'message'           => $message,
+                    'sender_id'         => $notification -> recipient_id,
+                    'recipient_id'      => $notification -> sender_id,
+                    'type'              => 'MP',
+                    'additional_params' => $notification -> type,
+                    'reference_id'      => $notification -> reference_id,
+                ]);
+                $notification_to_send -> save();
                 $reference -> save();
             }
         }else{
@@ -237,6 +258,15 @@ class Admin extends Controller{
                 $reference -> is_approval_pending = false;
                 $reference -> approved_route = $reference-> pending_route;
                 File::copyDirectory(public_path($path_changes), public_path($path_latest), true);
+                $notification_to_send = new Notification([
+                    'message'           => $message,
+                    'sender_id'         => $notification -> recipient_id,
+                    'recipient_id'      => $notification -> sender_id,
+                    'type'              => 'MP',
+                    'additional_params' => $notification -> type,
+                    'reference_id'      => $notification -> reference_id,
+                ]);
+                $notification_to_send -> save();
                 $reference -> save();
             }
         }else{
@@ -280,6 +310,15 @@ class Admin extends Controller{
                 $reference -> is_approval_pending = false;
                 $reference -> approved_route = $reference-> pending_route;
                 File::copyDirectory(public_path($path_changes), public_path($path_latest), true);
+                $notification_to_send = new Notification([
+                    'message'           => $message,
+                    'sender_id'         => $notification -> recipient_id,
+                    'recipient_id'      => $notification -> sender_id,
+                    'type'              => 'MP',
+                    'additional_params' => $notification -> type,
+                    'reference_id'      => $notification -> reference_id,
+                ]);
+                $notification_to_send -> save();
                 $reference -> save();
             }
         }else{
