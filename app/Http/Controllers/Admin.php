@@ -9,6 +9,8 @@ use App\Reference;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use File;
+use Log;
 
 class Admin extends Controller{
     public function viewNotification($id){
@@ -151,9 +153,6 @@ class Admin extends Controller{
                 $category -> approved_name = $category -> pending_name;
                 $category -> save();
              }
-             if($notification -> reference_id){
-
-             }
          }else{
              if($action == 'decline'){
 
@@ -169,11 +168,32 @@ class Admin extends Controller{
         $action            = $request -> action;
         if($action == 'accept'){
             $notification = Notification::where('id', '=', $notification_id) -> first();
+            $reference      = Reference::where('id', '=', $notification -> reference_id) -> first();
+            $topic = Topic::where('id','=', $reference -> topic_id) -> get() -> first();
+            $category_id = $topic -> category_id;
+            $category = Category::where('id', '=', $category_id) -> get() -> first();
+            $category_path      = "";
+            $topic_path         = "";
+            if($category -> needs_approval || $category -> is_approval_pending){
+                $category_path = $category -> pending_name;
+            }else{
+                $category_path = $category -> approved_name;
+            }
+            if($topic -> needs_approval || $topic -> is_approval_pending){
+                $topic_path = $topic -> pending_name;
+            }else{
+                $topic_path = $topic -> approved_name;
+            }
+            $category_name  = $category_path;
+            $topic_name     = $topic_path;
+            $path_changes   = 'storage/'.$category_path.'/'.$topic_path.'/Teoria/changes/';
+            $path_latest    = 'storage/'.$category_path.'/'.$topic_path.'/Teoria/latest/';
             if($notification -> reference_id){
                 $reference = Reference::where('id', '=', $notification -> reference_id) -> first();
                 $reference -> needs_approval = false;
                 $reference -> is_approval_pending = false;
                 $reference -> approved_route = $reference-> pending_route;
+                File::copyDirectory(public_path($path_changes), public_path($path_latest), true);
                 $reference -> save();
             }
         }else{
@@ -191,11 +211,32 @@ class Admin extends Controller{
         $action            = $request -> action;
         if($action == 'accept'){
             $notification = Notification::where('id', '=', $notification_id) -> first();
+            $reference      = Reference::where('id', '=', $notification -> reference_id) -> first();
+            $topic = Topic::where('id','=', $reference -> topic_id) -> get() -> first();
+            $category_id = $topic -> category_id;
+            $category = Category::where('id', '=', $category_id) -> get() -> first();
+            $category_path      = "";
+            $topic_path         = "";
+            if($category -> needs_approval || $category -> is_approval_pending){
+                $category_path = $category -> pending_name;
+            }else{
+                $category_path = $category -> approved_name;
+            }
+            if($topic -> needs_approval || $topic -> is_approval_pending){
+                $topic_path = $topic -> pending_name;
+            }else{
+                $topic_path = $topic -> approved_name;
+            }
+            $category_name  = $category_path;
+            $topic_name     = $topic_path;
+            $path_changes   = 'storage/'.$category_path.'/'.$topic_path.'/Simulacion/changes/';
+            $path_latest    = 'storage/'.$category_path.'/'.$topic_path.'/Simulacion/latest/';
             if($notification -> reference_id){
                 $reference = Reference::where('id', '=', $notification -> reference_id) -> first();
                 $reference -> needs_approval = false;
                 $reference -> is_approval_pending = false;
                 $reference -> approved_route = $reference-> pending_route;
+                File::copyDirectory(public_path($path_changes), public_path($path_latest), true);
                 $reference -> save();
             }
         }else{
@@ -213,11 +254,32 @@ class Admin extends Controller{
         $action            = $request -> action;
         if($action == 'accept'){
             $notification = Notification::where('id', '=', $notification_id) -> first();
+            $reference      = Reference::where('id', '=', $notification -> reference_id) -> first();
+            $topic = Topic::where('id','=', $reference -> topic_id) -> get() -> first();
+            $category_id = $topic -> category_id;
+            $category = Category::where('id', '=', $category_id) -> get() -> first();
+            $category_path      = "";
+            $topic_path         = "";
+            if($category -> needs_approval || $category -> is_approval_pending){
+                $category_path = $category -> pending_name;
+            }else{
+                $category_path = $category -> approved_name;
+            }
+            if($topic -> needs_approval || $topic -> is_approval_pending){
+                $topic_path = $topic -> pending_name;
+            }else{
+                $topic_path = $topic -> approved_name;
+            }
+            $category_name  = $category_path;
+            $topic_name     = $topic_path;
+            $path_changes   = 'storage/'.$category_path.'/'.$topic_path.'/Cuestionario/changes/';
+            $path_latest    = 'storage/'.$category_path.'/'.$topic_path.'/Cuestionario/latest/';
             if($notification -> reference_id){
                 $reference = Reference::where('id', '=', $notification -> reference_id) -> first();
                 $reference -> needs_approval = false;
                 $reference -> is_approval_pending = false;
                 $reference -> approved_route = $reference-> pending_route;
+                File::copyDirectory(public_path($path_changes), public_path($path_latest), true);
                 $reference -> save();
             }
         }else{

@@ -739,7 +739,7 @@ class Creator extends Controller{
         $path = 'public/'.$category_path.'/'.$topic_path.'/Teoria/changes/';
         $xmlFilePath = Storage::allFiles($path);
         $topic_name = $topic_path;
-        return view('edit_theory_manually', compact(['xmlFilePath', 'topic_name']));
+        return view('edit_topic_manually', compact(['xmlFilePath', 'topic_name']));
     }
 
     public function editTopicQuestionnaireManually(Request $request){
@@ -975,7 +975,10 @@ class Creator extends Controller{
         }
         $destinationPath = public_path('storage/'.$category_path.'/'.$topic_path.'/Cuestionario/changes/cuestionario.xml');
         Storage::disk('local')->put('public/'.$category_path.'/'.$topic_path.'/Cuestionario/changes/cuestionario.xml', $request -> xmlContent);
-        $reference = Reference::where('topic_id', '=', $topic -> id) -> where('type', '=', 'C') -> first();
+        $reference = new Reference();
+        $reference -> type = 'C';
+        $reference -> topic_id = $topic -> id;
+        $reference -> category_id = $category -> id;
         $reference -> pending_route = $destinationPath;
         $reference -> needs_approval = true;
         $reference -> uploaded_using_file   = false;
