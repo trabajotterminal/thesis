@@ -10,7 +10,7 @@ class Category extends Controller{
         $topics  = $category -> topics() -> where('approved_name', '!=', '') -> get();
         $references   = [];
         for($i = 0; $i < count($topics); $i++){
-            $references[$i] = $topics[$i] -> references;
+            $references[$i] = $topics[$i] -> references() -> where('approved_route', '!=', '') -> get();
         }
         return view('category', compact(['category_name', 'topics', 'references']));
     }

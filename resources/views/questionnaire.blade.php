@@ -1,5 +1,5 @@
 @php
-    $xmlstring      = file_get_contents('storage/'.$category_name.'/'.$topic_name.'/Cuestionario/cuestionario.xml');
+    $xmlstring      = file_get_contents('storage/'.$category_name.'/'.$topic_name.'/Cuestionario/latest/cuestionario.xml');
     $try_number     = $tries;
     $xml            = simplexml_load_string($xmlstring);
     $questions      = [];

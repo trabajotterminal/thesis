@@ -1,7 +1,7 @@
 @php
     $cssLinks = "";
     $jsLinks  = "";
-    $user            = session('user');
+    $user            = session('user_id');
     $user_type       = session('user_type');
 @endphp
 
@@ -66,7 +66,7 @@
             for($j = $startingPosition; $j <= $closingPosition; $j++){
                 $stringToRemove.= $htmlFile[$j];
             }
-            $htmlFile = str_replace($stringToRemove, "<link rel='stylesheet' href='".asset('storage/'.$category_name.'/'.$topic_name.'/Simulacion/css/'.$css_file_names[$k])."'  type='text/css' />", $htmlFile);
+            $htmlFile = str_replace($stringToRemove, "<link rel='stylesheet' href='".asset('storage/'.$category_name.'/'.$topic_name.'/Simulacion/latest/css/'.$css_file_names[$k])."'  type='text/css' />", $htmlFile);
         }
     }
 
@@ -99,7 +99,7 @@
             for($j = $startingPosition; $j <= $closingPosition; $j++){
                 $stringToRemove.= $htmlFile[$j];
             }
-            $htmlFile = str_replace($stringToRemove, "<script src='".asset('storage/'.$category_name.'/'.$topic_name.'/Simulacion/js/'.$js_file_names[$k])."'></script>", $htmlFile);
+            $htmlFile = str_replace($stringToRemove, "<script src='".asset('storage/'.$category_name.'/'.$topic_name.'/Simulacion/latest/js/'.$js_file_names[$k])."'></script>", $htmlFile);
         }
     }
 @endphp
@@ -116,7 +116,7 @@
 @section('content')
     <div id="content" style="height:590px;">
         <iframe width="100%" height="100%;" frameborder="0" id="iFrameContent"></iframe>
-        @if($user != null && $user_type == 'alumno')
+        @if($user != null && $user_type == 'student')
             <form id="updateGlance" method="POST" action="{{url('/simulation/updateGlance')}}">
                 {{(csrf_field())}}
                 <input type="hidden" id="user_id" value="{{$user}}" />

@@ -15,19 +15,31 @@ use Log;
 class Theory extends Controller
 {
     public function theory($topic_name){
-        $topic = Topic::where('name','=', $topic_name) -> get() -> first();
+        $topic = Topic::where('approved_name','=', $topic_name) -> orWhere('pending_name', '=', $topic_name) -> get() -> first();
         $category_id = $topic -> category_id;
         $category = Category::where('id', '=', $category_id) -> get() -> first();
-        $category_name = $category -> name;
-        $path = 'public/'.$category_name.'/'.$topic_name.'/Teoria/';
-        $topic_name = $topic -> name;
+        $category_path      = "";
+        $topic_path         = "";
+        if($category -> needs_approval || $category -> is_approval_pending){
+            $category_path = $category -> pending_name;
+        }else{
+            $category_path = $category -> approved_name;
+        }
+        if($topic -> needs_approval || $topic -> is_approval_pending){
+            $topic_path = $topic -> pending_name;
+        }else{
+            $topic_path = $topic -> approved_name;
+        }
+        $category_name  = $category_path;
+        $topic_name     = $topic_path;
+        $path = 'public/'.$category_name.'/'.$topic_name.'/Teoria/latest/';
         $xmlFile = Storage::allFiles($path);
         return view('theory', compact(['xmlFile', 'topic_name']));
     }
 
     public function updateGlance(Request $request){
         $student = User::where('id', '=', $request -> user_id) -> first() -> student;
-        $topic = Topic::where('name', '=', $request -> topic_name) -> first();
+        $topic = Topic::where('pending_name', '=', $request -> topic_name) ->orWhere('approved_name', '=', $request -> topic_name) -> first();
         $glance = Glance::firstOrNew(array(
             'type'          => $request -> type,
             'topic_id'      => $topic -> id,

@@ -35,18 +35,17 @@
                         @php
                             for($j = 0; $j < count($references[$i]); $j++){
                                 if($references[$i][$j] ->  type == 'C'){
-                                    $routeQ = $references[$i][$j] ->  route;
+                                    $routeQ = $references[$i][$j] ->  approved_route;
                                 }
                                 if($references[$i][$j] ->  type == 'S'){
-                                    $routeS = $references[$i][$j] ->  route;
+                                    $routeS = $references[$i][$j] ->  approved_route;
                                 }
                                 if($references[$i][$j] ->  type == 'T'){
-                                    $routeT = $references[$i][$j] ->  route;
+                                    $routeT = $references[$i][$j] ->  approved_route;
                                 }
                             }
                             $color = rand(0, sizeof($colors) -1);
                         @endphp
-
                         @if($i < count($topics))
                             <div class="col-md-4">
                                 <div class="feature-box9 text-center bmargin">
@@ -69,7 +68,7 @@
                                         @endif
                                         @if(strlen($routeQ))
                                             @if($user)
-                                            <u><h5><a href={{ url('/questionnaire', $topics[$i] -> approved_name) }}>Cuestionario</a></h5></u>
+                                                <u><h5><a href={{ url('/questionnaire', $topics[$i] -> approved_name) }}>Cuestionario</a></h5></u>
                                             @endif
                                         @endif
                                     </p>
