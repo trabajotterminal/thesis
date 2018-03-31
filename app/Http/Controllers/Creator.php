@@ -1119,10 +1119,20 @@ class Creator extends Controller{
         $category_name      = "";
         $reference          = Reference::where('id', '=', $notification -> reference_id) -> first();
         if($notification -> topic_id){
-            $topic_name = Topic::where('id', '=', $notification -> topic_id) -> first() -> approved_name;
+            $topic = Topic::where('id', '=', $notification -> topic_id) -> first();
+            if($topic -> approved_name){
+                $topic_name = $topic -> approved_name;
+            }else{
+                $topic_name = $topic -> pending_name;
+            }
         }
         if($notification -> category_id){
-            $category_name = Category::where('id', '=', $notification -> category_id) -> first() -> approved_name;
+            $category = Category::where('id', '=', $notification -> category_id) -> first();
+            if($category -> approved_name){
+                $category_name = $category -> approved_name;
+            }else{
+                $category_name = $category -> pending_name;
+            }
         }
         $reference_type     = "";
         if($notification -> reference_id){

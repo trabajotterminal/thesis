@@ -65,6 +65,9 @@
                                                         @if($notification -> type == 'MP')
                                                             <center><img src="{{ URL::asset('/images/accepted.png')}}" style="width:25px;height:25px;margin-top:10px;"/></center>
                                                         @endif
+                                                        @if($notification -> type == 'MN')
+                                                            <center><img src="{{ URL::asset('/images/cross.png')}}" style="width:25px;height:25px;margin-top:10px;"/></center>
+                                                        @endif
                                                     </div>
                                                     <div class="col-md-9 col-sm-9 col-xs-9">
                                                         @php

@@ -117,9 +117,17 @@
                         <blockquote style="font-size:30px;">
                             {{$notification -> message}}
                         </blockquote>
-                        <center><img src="{{ URL::asset('/images/thumbs.png')}}" style="width:50px;height:50px;margin-top:10px;"/></center>
+                        @if($notification -> type == 'MP')
+                            <center><img src="{{ URL::asset('/images/in_love.png')}}" style="width:100px;height:100px;margin-top:30px;"/></center>
+                        @else
+                            <center><img src="{{ URL::asset('/images/sad.png')}}" style="width:100px;height:100px;margin-top:30px;"/></center>
+                        @endif
                     @else
-                        <center><img src="{{ URL::asset('/images/thumbs.png')}}" style="width:150px;height:150px;margin-top:10px;"/></center>
+                        @if($notification -> type == 'MP')
+                            <center><img src="{{ URL::asset('/images/in_love.png')}}" style="width:100px;height:100px;margin-top:30px;"/></center>
+                        @else
+                            <center><img src="{{ URL::asset('/images/sad.png')}}" style="width:100px;height:100px;margin-top:30px;"/></center>
+                        @endif
                     @endif
                 </center>
             </div>

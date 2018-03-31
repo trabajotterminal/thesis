@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
             $user_id = session('user_id');
             $notifications = [];
             if($user_id){
-                $notifications  = DB::select('SELECT * FROM notifications WHERE recipient_id = ?', [$user_id]);
+                $notifications  = DB::select('SELECT * FROM notifications WHERE recipient_id = ? order by created_at desc', [$user_id]);
                 $reference_type = [];
                 $sender_names   = [];
                 for($i = 0; $i < count($notifications); $i++){

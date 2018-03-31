@@ -138,52 +138,70 @@ class Admin extends Controller{
          $notification_id   = $request -> notification_id;
          $message           = $request -> message;
          $action            = $request -> action;
+         $notification = Notification::where('id', '=', $notification_id) -> first();
+         $notification_to_send = new Notification([
+            'message'           => $message,
+            'sender_id'         => $notification -> recipient_id,
+            'recipient_id'      => $notification -> sender_id,
+            'additional_params' => $notification -> type,
+         ]);
+         $topic = "";
+         $category = "";
+        if($notification -> topic_id){
+            $topic      = Topic::where('id', '=', $notification -> topic_id) -> first();
+            $topic -> needs_approval = false;
+            $topic -> is_approval_pending = false;
+            $notification_to_send -> topic_id = $notification -> topic_id;
+        }
+        if($notification -> category_id){
+            $category = Category::where('id', '=', $notification -> category_id) -> first();
+            $category -> needs_approval = false;
+            $category -> is_approval_pending = false;
+            $notification_to_send -> category_id = $notification -> category_id;
+        }
          if($action == 'accept'){
-            $notification = Notification::where('id', '=', $notification_id) -> first();
-            $notification_to_send = new Notification([
-                'message'           => $message,
-                'sender_id'         => $notification -> recipient_id,
-                'recipient_id'      => $notification -> sender_id,
-                'type'              => 'MP',
-                'additional_params' => $notification -> type,
-             ]);
-            if($notification -> topic_id){
-                $topic      = Topic::where('id', '=', $notification -> topic_id) -> first();
-                $topic -> needs_approval = false;
-                $topic -> is_approval_pending = false;
+             $notification_to_send -> type = 'MP';
+             if($notification -> topic_id)
                 $topic -> approved_name = $topic -> pending_name;
-                $object = $notification -> topic_id;
-                $notification_to_send -> topic_id = $notification -> topic_id;
-                $topic -> save();
-            }
-             if($notification -> category_id){
-                $category = Category::where('id', '=', $notification -> category_id) -> first();
-                $category -> needs_approval = false;
-                $category -> is_approval_pending = false;
+             if($notification -> category_id)
                 $category -> approved_name = $category -> pending_name;
-                $notification_to_send -> category_id = $notification -> category_id;
-                $category -> save();
-             }
-             $notification_to_send -> save();
          }else{
              if($action == 'decline'){
-
+                 $notification_to_send -> type = 'MN';
              }
          }
-        $notification -> delete();
-        return response()->json(['success'=>'OK.']);
+         if($topic)
+            $topic -> save();
+         if($category)
+            $category -> save();
+         $notification -> delete();
+         $notification_to_send -> save();
+         return response()->json(['success'=>'OK.']);
     }
 
     public function resolveTheoryNotification(Request $request){
         $notification_id   = $request -> notification_id;
         $message           = $request -> message;
         $action            = $request -> action;
+        $notification = Notification::where('id', '=', $notification_id) -> first();
+
+        $reference      = Reference::where('id', '=', $notification -> reference_id) -> first();
+        $reference -> needs_approval = false;
+        $reference -> is_approval_pending = false;
+
+        $topic = Topic::where('id','=', $reference -> topic_id) -> get() -> first();
+        $category_id = $topic -> category_id;
+        $category = Category::where('id', '=', $category_id) -> get() -> first();
+
+        $notification_to_send = new Notification([
+            'message'           => $message,
+            'sender_id'         => $notification -> recipient_id,
+            'recipient_id'      => $notification -> sender_id,
+            'additional_params' => $notification -> type,
+            'reference_id'      => $notification -> reference_id,
+        ]);
+
         if($action == 'accept'){
-            $notification = Notification::where('id', '=', $notification_id) -> first();
-            $reference      = Reference::where('id', '=', $notification -> reference_id) -> first();
-            $topic = Topic::where('id','=', $reference -> topic_id) -> get() -> first();
-            $category_id = $topic -> category_id;
-            $category = Category::where('id', '=', $category_id) -> get() -> first();
             $category_path      = "";
             $topic_path         = "";
             if($category -> needs_approval || $category -> is_approval_pending){
@@ -200,28 +218,16 @@ class Admin extends Controller{
             $topic_name     = $topic_path;
             $path_changes   = 'storage/'.$category_path.'/'.$topic_path.'/Teoria/changes/';
             $path_latest    = 'storage/'.$category_path.'/'.$topic_path.'/Teoria/latest/';
-            if($notification -> reference_id){
-                $reference = Reference::where('id', '=', $notification -> reference_id) -> first();
-                $reference -> needs_approval = false;
-                $reference -> is_approval_pending = false;
-                $reference -> approved_route = $reference-> pending_route;
-                File::copyDirectory(public_path($path_changes), public_path($path_latest), true);
-                $notification_to_send = new Notification([
-                    'message'           => $message,
-                    'sender_id'         => $notification -> recipient_id,
-                    'recipient_id'      => $notification -> sender_id,
-                    'type'              => 'MP',
-                    'additional_params' => $notification -> type,
-                    'reference_id'      => $notification -> reference_id,
-                ]);
-                $notification_to_send -> save();
-                $reference -> save();
-            }
+            $reference -> approved_route = $reference-> pending_route;
+            File::copyDirectory(public_path($path_changes), public_path($path_latest), true);
+            $notification_to_send -> type = "MP";
         }else{
             if($action == 'decline'){
-
+                $notification_to_send -> type = "MN";
             }
         }
+        $notification_to_send -> save();
+        $reference -> save();
         $notification -> delete();
         return response()->json(['success'=>'OK.']);
     }
@@ -230,12 +236,25 @@ class Admin extends Controller{
         $notification_id   = $request -> notification_id;
         $message           = $request -> message;
         $action            = $request -> action;
+        $notification = Notification::where('id', '=', $notification_id) -> first();
+
+        $reference      = Reference::where('id', '=', $notification -> reference_id) -> first();
+        $reference -> needs_approval = false;
+        $reference -> is_approval_pending = false;
+
+        $topic = Topic::where('id','=', $reference -> topic_id) -> get() -> first();
+        $category_id = $topic -> category_id;
+        $category = Category::where('id', '=', $category_id) -> get() -> first();
+
+        $notification_to_send = new Notification([
+            'message'           => $message,
+            'sender_id'         => $notification -> recipient_id,
+            'recipient_id'      => $notification -> sender_id,
+            'additional_params' => $notification -> type,
+            'reference_id'      => $notification -> reference_id,
+        ]);
+
         if($action == 'accept'){
-            $notification = Notification::where('id', '=', $notification_id) -> first();
-            $reference      = Reference::where('id', '=', $notification -> reference_id) -> first();
-            $topic = Topic::where('id','=', $reference -> topic_id) -> get() -> first();
-            $category_id = $topic -> category_id;
-            $category = Category::where('id', '=', $category_id) -> get() -> first();
             $category_path      = "";
             $topic_path         = "";
             if($category -> needs_approval || $category -> is_approval_pending){
@@ -252,28 +271,16 @@ class Admin extends Controller{
             $topic_name     = $topic_path;
             $path_changes   = 'storage/'.$category_path.'/'.$topic_path.'/Simulacion/changes/';
             $path_latest    = 'storage/'.$category_path.'/'.$topic_path.'/Simulacion/latest/';
-            if($notification -> reference_id){
-                $reference = Reference::where('id', '=', $notification -> reference_id) -> first();
-                $reference -> needs_approval = false;
-                $reference -> is_approval_pending = false;
-                $reference -> approved_route = $reference-> pending_route;
-                File::copyDirectory(public_path($path_changes), public_path($path_latest), true);
-                $notification_to_send = new Notification([
-                    'message'           => $message,
-                    'sender_id'         => $notification -> recipient_id,
-                    'recipient_id'      => $notification -> sender_id,
-                    'type'              => 'MP',
-                    'additional_params' => $notification -> type,
-                    'reference_id'      => $notification -> reference_id,
-                ]);
-                $notification_to_send -> save();
-                $reference -> save();
-            }
+            $reference -> approved_route = $reference-> pending_route;
+            File::copyDirectory(public_path($path_changes), public_path($path_latest), true);
+            $notification_to_send -> type = "MP";
         }else{
             if($action == 'decline'){
-
+                $notification_to_send -> type = "MN";
             }
         }
+        $notification_to_send -> save();
+        $reference -> save();
         $notification -> delete();
         return response()->json(['success'=>'OK.']);
     }
@@ -282,12 +289,25 @@ class Admin extends Controller{
         $notification_id   = $request -> notification_id;
         $message           = $request -> message;
         $action            = $request -> action;
+        $notification = Notification::where('id', '=', $notification_id) -> first();
+
+        $reference      = Reference::where('id', '=', $notification -> reference_id) -> first();
+        $reference -> needs_approval = false;
+        $reference -> is_approval_pending = false;
+
+        $topic = Topic::where('id','=', $reference -> topic_id) -> get() -> first();
+        $category_id = $topic -> category_id;
+        $category = Category::where('id', '=', $category_id) -> get() -> first();
+
+        $notification_to_send = new Notification([
+            'message'           => $message,
+            'sender_id'         => $notification -> recipient_id,
+            'recipient_id'      => $notification -> sender_id,
+            'additional_params' => $notification -> type,
+            'reference_id'      => $notification -> reference_id,
+        ]);
+
         if($action == 'accept'){
-            $notification = Notification::where('id', '=', $notification_id) -> first();
-            $reference      = Reference::where('id', '=', $notification -> reference_id) -> first();
-            $topic = Topic::where('id','=', $reference -> topic_id) -> get() -> first();
-            $category_id = $topic -> category_id;
-            $category = Category::where('id', '=', $category_id) -> get() -> first();
             $category_path      = "";
             $topic_path         = "";
             if($category -> needs_approval || $category -> is_approval_pending){
@@ -304,28 +324,16 @@ class Admin extends Controller{
             $topic_name     = $topic_path;
             $path_changes   = 'storage/'.$category_path.'/'.$topic_path.'/Cuestionario/changes/';
             $path_latest    = 'storage/'.$category_path.'/'.$topic_path.'/Cuestionario/latest/';
-            if($notification -> reference_id){
-                $reference = Reference::where('id', '=', $notification -> reference_id) -> first();
-                $reference -> needs_approval = false;
-                $reference -> is_approval_pending = false;
-                $reference -> approved_route = $reference-> pending_route;
-                File::copyDirectory(public_path($path_changes), public_path($path_latest), true);
-                $notification_to_send = new Notification([
-                    'message'           => $message,
-                    'sender_id'         => $notification -> recipient_id,
-                    'recipient_id'      => $notification -> sender_id,
-                    'type'              => 'MP',
-                    'additional_params' => $notification -> type,
-                    'reference_id'      => $notification -> reference_id,
-                ]);
-                $notification_to_send -> save();
-                $reference -> save();
-            }
+            $reference -> approved_route = $reference-> pending_route;
+            File::copyDirectory(public_path($path_changes), public_path($path_latest), true);
+            $notification_to_send -> type = "MP";
         }else{
             if($action == 'decline'){
-
+                $notification_to_send -> type = "MN";
             }
         }
+        $notification_to_send -> save();
+        $reference -> save();
         $notification -> delete();
         return response()->json(['success'=>'OK.']);
     }
