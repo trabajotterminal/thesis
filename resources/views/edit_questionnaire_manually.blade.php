@@ -3,7 +3,7 @@
     $xml            = simplexml_load_string($xmlstring);
     $questions      = [];
     $feedbacks      = [];
-    $simulations    = [];
+    $input_images    = [];
     $options        = [];
     $options_length = [];
     $options_length[0] = 1;
@@ -19,7 +19,7 @@
         foreach($xml->children()[$k] as $index => $bloque) {
             array_push($questions, $bloque -> pregunta);
             array_push($feedbacks, $bloque -> retroalimentacion);
-            array_push($simulations, $bloque -> simulacion);
+            array_push($input_images, $bloque -> imagen);
             $option_list = [];
             $j = 0;
             foreach($bloque -> opcion  as $option){
@@ -86,11 +86,11 @@
                             <input class="email_input" style="color:black;border-color:black;" type="search" id="feedback_{{($key + 1)}}" value="{{$feedbacks[$key]}}">
                         </div>
                     </div>
-                    <div class="col-md-12 margin-top3">
-                        <h3>Simulación</h3>
-                        <div class="input_holder">
-                            <input class="email_input" style="color:black;border-color:black;height:150px;" type="search" id="simulation_{{$key + 1}}" value="{{$simulations[$key]}}">
-                        </div>
+                    <div class="col-md-3 margin-top3">
+                        <h3>Imágen auxiliar</h3>
+                        <input name="input_image" type="file" id="{{($key + 1)}}" onchange="encodeImageFileAsURL(this)">
+                        <br>
+                        <img src="{{$input_images[$key]}}" id ='preview_image_{{($key + 1)}}' style="width:250px;height:250px;"/>
                     </div>
                     <div class="col-md-12 margin-top3" id="options_{{($key + 1)}}">
                         <h3>Opciones</h3>
@@ -104,7 +104,7 @@
                     </div>
                 @endforeach
             </div>
-            <form action="{{url('creator/topic/questionnaire/register/manually/save')}}" method="POST" id="finish">
+            <form action="{{url('creator/topic/questionnaire/update/manually/')}}" method="POST" id="finish">
                 <button class="btn btn-light" style="margin-top:30px;margin-left:50px;" id="addQuestion">Agregar otra pregunta</button>
                 {{ csrf_field() }}
                 <input type="submit" class="btn btn-success" style="margin-top:30px;margin-left:50px;" id="saveQuestionnaire" value="Actualizar cuestionarios" />
@@ -120,16 +120,33 @@
 @section('statics-js')
     @include('layouts/statics-js-1')
     <script>
+        var input_images = [];
         var questions_per_questionnaire_php = 0;
         var number_of_questionnaires_php = 0;
         var numberOfQuestionnaires = 0;
         var questionsPerQuestionnaire = 0;
         var requiredQuestions = 0;
         var questions       = <?php  echo json_decode(count($questions)); ?>;
-        var simulations     = <?php  echo json_decode(count($simulations)); ?>;
         var feedbacks       = <?php  echo json_decode(count($feedbacks)); ?>;
         var options         = [];
+
+        function encodeImageFileAsURL(element) {
+            var file = element.files[0];
+            var id   = parseInt(element.id);
+            var reader = new FileReader();
+            reader.onloadend = function() {
+                input_images[id] = reader.result;
+                document.getElementById("preview_image_" + id).src = reader.result;
+            }
+            reader.readAsDataURL(file);
+        }
+
         $( document ).ready(function() {
+            input_images = <? echo json_encode($input_images); ?>;
+            input_images.unshift("");
+            for(var i = 0; i < input_images.length; i++){
+                input_images[i] = Object.values(input_images[i])[0];
+            }
             questions_per_questionnaire_php = <?php echo json_decode($questions_per_questionnaire); ?>;
             number_of_questionnaires_php = <?php echo json_decode($number_of_questionnaires); ?>;
             $("#questions_per_questionnaire").val(questions_per_questionnaire_php);
@@ -185,10 +202,8 @@
                 '                    </div>\n' +
                 '                </div>\n' +
                 '                <div class="col-md-12 margin-top3">\n' +
-                '                    <h3>Simulación</h3>\n' +
-                '                    <div class="input_holder">\n' +
-                '                        <input class="email_input" style="color:black;border-color:black;height:150px;" type="search" id="simulation_'+(questions + 1)+'">\n' +
-                '                    </div>\n' +
+                '                    <h3>Imágen auxiliar</h3>\n' +
+                '                       <input name="input_image" type="file" id="'+(questions + 1)+'" onchange="encodeImageFileAsURL(this)">' +
                 '                </div>\n' +
                 '                <div class="col-md-12 margin-top3" id="options_'+(questions + 1)+'">\n' +
                 '                    <h3>Opciones</h3>\n' +
@@ -241,9 +256,9 @@
                     xmlContent += $('#option_'+(i)+'_'+j).val();
                     xmlContent += '</opcion>\n'
                 }
-                xmlContent += '<simulacion>\n';
-                xmlContent += $("#simulation_" + i).val();
-                xmlContent += '</simulacion>\n';
+                xmlContent += '<imagen>\n';
+                xmlContent += input_images[i];
+                xmlContent += '\n</imagen>';
                 xmlContent += '<retroalimentacion>\n';
                 xmlContent += $("#feedback_" + i).val();
                 xmlContent += '</retroalimentacion>\n';
@@ -267,7 +282,7 @@
                 data: {"xmlContent": xmlContent, "topic_name": topic_name},
                 dataType: 'json',
                 success: function( _response ){
-                    window.location.href = "/creator/topics";
+                    window.location.href = "/creator/topic/{{$topic_name}}";
                 },
                 error: function(xhr, status, error) {
                     alert(error);

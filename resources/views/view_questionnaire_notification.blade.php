@@ -3,7 +3,7 @@
     $xml            = simplexml_load_string($xmlstring);
     $questions      = [];
     $feedbacks      = [];
-    $simulations    = [];
+    $input_images   = [];
     $options        = [];
     $right_answers  = [];
     $tries          = $xml['cuestionarios'];
@@ -12,7 +12,7 @@
         foreach($xml->children()[$k] as $index => $bloque) {
             array_push($questions, $bloque -> pregunta);
             array_push($feedbacks, $bloque -> retroalimentacion);
-            array_push($simulations, $bloque -> simulacion);
+            array_push($input_images, $bloque -> imagen);
             $option_list = [];
             $j = 0;
             foreach($bloque -> opcion  as $option){
@@ -70,7 +70,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 bmargin">
-
+                            <img src="{{$input_images[$key]}}" style="width:80%;height:80%;margin-top:10%;"/>
                         </div>
                     </div>
                 </div>

@@ -762,6 +762,31 @@ class Creator extends Controller{
         return view('edit_questionnaire_manually', compact('topic_name', 'category_name'));
     }
 
+    public function updateTopicQuestionnaireManually(Request $request){
+        $topic = Topic::where('pending_name', '=', $request -> topic_name) -> orWhere('approved_name', '=', $request -> topic_name) -> first();
+        $category = Category::where('id', '=', $topic -> category_id) -> first();
+        $category_path  = "";
+        $topic_path     = "";
+        if($category -> needs_approval || $category -> is_approval_pending){
+            $category_path = $category -> pending_name;
+        }else{
+            $category_path = $category -> approved_name;
+        }
+        if($topic -> needs_approval || $topic -> is_approval_pending){
+            $topic_path = $topic -> pending_name;
+        }else{
+            $topic_path = $topic -> approved_name;
+        }
+        $destinationPath = public_path('storage/'.$category_path.'/'.$topic_path.'/Cuestionario/changes/cuestionario.xml');
+        Storage::disk('local')->put('public/'.$category_path.'/'.$topic_path.'/Cuestionario/changes/cuestionario.xml', $request -> xmlContent);
+        $reference = Reference::where('topic_id', '=', $topic -> id) -> where('type', '=', 'C') -> first();
+        $reference -> pending_route = $destinationPath;
+        $reference -> needs_approval = true;
+        $reference -> uploaded_using_file   = false;
+        $reference -> save();
+        return response() -> json(['success' => 'OK']);
+    }
+
 
     public function editTopicSimulationFile(Request $request){
         $topic = Topic::where('approved_name', '=', $request -> topic_name) -> orWhere('pending_name', '=', $request -> topic_name) -> first();

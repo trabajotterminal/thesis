@@ -53,10 +53,8 @@
                     </div>
                 </div>
                 <div class="col-md-12 margin-top3">
-                    <h3>Simulación</h3>
-                    <div class="input_holder">
-                        <input class="email_input" style="color:black;border-color:black;height:150px;" type="search" id="simulation_1">
-                    </div>
+                    <h3>Imágen auxiliar</h3>
+                    <input name="input_image" type="file" id="1" onchange="encodeImageFileAsURL(this)">
                 </div>
                 <div class="col-md-12 margin-top3" id="options_1">
                     <h3>Opciones</h3>
@@ -97,6 +95,19 @@
 @section('statics-js')
     @include('layouts/statics-js-1')
     <script>
+        var input_images;
+        $(document).ready(function(){
+            input_images = [];
+        });
+        function encodeImageFileAsURL(element) {
+            var file = element.files[0];
+            var id   = parseInt(element.id);
+            var reader = new FileReader();
+            reader.onloadend = function() {
+                input_images[id] = reader.result;
+            }
+            reader.readAsDataURL(file);
+        }
         var questions       = 1;
         var simulations     = 1;
         var feedbacks       = 1;
@@ -143,10 +154,8 @@
                 '                    </div>\n' +
                 '                </div>\n' +
                 '                <div class="col-md-12 margin-top3">\n' +
-                '                    <h3>Simulación</h3>\n' +
-                '                    <div class="input_holder">\n' +
-                '                        <input class="email_input" style="color:black;border-color:black;height:150px;" type="search" id="simulation_'+(questions + 1)+'">\n' +
-                '                    </div>\n' +
+                '                    <h3>Imágen auxiliar</h3>\n' +
+                '                       <input name="input_image" type="file" id="'+(questions + 1)+'" onchange="encodeImageFileAsURL(this)">' +
                 '                </div>\n' +
                 '                <div class="col-md-12 margin-top3" id="options_'+(questions + 1)+'">\n' +
                 '                    <h3>Opciones</h3>\n' +
@@ -181,6 +190,8 @@
         });
 
         $("#finish").submit(function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
             var xmlContent = '<xml cuestionarios="'+numberOfQuestionnaires+'" preguntas_por_cuestionario="'+questionsPerQuestionnaire+'">\n';
             xmlContent     += '<cuestionario>\n';
             var questionnaire_id = 1;
@@ -199,9 +210,9 @@
                     xmlContent += $('#option_'+(i)+'_'+j).val();
                     xmlContent += '</opcion>\n'
                 }
-                xmlContent += '<simulacion>\n';
-                xmlContent += $("#simulation_" + i).val();
-                xmlContent += '</simulacion>\n';
+                xmlContent += '<imagen>\n';
+                xmlContent += input_images[i];
+                xmlContent += '\n</imagen>';
                 xmlContent += '<retroalimentacion>\n';
                 xmlContent += $("#feedback_" + i).val();
                 xmlContent += '</retroalimentacion>\n';
@@ -231,7 +242,6 @@
                     alert(error);
                 },
             });
-            e.preventDefault();
             return 0;
         });
 

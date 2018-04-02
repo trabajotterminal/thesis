@@ -1,10 +1,10 @@
 @php
-    $xmlstring      = file_get_contents('storage/'.$category_name.'/'.$topic_name.'/Cuestionario/latest/cuestionario.xml');
+    $xmlstring      = file_get_contents('storage/'.$category_name.'/'.$topic_name.'/Cuestionario/changes/cuestionario.xml');
     $try_number     = $tries;
     $xml            = simplexml_load_string($xmlstring);
     $questions      = [];
     $feedbacks      = [];
-    $simulations    = [];
+    $input_images   = [];
     $options        = [];
     $right_answers  = [];
     $i = 0;
@@ -12,7 +12,7 @@
         foreach($xml->children()[$tries] as $index => $bloque) {
             array_push($questions, $bloque -> pregunta);
             array_push($feedbacks, $bloque -> retroalimentacion);
-            array_push($simulations, $bloque -> simulacion);
+            array_push($input_images, $bloque -> imagen);
             $option_list = [];
             $j = 0;
             foreach($bloque -> opcion  as $option){
@@ -42,13 +42,15 @@
 @section('content')
     <center><h5 class="uppercase weight3 pull">{{$topic_name}}</h5></center>
     <div class="carousel_holder">
-        <div id="owl-demo7" class="owl-carousel" style="min-height:490px;">
+        <div id="owl-demo7" class="owl-carousel" style="min-height:540px;">
             @foreach($questions as $key => $question)
                 <div class="item">
                     <div class="row">
                         <div class="col-md-6" style="height:450px;">
                             <div class="row" style="height:100px;margin:30px;">
-                                <h4> {{$question}} </h4>
+                                <div class="col">
+                                    <h4> {{$question}} </h4>
+                                </div>
                             </div>
                             <div class="row" style="margin-top:50px;margin-left:100px;">
                                 <div class="col">
@@ -64,18 +66,17 @@
                             </div>
                         </div>
                         <div class="col-md-6 bmargin">
-                            <div id="questionnaire_{{($key + 1)}}" style="width:400px;height:400px;"></div>
-                            <input type="hidden" id="json_{{($key + 1)}}" value="{{$simulations[$key]}}" />
+                            <img  src="{{$input_images[$key]}}" style="margin-top:10px;width:600px;height:300px;"/>
                         </div>
-                        <div class="row">
-                            @if($key + 1 == count($questions))
+                        @if($key + 1 == count($questions))
+                            <div class="row">
                                 <form action="{{url('/questionnaire/'.$topic_name.'/evaluate')}}" method="POST" id="questionnaireDone">
                                     <input type="hidden" id="numberOfQuestions" value="{{count($questions)}}">
                                     <input type="hidden" id="hiddenTopicName" value="{{$topic_name}}">
                                     <input type="submit" class="btn btn-success" style="float:right; margin-right:100px;" value="Terminar cuestionario" />
                                 </form>
-                            @endif
-                        </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
             @endforeach
