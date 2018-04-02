@@ -55,6 +55,7 @@
                 <div class="col-md-12 margin-top3">
                     <h3>Imágen auxiliar</h3>
                     <input name="input_image" type="file" id="1" onchange="encodeImageFileAsURL(this)">
+                    <img src="" id="preview_image_1" style="width:250px;height:250px;display:none;margin-top: 10px;"/>
                 </div>
                 <div class="col-md-12 margin-top3" id="options_1">
                     <h3>Opciones</h3>
@@ -105,6 +106,8 @@
             var reader = new FileReader();
             reader.onloadend = function() {
                 input_images[id] = reader.result;
+                document.getElementById("preview_image_" + id).src = reader.result;
+                $('#preview_image_'+id).fadeIn(2000).css('display','block');
             }
             reader.readAsDataURL(file);
         }
@@ -140,6 +143,7 @@
             if(questions == next){
                 title = '<u><h4 style="margin-left:15px;">Cuestionario '+(++title_id)+'</h4></u>';
             }
+            var preview_variable = "preview_image_" + (questions + 1);
             var new_question = '<div class="clearfix" /><br>\n' +
                 '                '+title+'<div class="col-md-12">\n' +
                 '                    <h3>Pregunta '+(questions + 1)+':</h3>\n' +
@@ -154,8 +158,9 @@
                 '                    </div>\n' +
                 '                </div>\n' +
                 '                <div class="col-md-12 margin-top3">\n' +
-                '                    <h3>Imágen auxiliar</h3>\n' +
+                '                       <h3>Imágen auxiliar</h3>\n' +
                 '                       <input name="input_image" type="file" id="'+(questions + 1)+'" onchange="encodeImageFileAsURL(this)">' +
+                '                       <img src="" id="'+preview_variable+'" style="width:250px;height:250px;display:none;margin-top: 10px;" />' +
                 '                </div>\n' +
                 '                <div class="col-md-12 margin-top3" id="options_'+(questions + 1)+'">\n' +
                 '                    <h3>Opciones</h3>\n' +
@@ -236,7 +241,7 @@
                 data: {"xmlContent": xmlContent, "topic_name": topic_name},
                 dataType: 'json',
                 success: function( _response ){
-                    window.location.href = "/creator/topics";
+                    window.location.href = "/creator/topic/{{$topic_name}}";
                 },
                 error: function(xhr, status, error) {
                     alert(error);

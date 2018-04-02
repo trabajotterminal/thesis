@@ -70,7 +70,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 bmargin">
-                            <img src="{{$input_images[$key]}}" style="width:80%;height:80%;margin-top:10%;"/>
+                            <img src="{{$input_images[$key]}}" style="width:300px;height:300px;margin-top:50px;"/>
                         </div>
                     </div>
                 </div>
