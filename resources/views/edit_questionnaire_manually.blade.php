@@ -90,7 +90,9 @@
                         <h3>Imágen auxiliar</h3>
                         <input name="input_image" type="file" id="{{($key + 1)}}" onchange="encodeImageFileAsURL(this)">
                         <br>
-                        <img src="{{$input_images[$key]}}" id ='preview_image_{{($key + 1)}}' style="width:250px;height:250px;"/>
+                        @if(strpos($input_images[$key], 'undefined') == false)
+                            <img src="{{$input_images[$key]}}" id ='preview_image_{{($key + 1)}}' style="width:250px;height:250px;"/>
+                        @endif
                     </div>
                     <div class="col-md-12 margin-top3" id="options_{{($key + 1)}}">
                         <h3>Opciones</h3>
