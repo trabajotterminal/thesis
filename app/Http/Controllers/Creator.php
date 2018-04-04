@@ -1163,10 +1163,11 @@ class Creator extends Controller{
         if($notification -> reference_id){
             $topic_name = Topic::where('id', '=', $reference -> topic_id) -> first() -> approved_name;
             $category_name = Category::where('id', '=', $reference -> category_id) -> first() -> approved_name;
-            Log::debug($topic_name);
             $reference_type = $reference -> type;
         }
         $sender             = User::where('id', '=', $notification -> sender_id) -> first();
+        $notification -> seen = true;
+        $notification -> save();
         return view('creator_view_notification', compact(['notification', 'sender', 'topic', 'category', 'reference', 'topic_name', 'category_name', 'reference_type']));
     }
 }

@@ -23,8 +23,11 @@ class AppServiceProvider extends ServiceProvider
         view() -> composer('layouts.menu', function($view){
             $user_id = session('user_id');
             $notifications = [];
+            $unread_notifications = 0;
             if($user_id){
                 $notifications  = DB::select('SELECT * FROM notifications WHERE recipient_id = ? order by created_at desc', [$user_id]);
+                $unread_notifications  = DB::select('SELECT * FROM notifications WHERE recipient_id = ? and seen = ? order by created_at desc', [$user_id, false]);
+                $unread_notifications = count($unread_notifications);
                 $reference_type = [];
                 $sender_names   = [];
                 for($i = 0; $i < count($notifications); $i++){
@@ -37,6 +40,7 @@ class AppServiceProvider extends ServiceProvider
                 $view -> with('reference_type', $reference_type);
             }
             $view -> with('notifications', $notifications);
+            $view -> with('unread_notifications', $unread_notifications);
             $view -> with('categories', Category::where('approved_name','!=', '') -> get());
         });
     }

@@ -17,6 +17,7 @@ class CreateNotificationsTable extends Migration
             $table->increments('id');
             $table->string('message')->nullable();
             $table->integer('sender_id') -> unsigned();
+            $table->boolean('seen')->default(false);
             $table->foreign('sender_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('recipient_id') -> unsigned();
             $table->foreign('recipient_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
