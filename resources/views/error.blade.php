@@ -69,9 +69,15 @@
 @section('content')
     <div id="block_error" style="min-height:500px;">
         <div>
-            <h2>Uups.</h2>
+            <h2>¡Uuuups!</h2>
             <h5>Parece que algo malo malo ocurrió, inténta volver más tarde.</h5>
             <h5>Nuestro equipo recibirá el reporte del error y trabajara en ello lo más pronto posible.</h5>
+            <center>
+                <img src="{{ URL::asset('/images/barricade.png')}}" style="width:120px;height:120px;margin-top:30px;"/>
+                <img src="{{ URL::asset('/images/barricade.png')}}" style="width:120px;height:120px;margin-top:30px;"/>
+                <img src="{{ URL::asset('/images/barricade.png')}}" style="width:120px;height:120px;margin-top:30px;"/>
+                <img src="{{ URL::asset('/images/barricade.png')}}" style="width:120px;height:120px;margin-top:30px;"/>
+            </center>
         </div>
     </div>
 
