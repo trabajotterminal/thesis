@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Group;
 use Illuminate\Http\Request;
 use \App\School;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Log;
 class User extends Controller{
@@ -44,8 +45,8 @@ class User extends Controller{
 
         Validator::extend('match_old_password', function($field, $value, $parameters){
             $user_id = $parameters[0];
-            $user = \App\User::where('id', '=', $user_id) -> where('password', '=', $value) -> first();
-            return $user;
+            $user = \App\User::where('id', '=', $user_id) -> first();
+            return Hash::check($value, $user -> password);
         });
 
         Validator::extend('new_institution', function($field, $value, $parameters){
@@ -79,7 +80,7 @@ class User extends Controller{
             $user -> profile_picture = $request -> profile_picture;
 
             if($request -> password){
-                $user -> password = $request -> new_password;
+                $user -> password = bcrypt($request -> new_password);
             }
 
             $school = "";

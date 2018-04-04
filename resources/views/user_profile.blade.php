@@ -298,6 +298,8 @@
                         $('#new_club').css('visibility', 'hidden');
                         $('#new_institution').css('visibility', 'hidden');
                         updateSelect();
+                        $('#new_password').val('');
+                        $('#old_password').val('');
                     }else{
                         printErrorMsg(data.error);
                     }

@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
             $table->increments('id')->unsigned()->unique();
             $table->string('username')->unique();
             $table->longText('profile_picture');
-            $table->string('password');
+            $table->string('password', 60);
             $table->string('email') -> unique();
             $table->rememberToken();
             $table->timestamps();
