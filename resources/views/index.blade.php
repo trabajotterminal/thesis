@@ -33,7 +33,6 @@
                             <span class="right-move"><a class="text-white uppercase tag" href="#">Búsqueda Binaria</a></span>
                             <span class="right-move"><a class="text-white uppercase tag" href="#">DFS</a></span>
                         </center>
-
                         <!--<span class="text-white">Plataforma para el aprendizaje de algoritmos</span> </div>-->
                     </div>
                 </div>
