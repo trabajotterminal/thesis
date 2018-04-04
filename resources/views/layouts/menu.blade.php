@@ -25,7 +25,7 @@
         <div class="navbar lightblue-3 navbar-default yamm">
             <div class="navbar-header">
                 <button type="button" data-toggle="collapse" data-target="#navbar-collapse-grid" class="navbar-toggle two three"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-                <a href="/" class="navbar-brand less-top-padding"><img src="/images/logoEscom.png" style="width:80px;height:50px;"alt=""/></a> </div>
+                <a href="/" class="navbar-brand less-top-padding"><!--<img src="/images/logoEscom.png" style="width:80px;height:50px;"alt=""/>--></a> </div>
                 <div id="navbar-collapse-grid" class="navbar-collapse collapse pull-right">
                     <ul class="nav pink-3 navbar-nav">
                         <li><a href="/" class="dropdown-toggle {{$menu_classes[0]}}">Inicio</a></li>
@@ -124,49 +124,50 @@
                                             <div class="drop-content">
                                                 @if($notification_count == '')
                                                     <li style="margin-left:20px;">Sin notificaciones</li>
-                                                @endif
-                                                @foreach($notifications as $key => $notification)
-                                                    <li>
-                                                        <div class="col-md-3 col-sm-3 col-xs-3" style="width:60px;height:60px;">
-                                                            <center><span style="font-size:40px;text-align: center;vertical-align: middle;line-height: 40px;">{{$sender_names[$key][0]}}</span></center>
-                                                        </div>
-                                                        <div class="col-md-9 col-sm-9 col-xs-9">
-                                                            @php
-                                                                $action = "";
-                                                                $object = "";
-                                                                if($notification -> type == 'A')
-                                                                    $action = "agregó";
-                                                                if($notification -> type == 'E')
-                                                                    $action = 'editó';
-                                                                if($notification -> type == 'D')
-                                                                    $action = 'eliminó';
-                                                                if($notification -> category_id)
-                                                                    $object = " una categoria.";
-                                                                if($notification -> topic_id)
-                                                                    $object = ' un tema';
-                                                                if($notification -> reference_id){
-                                                                    $object = ' contenido de un tema';
-                                                                }
-                                                            @endphp
-                                                            <p>{{$sender_names[$key]}} {{$action}} {{$object}}</p>
-                                                            @if($notification -> reference_id)
-                                                                @if($reference_type[$key] == 'T')
-                                                                    <p><u><a href="{{url('admin/notification/theory/'.$notification -> id)}}" style="color: #34495e ">Revisar ahora</a></u></p>
+                                                @else
+                                                    @foreach($notifications as $key => $notification)
+                                                        <li>
+                                                            <div class="col-md-3 col-sm-3 col-xs-3" style="width:60px;height:60px;">
+                                                                <center><span style="font-size:40px;text-align: center;vertical-align: middle;line-height: 40px;">{{$sender_names[$key][0]}}</span></center>
+                                                            </div>
+                                                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                                                @php
+                                                                    $action = "";
+                                                                    $object = "";
+                                                                    if($notification -> type == 'A')
+                                                                        $action = "agregó";
+                                                                    if($notification -> type == 'E')
+                                                                        $action = 'editó';
+                                                                    if($notification -> type == 'D')
+                                                                        $action = 'eliminó';
+                                                                    if($notification -> category_id)
+                                                                        $object = " una categoria.";
+                                                                    if($notification -> topic_id)
+                                                                        $object = ' un tema';
+                                                                    if($notification -> reference_id){
+                                                                        $object = ' contenido de un tema';
+                                                                    }
+                                                                @endphp
+                                                                <p>{{$sender_names[$key]}} {{$action}} {{$object}}</p>
+                                                                @if($notification -> reference_id)
+                                                                    @if($reference_type[$key] == 'T')
+                                                                        <p><u><a href="{{url('admin/notification/theory/'.$notification -> id)}}" style="color: #34495e ">Revisar ahora</a></u></p>
+                                                                    @endif
+                                                                    @if($reference_type[$key] == 'C')
+                                                                        <p><u><a href="{{url('admin/notification/questionnaire/'.$notification -> id)}}" style="color: #34495e ">Revisar ahora</a></u></p>
+                                                                    @endif
+                                                                    @if($reference_type[$key] == 'S')
+                                                                        <p><u><a href="{{url('admin/notification/simulation/'.$notification -> id)}}" style="color: #34495e ">Revisar ahora</a></u></p>
+                                                                    @endif
+                                                                @else
+                                                                    <p><u><a href="{{url('admin/notification/'.$notification -> id)}}" style="color: #34495e ">Revisar ahora</a></u></p>
                                                                 @endif
-                                                                @if($reference_type[$key] == 'C')
-                                                                    <p><u><a href="{{url('admin/notification/questionnaire/'.$notification -> id)}}" style="color: #34495e ">Revisar ahora</a></u></p>
-                                                                @endif
-                                                                @if($reference_type[$key] == 'S')
-                                                                    <p><u><a href="{{url('admin/notification/simulation/'.$notification -> id)}}" style="color: #34495e ">Revisar ahora</a></u></p>
-                                                                @endif
-                                                            @else
-                                                                <p><u><a href="{{url('admin/notification/'.$notification -> id)}}" style="color: #34495e ">Revisar ahora</a></u></p>
-                                                            @endif
 
-                                                            <hr>
-                                                        </div>
-                                                    </li>
-                                                @endforeach
+                                                                <hr>
+                                                            </div>
+                                                        </li>
+                                                    @endforeach
+                                                @endif
                                             </div>
                                         </ul>
                                     </li>
