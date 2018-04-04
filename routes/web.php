@@ -24,6 +24,9 @@ Route::group(['middleware' => 'web'], function(){
     Route::post('/login/user',  ['as' => 'login/user', 'uses' => 'Authenticator@login']);
     Route::get('/logout', 'Authenticator@logout');
     Route::get('/simulation/{name}', 'Simulation@simulation');
+    Route::get('/error', function () {
+        return view('error');
+    });
     Route::get('/theory/{name}', 'Theory@theory');
     Route::post('/theory/updateGlance', 'Theory@updateGlance');
     Route::post('/simulation/updateGlance', 'Simulation@updateGlance');
@@ -31,9 +34,12 @@ Route::group(['middleware' => 'web'], function(){
 
 Route::get('/questionnaire/{name}', 'Questionnaire@showQuestionnaire') -> middleware('checkIfLoggedIn');
 Route::get('/profile/', 'User@profile') -> middleware('checkIfIsStudent');
+Route::get('/user/school/clubs/json', 'User@getGroupsBySchool') -> middleware('checkIfIsStudent');
+Route::get('/user/getInfo/json', 'User@getInfoJson') -> middleware('checkIfIsStudent');
+Route::get('/user/schools/json', 'User@getSchoolsJson') -> middleware('checkIfIsStudent');
 Route::post('/questionnaire/{name}/evaluate', 'Questionnaire@evaluate') -> middleware('checkIfIsStudent');
 Route::post('/questionnaire/answers', 'Questionnaire@getAnswers') -> middleware('checkIfIsStudent');
-
+Route::post('/user/updateInfo', 'User@updateInfo') -> middleware('checkIfIsStudent');
 
 Route::group(['prefix' => 'admin', 'middleware' => 'checkIfIsAdmin'], function(){
     // for categories and topics / crud.

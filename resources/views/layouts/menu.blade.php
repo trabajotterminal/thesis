@@ -36,6 +36,9 @@
                                         @foreach($categories as $category)
                                             <li class="dropdown-submenu"><a href="{{ url('/category/'.$category -> approved_name)}}">{{$category -> approved_name}}</li>
                                         @endforeach
+                                        @if(count($categories) == 0)
+                                                <li class="dropdown-submenu"><a href="#">Aún no hay categorias disponibles</a></li>
+                                        @endif
                                         <li class="dropdown-submenu mul" style="display:none;">
                                             <a tabindex="-1" href="#">No idea</a>
                                         </li>
@@ -174,6 +177,9 @@
                                     @foreach($categories as $category)
                                         <li class="dropdown-submenu"><a href="{{ url('/category/'.$category -> approved_name)}}">{{$category -> approved_name}}</li>
                                     @endforeach
+                                    @if(count($categories) == 0)
+                                        <li class="dropdown-submenu"><a href="#">Aún no hay categorias disponibles</a></li>
+                                    @endif
                                     <li class="dropdown-submenu mul" style="display:none;">
                                         <a tabindex="-1" href="#">No idea</a>
                                     </li>
