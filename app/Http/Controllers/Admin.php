@@ -354,7 +354,7 @@ class Admin extends Controller{
           GROUP BY M.user_id ORDER BY  AVG(M.Points) DESC;
         ');
         $non_ranked_users = DB::select('
-          SELECT username, profile_picture from users where id = (SELECT S.id FROM students S WHERE NOT EXISTS ( SELECT user_id FROM marks where student_id = S.id ));
+          SELECT U.username as username, U.profile_picture as profile_picture, S.name as school_name, G.name as group_name from users U, Groups G, Schools S where U.id IN (SELECT user_id FROM students SS WHERE NOT EXISTS (SELECT user_id FROM marks where student_id = SS.id )) and S.id = (select school_id from students where user_id = U.id) and G.id = (select group_id from students where user_id = U.id)
         ');
         return view('users_ranking', compact(['ranked_users', 'non_ranked_users']));
     }

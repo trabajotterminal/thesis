@@ -1,23 +1,7 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-
-
-
 Route::group(['middleware' => 'web'], function(){
-    Route::get('/', function () {
-        return view('index');
-    });
+    Route::get('/', 'Index@index');
     Route::get('/category/{name}', 'Category@category');
     Route::get('/login', 'Login@index');
     Route::post('/register/user',  ['as' => 'register/user', 'uses' => 'Authenticator@register']);
@@ -42,9 +26,7 @@ Route::post('/questionnaire/answers', 'Questionnaire@getAnswers') -> middleware(
 Route::post('/user/updateInfo', 'User@updateInfo') -> middleware('checkIfIsStudent');
 
 Route::group(['prefix' => 'admin', 'middleware' => 'checkIfIsAdmin'], function(){
-    // for categories and topics / crud.
     Route::get('/notification/{id}', 'Admin@viewNotification');
-    // for more specific editions.
     Route::get('/notification/theory/{id}', 'Admin@viewTheoryNotification');
     Route::get('/notification/questionnaire/{id}', 'Admin@viewQuestionnaireNotification');
     Route::get('/notification/simulation/{id}', 'Admin@viewSimulationNotification');
