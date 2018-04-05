@@ -1,4 +1,4 @@
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+<script src="{{ URL::asset('/js/bootstrap/bootstrap.min.js')}}"></script>
 @php
     $menu_classes       = [];
     $menu_classes[0]    = $page == 'index' ? 'active' : '';
@@ -55,7 +55,6 @@
                                         <li> <a href="/creator/topics">Mis temas</a> </li>
                                     </ul>
                                 </li>
-                                <!--<li><a href="/creator/statistics" class="dropdown-toggle  {{$menu_classes[2]}}">Ver estadisticas</a></li>-->
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle">Notificaciones <b>{{$unread_notifications}}</b></a>
                                     <ul class="dropdown-menu notify-drop">
@@ -172,6 +171,7 @@
                                             </div>
                                         </ul>
                                     </li>
+                                    <li><a href="/admin/statistics" class="dropdown-toggle  {{$menu_classes[2]}}">Ver estadisticas</a></li>
                                     <li><a href="/logout" class="dropdown-toggle"  {{$menu_classes[3]}}">Cerrar Sesión</a></li>
                             @endif
                         @else

@@ -1,5 +1,5 @@
 @php
-    $glances_questionnaire_topics = array_column($questionnaire_glances_array, 'name');
+    $glances_questionnaire_topics = array_column($questionnaire_glances_array, 'approved_name');
     $seen_topics = count($glances_questionnaire_topics);
     $percentage = $total_topics > 0 ? $seen_topics * 100 / $total_topics : 0;
 @endphp
@@ -53,7 +53,7 @@
         <div class="sh-divider-line doubble light  margin"></div>
     @endforeach
 </div>
-<h3 class="margin-left-3 margin-top1">Estadisticas generales - Teoría.</h3>
+<h3 class="margin-left-3 margin-top1">Estadisticas generales - Cuestionarios.</h3>
 <div id="chartContainerQuestionnaire" style="height: 300px; width: 100%;margin-top:60px;"></div>
 <script>
     $(document).ready(function(){

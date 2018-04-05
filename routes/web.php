@@ -52,13 +52,29 @@ Route::group(['prefix' => 'admin', 'middleware' => 'checkIfIsAdmin'], function()
     Route::post('/notification/theory/resolve', 'Admin@resolveTheoryNotification');
     Route::post('/notification/simulation/resolve', 'Admin@resolveSimulationNotification');
     Route::post('/notification/questionnaire/resolve', 'Admin@resolveQuestionnaireNotification');
+    Route::get('/statistics', 'Admin@statistics');
+    Route::get('/users/ranking', 'Admin@usersRanking');
+    Route::get('/groups/ranking', 'Admin@groupsRanking');
+    Route::get('/schools/ranking', 'Admin@schoolsRanking');
+    Route::get('/statistics/user/{name}', 'Admin@userStatistics');
+    Route::get('/statistics/group/{name}', 'Admin@groupStatistics');
+    Route::get('/statistics/school/{name}', 'Admin@schoolStatistics');
+    Route::get('/user/ranking/{name}/theory', 'Admin@getUserTheoryStatistics');
+    Route::get('/group/statistics/{name}/theory', 'Admin@getGroupTheoryStatistics');
+    Route::get('/group/statistics/{name}/questionnaire', 'Admin@getGroupQuestionnaireStatistics');
+    Route::get('/group/statistics/{name}/simulation', 'Admin@getGroupSimulationStatistics');
+    Route::get('/school/statistics/{name}/theory', 'Admin@getSchoolTheoryStatistics');
+    Route::get('/school/statistics/{name}/questionnaire', 'Admin@getSchoolQuestionnaireStatistics');
+    Route::get('/school/statistics/{name}/simulation', 'Admin@getSchoolSimulationStatistics');
+    Route::get('/user/ranking/{name}/questionnaire', 'Admin@getUserQuestionnaireStatistics');
+    Route::get('/user/ranking/{name}/simulation', 'Admin@getUserSimulationStatistics');
+
 });
 
 Route::group(['prefix' => 'creator',  'middleware' => 'checkIfIsCreator'], function(){
     Route::get('/notification/{id}', 'Creator@viewNotification');
     Route::get('/categories', 'Creator@categories');
     Route::get('/topics', 'Creator@topics');
-    Route::get('/statistics', 'Creator@statistics');
     Route::get('/categories/list', 'Creator@categoryList');
     Route::get('/topics/list', 'Creator@topicList');
     Route::get('/topic/{id}', 'Creator@displayTopic');
@@ -66,21 +82,6 @@ Route::group(['prefix' => 'creator',  'middleware' => 'checkIfIsCreator'], funct
     Route::get('/topic/{id}/simulation', 'Creator@topicSimulationManager');
     Route::get('/topic/{id}/questionnaire', 'Creator@topicQuestionnaireManager');
     Route::get('/categories/list/json', 'Creator@categoryListJSON');
-    Route::get('/users/ranking', 'Creator@usersRanking');
-    Route::get('/statistics/user/{name}', 'Creator@userStatistics');
-    Route::get('/statistics/group/{name}', 'Creator@groupStatistics');
-    Route::get('/statistics/school/{name}', 'Creator@schoolStatistics');
-    Route::get('/groups/ranking', 'Creator@groupsRanking');
-    Route::get('/schools/ranking', 'Creator@schoolsRanking');
-    Route::get('/user/ranking/{name}/theory', 'Creator@getUserTheoryStatistics');
-    Route::get('/group/statistics/{name}/theory', 'Creator@getGroupTheoryStatistics');
-    Route::get('/group/statistics/{name}/questionnaire', 'Creator@getGroupQuestionnaireStatistics');
-    Route::get('/group/statistics/{name}/simulation', 'Creator@getGroupSimulationStatistics');
-    Route::get('/school/statistics/{name}/theory', 'Creator@getSchoolTheoryStatistics');
-    Route::get('/school/statistics/{name}/questionnaire', 'Creator@getSchoolQuestionnaireStatistics');
-    Route::get('/school/statistics/{name}/simulation', 'Creator@getSchoolSimulationStatistics');
-    Route::get('/user/ranking/{name}/questionnaire', 'Creator@getUserQuestionnaireStatistics');
-    Route::get('/user/ranking/{name}/simulation', 'Creator@getUserSimulationStatistics');
     Route::post('/categories/register', 'Creator@registerCategory');
     Route::post('/topics/register', 'Creator@registerTopic');
     Route::post('/categories/delete', 'Creator@deleteCategory');

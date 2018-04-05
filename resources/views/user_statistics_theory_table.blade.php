@@ -1,5 +1,5 @@
 @php
-    $glances_theory_topics = array_column($theory_glances_array, 'name');
+    $glances_theory_topics = array_column($theory_glances_array, 'approved_name');
     $seen_topics = count($glances_theory_topics);
     $percentage = $total_topics > 0  ? $seen_topics * 100 / $total_topics: 0;
 @endphp
