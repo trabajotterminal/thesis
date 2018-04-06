@@ -4,6 +4,7 @@
     $school_name        = [];
     $group_name         = [];
     $index              = 0;
+    $user_id            = session('user_id');
     for($i = 0; $i < count($ranked_users) && $index < 10; $i++){
         $users_table[$index]        = $ranked_users[$i] -> username;
         $profile_picture[$index]    = $ranked_users[$i] -> profile_picture;
@@ -91,7 +92,9 @@
                                 @endforeach
                             </ul>
                             <div class="panel-footer">
-                                <a class="btn btn-lg btn-danger" href="#">Registrate ahora</a>
+                                @if(!($user_id))
+                                    <a class="btn btn-lg btn-danger" href="/login">Registrate ahora</a>
+                                @endif
                             </div>
                         </div>
                     </div>
