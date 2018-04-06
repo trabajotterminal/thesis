@@ -49,7 +49,7 @@ class Handler extends ExceptionHandler
             return response()->view('index'.'404');
         }
         if ($e instanceof NotFoundHttpException){
-            return response()->view('not_foundqq');
+            return response()->view('not_found');
         }
         elseif ($this->isHttpException($e)) {
             return $this->renderHttpException($e);

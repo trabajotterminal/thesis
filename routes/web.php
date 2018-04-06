@@ -2,6 +2,7 @@
 
 Route::group(['middleware' => 'web'], function(){
     Route::get('/', 'Index@index');
+    Route::get('/search', 'Index@searchEngine');
     Route::get('/category/{name}', 'Category@category');
     Route::get('/login', 'Login@index');
     Route::post('/register/user',  ['as' => 'register/user', 'uses' => 'Authenticator@register']);
