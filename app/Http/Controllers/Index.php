@@ -182,14 +182,14 @@ class Index extends Controller{
         }
         $should_display_predicted_word = false;
         $character_count    = strlen($predicted_word);
-        $percentage         = $best_length ? $best_length * 100.0 / strlen($predicted_word) : 0;
+        $percentage         = $best_length && strlen($predicted_word) ? $best_length * 100.0 / strlen($predicted_word) : 0;
         $should_display_predicted_word = $percentage >= 60 && $best_length >= 3 ? true : false;
         $search_results = DB::select("
           SELECT DISTINCT t.approved_name as topic_name from topics t 
           where t.approved_name like ? 
           OR t.approved_name IN (SELECT approved_name from topics t JOIN tag_topic tt ON t.id=tt.topic_id 
           RIGHT JOIN tags tg ON tt.tag_id=tg.id where tg.name like ?);", ['%'.$request -> input_search.'%', '%'.$request -> input_search.'%']);
-        $predicted_word = $mapped_string[$predicted_word];
+        $predicted_word = $predicted_word ? $mapped_string[$predicted_word] : "";
         return view('search_results', compact(['search_results', 'input', 'predicted_word', 'should_display_predicted_word']));
     }
 }
