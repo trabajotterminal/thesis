@@ -26,9 +26,15 @@
 
 3) Dentro de `XAMPP/htdocs/thesis-master`, ejecutar los siguientes comandos.
     
+    - `composer install`
+    
     - `php artisan key_generate`
     
-    - `php artisan serve`
+    - 
+    
+    - `php artisan serve --port=8005`
+    
+    
       
 
 ## Autores.
