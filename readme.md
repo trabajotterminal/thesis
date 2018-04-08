@@ -24,9 +24,10 @@
 
 2) Colocar la carpeta descarga o clonada `thesis-master` dentro de la carpeta `XAMPP/htdocs`.
 
-3) Iniciar `XAMPP`, ir la interfaz de `Php my admin` y crear una nueva base de datos llamada `database`.
+3) Iniciar `XAMPP`, ir la interfaz de `Phpmyadmin` y crear una nueva base de datos llamada `database`.
 
-4) Copiar el contenido del archivo `thesis-master/database.sql` y después pegarlo en la caja de texto dentro de la pestaña SQL.
+4) Copiar el contenido del archivo `thesis-master/database.sql` para posteriormente pegarlo en la caja de texto que aparece en la pestaña SQL dentro de `Phpmyadmin`.
+<img src="https://i.imgur.com/lRkZ7hz.png" style="width:200px;height:200px;" />
 
 3) Dentro de `XAMPP/htdocs/thesis-master`, ejecutar los siguientes comandos.
     
