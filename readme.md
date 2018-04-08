@@ -24,16 +24,19 @@
 
 2) Colocar la carpeta descarga o clonada `thesis-master` dentro de la carpeta `XAMPP/htdocs`.
 
+3) Iniciar `XAMPP`, ir la interfaz de `Php my admin` y crear una nueva base de datos llamada `database`.
+
+4) Posteriormente a eso copiar el contenido del archivo database.sql dentro de la carpeta `thesis-master` y pegarlo en la caja de texto dentro de la pestaña SQL.
+
 3) Dentro de `XAMPP/htdocs/thesis-master`, ejecutar los siguientes comandos.
     
     - `composer install`
     
     - `php artisan key_generate`
     
-    - 
-    
     - `php artisan serve --port=8005`
-    
+ 
+ 4) Ir al navegador Firefox e introducir la dirección: `127.0.0.1:8005`  
     
       
 
