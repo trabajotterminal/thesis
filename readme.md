@@ -1,6 +1,6 @@
 ## Plataforma de aprendizaje de algoritmos para la programación competitiva.
 
-<p align="justify">El siguiente sistema permite administrar contenido relacionado a la programación competitiva, el cuál se puede clasificar en tres principales bloques:</p>
+<p align="justify">El siguiente sistema permite administrar contenido relacionado a la programación competitiva el cuál se puede clasificar en tres principales bloques:</p>
     
     1) Teoría
     2) Simulación
@@ -12,14 +12,13 @@
 ## Prerequisitos.
 
 - Navegador Firefox versión 59.0.2 (64-bit) o posterior.
+- XAMPP v5.6.34 o posterior.
 
 ## Instalación.
 
-1)O
+1) Clonar el repositorio usando el siguiente link: https://github.com/trabajotterminal/thesis.git o descargarlo desde <a href="https://github.com/trabajotterminal/thesis/archive/master.zip">aquí</a>.
 
-2)O
-
-3)O
+2) Colocar la carpeta descarga o clonada `thesis-master` dentro de la carpeta `XAMPP/htdocs`. 
 
 ## Autores.
 
