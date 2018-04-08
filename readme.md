@@ -1,12 +1,12 @@
 ## Plataforma de aprendizaje de algoritmos para la programación competitiva.
 
-El siguiente sistema permite administrar contenido relacionado a la programación competitiva, el cuál se puede clasificar en tres principales bloques:
+<p align="justify">El siguiente sistema permite administrar contenido relacionado a la programación competitiva, el cuál se puede clasificar en tres principales bloques:</p>
     
     1) Teoría
     2) Simulación
     3) Cuestionarios
     
-Por otra parte el sistema también es capaz de mostrar el contenido a los usuarios de modo que sirva de apoyo durante en el proceso de aprendizaje. Finalmente el sistema posee con un módulo administrativo en el que se podrá obtener estádisticas relacionadas a la actividad realizada por los usuarios en el sistema.        
+<p align="justify">Por otra parte el sistema también es capaz de mostrar el contenido a los usuarios de modo que sirva de apoyo durante en el proceso de aprendizaje. Finalmente el sistema posee con un módulo administrativo en el que se podrá obtener estádisticas relacionadas a la actividad realizada por los usuarios en el sistema.</p>        
 <p align="center"><img src="https://image.ibb.co/d6bJ4x/Screen_Shot_2018_04_07_at_6_58_21_PM.png" style="width:300px;height:300px;"></p>
 
 ## Prerequisitos.
