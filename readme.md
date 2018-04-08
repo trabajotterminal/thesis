@@ -22,7 +22,14 @@
 
 1) Clonar el repositorio usando el siguiente link: https://github.com/trabajotterminal/thesis.git o descargarlo desde <a href="https://github.com/trabajotterminal/thesis/archive/master.zip">aquí</a>.
 
-2) Colocar la carpeta descarga o clonada `thesis-master` dentro de la carpeta `XAMPP/htdocs`. 
+2) Colocar la carpeta descarga o clonada `thesis-master` dentro de la carpeta `XAMPP/htdocs`.
+
+3) Dentro de `XAMPP/htdocs/thesis-master`, ejecutar los siguientes comandos.
+    
+    - `php artisan key_generate`
+    
+    - `php artisan serve`
+      
 
 ## Autores.
 
