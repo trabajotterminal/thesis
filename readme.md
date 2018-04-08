@@ -29,7 +29,7 @@
 4) Copiar el contenido del archivo `thesis-master/database.sql` para posteriormente pegarlo en la caja de texto que aparece en la pestaña SQL dentro de `Phpmyadmin`.
 <img src="https://i.imgur.com/lRkZ7hz.png" style="width:200px;height:200px;" />
 
-3) Dentro de `XAMPP/htdocs/thesis-master`, ejecutar los siguientes comandos.
+5) Dentro de `XAMPP/htdocs/thesis-master`, ejecutar los siguientes comandos.
     
     - `composer install`
     
@@ -37,7 +37,7 @@
     
     - `php artisan serve --port=8005`
  
- 4) Ir al navegador Firefox e introducir la dirección: `127.0.0.1:8005`  
+ 6) Ir al navegador Firefox e introducir la dirección: `127.0.0.1:8005`  
     
       
 
