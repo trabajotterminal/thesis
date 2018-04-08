@@ -11,9 +11,13 @@
 
 ## Prerequisitos.
 
-- Navegador Firefox versión 59.0.2 (64-bit) o posterior.
-- XAMPP v5.6.34 o posterior.
+- Navegador Firefox versión 59.0.2 (64-bit) o posterior. [<a href="https://www.mozilla.org/en-US/firefox/new/">Descargar</a>]
 
+- XAMPP v5.6.34 o posterior. [<a href="https://www.apachefriends.org/download.html">Descargar</a>]
+
+- Composer. [<a href="https://getcomposer.org/download/">Descargar</a>]
+
+- Laravel v5.6 o posterior. [<a href="https://laravel.com/docs/5.6/installation">Descargar</a>]
 ## Instalación.
 
 1) Clonar el repositorio usando el siguiente link: https://github.com/trabajotterminal/thesis.git o descargarlo desde <a href="https://github.com/trabajotterminal/thesis/archive/master.zip">aquí</a>.
