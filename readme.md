@@ -6,7 +6,7 @@
     2) Simulación
     3) Cuestionarios
     
-<p align="justify">Por otra parte el sistema también es capaz de mostrar el contenido a los usuarios de modo que sirva de apoyo durante en el proceso de aprendizaje. Finalmente el sistema posee con un módulo administrativo en el que se podrá obtener estádisticas relacionadas a la actividad realizada por los usuarios en el sistema.</p>        
+<p align="justify">Por otra parte el sistema también es capaz de mostrar el contenido a los usuarios de modo que sirva de apoyo durante en el proceso de aprendizaje. Finalmente el sistema posee un módulo administrativo en el que se podrá obtener estádisticas relacionadas a la actividad realizada por los usuarios en el sistema.</p>        
 <p align="center"><img src="https://image.ibb.co/d6bJ4x/Screen_Shot_2018_04_07_at_6_58_21_PM.png" style="width:300px;height:300px;"></p>
 
 ## Prerequisitos.
@@ -26,7 +26,7 @@
 
 3) Iniciar `XAMPP`, ir la interfaz de `Php my admin` y crear una nueva base de datos llamada `database`.
 
-4) Posteriormente a eso copiar el contenido del archivo database.sql dentro de la carpeta `thesis-master` y pegarlo en la caja de texto dentro de la pestaña SQL.
+4) Copiar el contenido del archivo `thesis-master/database.sql` y después pegarlo en la caja de texto dentro de la pestaña SQL.
 
 3) Dentro de `XAMPP/htdocs/thesis-master`, ejecutar los siguientes comandos.
     
