@@ -23,7 +23,12 @@
     $code_opening       = [];
     $code_closing       = [];
     $code_content       = [];
-
+    $reference_title_opening = [];
+    $reference_title_closing = [];
+    $reference_title_content = [];
+    $reference_link_opening  = [];
+    $reference_link_closing  = [];
+    $reference_link_content  = [];
     $title_opening          = getSubstringArray('<titulo>', $text);
     $title_closing          = getSubstringArray('</titulo>', $text);
     $subtitle_opening       = getSubstringArray('<subtitulo>', $text);
@@ -32,6 +37,10 @@
     $paragraph_closing      = getSubstringArray('</parrafo>', $text);
     $code_opening           = getSubstringArray('<codigo>', $text);
     $code_closing           = getSubstringArray('</codigo>', $text);
+    $reference_title_opening = getSubstringArray('<encabezado>', $text);
+    $reference_title_closing = getSubstringArray('</encabezado>', $text);
+    $reference_link_opening  = getSubstringArray('<link>', $text);
+    $reference_link_closing  = getSubstringArray('</link>', $text);
     for($i = 0; $i < count($title_opening); $i++){
         $title_content[$i] = substr($text, $title_opening[$i] + strlen('<titulo>'), $title_closing[$i] - $title_opening[$i] - strlen('</titulo>') + 1);
     }
@@ -44,12 +53,20 @@
     for($i = 0; $i < count($code_opening); $i++){
         $code_content[$i] = substr($text, $code_opening[$i] + strlen('<codigo>'), $code_closing[$i] - $code_opening[$i] -  strlen('</codigo>') + 1);
     }
-    $indexOpeningContent    = array_merge($title_opening, $subtitle_opening, $paragraph_opening, $code_opening);
+    for($i = 0; $i < count($reference_title_opening); $i++){
+        $reference_title_content[$i] = substr($text, $reference_title_opening[$i] + strlen('<encabezado>'), $reference_title_closing[$i] - $reference_title_opening[$i] -  strlen('</encabezado>') + 1);
+    }
+
+    for($i = 0; $i < count($reference_link_opening); $i++){
+        $reference_link_content[$i] = substr($text, $reference_link_opening[$i] + strlen('<link>'), $reference_link_closing[$i] - $reference_link_opening[$i] -  strlen('</link>') + 1);
+    }
+    $indexOpeningContent    = array_merge($title_opening, $subtitle_opening, $paragraph_opening, $code_opening, $reference_title_opening, $reference_link_opening);
     sort($indexOpeningContent);
     $titles        = 0;
     $subtitles     = 0;
     $paragraphs    = 0;
     $codes         = 0;
+    $references    = 0;
 @endphp
 @extends('layouts.app')
 @section('title', 'Edición.')
@@ -145,13 +162,42 @@
                     @endforeach
                 </div>
             </div>
+            <div class="row" id="references">
+                @foreach($indexOpeningContent as $key => $value)
+                    @if(in_array($value, $reference_title_opening))
+                        <div class="col-md-12">
+                            <h3>Referencia</h3>
+                            <form>
+                                <div class="form-group" style="width:87%;">
+                                    <label for="reference_title_{{($references + 1)}}">Titulo</label>
+                                    <input type="search" class="form-control" name="reference_title_{{$references + 1}}" value="{{$reference_title_content[$references]}}">
+                                </div>
+                                <div class="form-group" style="width:87%">
+                                    <label for="reference_link_{{($references + 1)}}">Link</label>
+                                    <input type="search" class="form-control" name="reference_link_{{$references + 1}}" value="{{$reference_link_content[$references]}}">
+                                </div>
+                            </form>
+                        </div>
+                        @php
+                            ++$references;
+                        @endphp
+                        @if($references > 1)
+                            <script>
+                                setTimeout(function () {
+                                    elements.push('reference');
+                                }, 1000);
+                            </script>
+                        @endif
+                    @endif
+                @endforeach
+            </div>
         </div>
-        <div class="clearfix">
         <div class="row">
             <div class="col-md-12">
                 <button class="btn btn-light" style="margin-top:30px;margin-left:50px;" id="addSubtitle">Agregar nuevo subtitulo</button>
                 <button class="btn btn-light" style="margin-top:30px;margin-left:50px;" id="addParagraph">Agregar nuevo parrafo</button>
                 <button class="btn btn-light" style="margin-top:30px;margin-left:50px;" id="addCode">Agregar código</button>
+                <button class="btn btn-light" style="margin-top:30px;margin-left:50px;" id="addReference">Agregar referencia</button>
                 <form action="{{url('creator/topic/theory/update/manually')}}" method="POST" id="finish">
                     {{ csrf_field() }}
                     <input type="submit" class="btn btn-success" style="margin-top:30px;margin-left:50px;"  value="Actualizar teoría" />
@@ -176,13 +222,16 @@
         var subtitle    = 0;
         var paragraph   = 0;
         var code        = 0;
-        var elements = ['title', 'subtitle', 'paragraph'];
+        var reference   = 0;
+        var elements = ['title', 'subtitle', 'paragraph', 'reference'];
         var editors     = [];
         $(document).ready(function() {
             title       = <?php echo json_decode($titles);      ?>;
             subtitle    = <?php echo json_decode($subtitles);   ?>;
             paragraph   = <?php echo json_decode($paragraphs);  ?>;
             code        = <?php echo json_decode($codes);       ?>;
+            reference   = <?php echo json_decode($references);  ?>;
+            console.warn(elements);
             for(var i = 1; i <= code; i++){
                 editors[i] = CodeMirror(document.getElementById("code_"+(i)), {
                     lineNumbers: true,
@@ -215,6 +264,7 @@
                 });
             }
         });
+
         $("#addSubtitle").click(function() {
             var elm = '<div class="col-md-12 margin-top3">\n' +
                 '                    <h3>Subtitulo</h3>\n' +
@@ -225,6 +275,25 @@
             $(elm).hide().appendTo('#theory').fadeIn();
             elements.push('subtitle');
         });
+
+        $('#addReference').click(function(){
+            var elm = '<div class="col-md-12">' +
+                '                    <h3>Referencia</h3>' +
+                '                    <form>' +
+                '                        <div class="form-group" style="width:87%;">' +
+                '                            <label for="reference_title_'+(reference + 1)+'">Titulo</label>' +
+                '                            <input type="search" class="form-control" name="reference_title_'+(reference + 1)+'" placeholder="Guide to competitive programming. Pg: 75-104">' +
+                '                        </div>\n' +
+                '                        <div class="form-group" style="width:87%">' +
+                '                            <label for="reference_link_'+(reference + 1)+'">Link</label>' +
+                '                            <input type="search" class="form-control" name="reference_link_'+(++reference)+'" placeholder="https://books.google.com.mx/books?id=nCdFDwAAQBAJ&printsec=frontcover&dq=competitive+programming&hl=en&sa=X&ved=0ahUKEwirjuzpwa3aAhVEcq0KHZI9A3UQ6wEIKjAA#v=onepage&q=competitive%20programming&f=false">' +
+                '                        </div>' +
+                '                    </form>' +
+                '                </div>';
+            $(elm).hide().appendTo('#references').fadeIn();
+            elements.push('reference');
+        });
+
         $("#addParagraph").click(function() {
             var elm = '<div class="col-md-12 margin-top3" style="width:87%;">\n' +
                 '                    <h3>Parrafo</h3>\n' +
@@ -278,8 +347,10 @@
             var c = 0;
             var t = 0;
             var s = 0;
+            var r = 0;
+            var left = 0;
             var xmlContent = "<teoria>";
-            for(let i = 0; i < elements.length; i++) {
+            for(var i = 0; i < elements.length; i++) {
                 if (elements[i] == 'title') {
                     xmlContent += '<titulo>\n';
                     xmlContent += $('input[name=title]').val();
@@ -300,6 +371,19 @@
                     xmlContent += editors[++c].getValue();
                     xmlContent += '</codigo>\n'
                 }
+                if(elements[i] == 'reference'){
+                    ++left;
+                }
+            }
+            for(var i = 0; i < left; i++){
+                xmlContent += '<referencia>\n';
+                xmlContent += '<encabezado>\n';
+                xmlContent += $('input[name=reference_title_' + (r + 1) + ']').val() + '\n';
+                xmlContent += '</encabezado>\n';
+                xmlContent += '<link>\n';
+                xmlContent += $('input[name=reference_link_' + (++r) + ']').val() + '\n';
+                xmlContent += '</link>\n';
+                xmlContent += '</referencia>\n';
             }
             xmlContent += "</teoria>";
             var url = $('#finish').attr('action');
@@ -311,7 +395,7 @@
                 data: {"xmlContent": xmlContent, "topic_name": topic_name},
                 dataType: 'json',
                 success: function( _response ){
-                    window.location.href = "/creator/topics";
+                    window.location.href = "/creator/topic/" + topic_name;
                 },
                 error: function(xhr, status, error) {
                     alert(error);
@@ -319,7 +403,6 @@
             });
             return 0;
         });
-
     </script>
 @endsection
 

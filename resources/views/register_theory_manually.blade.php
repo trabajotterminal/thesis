@@ -42,9 +42,25 @@
                     <div id="paragraph_1"></div>
                 </div>
             </div>
+            <div class="row" id="references">
+                <div class="col-md-12">
+                    <h3>Referencia</h3>
+                    <form>
+                        <div class="form-group" style="width:87%;">
+                            <label for="reference_title_1">Titulo</label>
+                            <input type="search" class="form-control" name="reference_title_1" placeholder="Guide to competitive programming. Pg: 75-104">
+                        </div>
+                        <div class="form-group" style="width:87%">
+                            <label for="reference_link_1">Link</label>
+                            <input type="search" class="form-control" name="reference_link_1" placeholder="https://books.google.com.mx/books?id=nCdFDwAAQBAJ&printsec=frontcover&dq=competitive+programming&hl=en&sa=X&ved=0ahUKEwirjuzpwa3aAhVEcq0KHZI9A3UQ6wEIKjAA#v=onepage&q=competitive%20programming&f=false">
+                        </div>
+                    </form>
+                </div>
+            </div>
             <button class="btn btn-light" style="margin-top:30px;margin-left:50px;" id="addSubtitle">Agregar nuevo subtitulo</button>
             <button class="btn btn-light" style="margin-top:30px;margin-left:50px;" id="addParagraph">Agregar nuevo parrafo</button>
             <button class="btn btn-light" style="margin-top:30px;margin-left:50px;" id="addCode">Agregar código</button>
+            <button class="btn btn-light" style="margin-top:30px;margin-left:50px;" id="addReference">Agregar referencia</button>
             <form action="{{url('creator/topic/theory/register/manually/save')}}" method="POST" id="finish">
                 {{ csrf_field() }}
                 <input type="submit" class="btn btn-success" style="margin-top:30px;margin-left:50px;"  value="Finalizar teoría" />
@@ -86,10 +102,11 @@
         });
     </script>
     <script>
-        var elements = ['title', 'subtitle', 'paragraph'];
+        var elements = ['title', 'subtitle', 'paragraph', 'reference'];
         var title       = 1;
         var subtitle    = 1;
         var paragraph   = 1;
+        var reference   = 1;
         var code        = 0;
         var editors     = [];
         $("#addSubtitle").click(function() {
@@ -102,6 +119,25 @@
             $(elm).hide().appendTo('#questionnaire').fadeIn();
             elements.push('subtitle');
         });
+
+        $('#addReference').click(function(){
+            var elm = '<div class="col-md-12">' +
+                '                    <h3>Referencia</h3>' +
+                '                    <form>' +
+                '                        <div class="form-group" style="width:87%;">' +
+                '                            <label for="reference_title_'+(reference + 1)+'">Titulo</label>' +
+                '                            <input type="search" class="form-control" name="reference_title_'+(reference + 1)+'" placeholder="Guide to competitive programming. Pg: 75-104">' +
+                '                        </div>\n' +
+                '                        <div class="form-group" style="width:87%">' +
+                '                            <label for="reference_link_'+(reference + 1)+'">Link</label>' +
+                '                            <input type="search" class="form-control" name="reference_link_'+(++reference)+'" placeholder="https://books.google.com.mx/books?id=nCdFDwAAQBAJ&printsec=frontcover&dq=competitive+programming&hl=en&sa=X&ved=0ahUKEwirjuzpwa3aAhVEcq0KHZI9A3UQ6wEIKjAA#v=onepage&q=competitive%20programming&f=false">' +
+                '                        </div>' +
+                '                    </form>' +
+                '                </div>';
+            $(elm).hide().appendTo('#references').fadeIn();
+            elements.push('reference');
+        });
+
         $("#addParagraph").click(function() {
             var elm = '<div class="col-md-12 margin-top3" style="width:87%;">\n' +
                 '                    <h3>Parrafo</h3>\n' +
@@ -155,8 +191,11 @@
             var c = 0;
             var t = 0;
             var s = 0;
+            var r = 0;
+            var left = 0;
             var xmlContent = "";
-            for(let i = 0; i < elements.length; i++) {
+            xmlContent += "<teoria>";
+            for(var i = 0; i < elements.length; i++) {
                 if (elements[i] == 'title') {
                     xmlContent += '<titulo>\n';
                     xmlContent += $('input[name=title]').val();
@@ -177,7 +216,21 @@
                     xmlContent += editors[++c].getValue();
                     xmlContent += '</codigo>\n'
                 }
+                if(elements[i] == 'reference'){
+                   ++left;
+                }
             }
+            for(var i = 0; i < left; i++){
+                xmlContent += '<referencia>\n';
+                xmlContent += '<encabezado>\n';
+                xmlContent += $('input[name=reference_title_' + (r + 1) + ']').val() + '\n';
+                xmlContent += '</encabezado>\n';
+                xmlContent += '<link>\n';
+                xmlContent += $('input[name=reference_link_' + (++r) + ']').val() + '\n';
+                xmlContent += '</link>\n';
+                xmlContent += '</referencia>\n';
+            }
+            xmlContent += "</teoria>";
             var url = $('#finish').attr('action');
             var topic_name = $('#hiddenTopicName').val();
             $.ajax({
@@ -187,7 +240,7 @@
                 data: {"xmlContent": xmlContent, "topic_name": topic_name},
                 dataType: 'json',
                 success: function( _response ){
-                    window.location.href = "/creator/topics";
+                    window.location.href = "/creator/topic/" + topic_name;
                 },
                 error: function(xhr, status, error) {
                     alert(error);

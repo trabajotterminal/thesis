@@ -163,6 +163,12 @@ class Index extends Controller{
             $mapped_string[$filtered_string] = $topics[$i]->approved_name;
             array_push($dictionary, $filtered_string);
         }
+        $categories         = Category::all();
+        for($i = 0; $i < count($categories); $i++) {
+            $filtered_string = strtr($categories[$i]->approved_name, $chars);
+            $mapped_string[$filtered_string] = $categories[$i]->approved_name;
+            array_push($dictionary, $filtered_string);
+        }
         $tags           = Tag::all();
         for($i = 0; $i < count($tags); $i++) {
             $filtered_string = strtr($tags[$i]-> name, $chars);
@@ -188,7 +194,8 @@ class Index extends Controller{
           SELECT DISTINCT t.approved_name as topic_name from topics t 
           where t.approved_name like ? 
           OR t.approved_name IN (SELECT approved_name from topics t JOIN tag_topic tt ON t.id=tt.topic_id 
-          RIGHT JOIN tags tg ON tt.tag_id=tg.id where tg.name like ?);", ['%'.$request -> input_search.'%', '%'.$request -> input_search.'%']);
+          RIGHT JOIN tags tg ON tt.tag_id=tg.id where tg.name like ?) OR t.approved_name IN (SELECT t.approved_name as topic_name 
+          from topics t join categories c on t.category_id=c.id where c.approved_name like ?);", ['%'.$request -> input_search.'%', '%'.$request -> input_search.'%', '%'.$request -> input_search.'%']);
         $predicted_word = $predicted_word ? $mapped_string[$predicted_word] : "";
         return view('search_results', compact(['search_results', 'input', 'predicted_word', 'should_display_predicted_word']));
     }

@@ -17,6 +17,15 @@
     $T = str_replace('<codigo>', '<pre><code>', $T);
     $T = str_replace('</codigo>', '</pre></code><br>', $T);
 
+    $T = str_replace('<referencia>', '', $T);
+    $T = str_replace('</referencia>', '', $T);
+
+    $T = str_replace('<encabezado>', '<b><p>', $T);
+    $T = str_replace('</encabezado>', '<b></p>', $T);
+
+    $T = str_replace('<link>', '<a href="#" style="color:#235cba;">', $T);
+    $T = str_replace('</link>', '</a>', $T);
+
     $T = str_replace('<teoria>', '', $T);
     $T = str_replace('</teoria>', '', $T);
     $user_id            = session('user_id');
