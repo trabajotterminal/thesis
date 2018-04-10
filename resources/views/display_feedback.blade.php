@@ -37,9 +37,13 @@
 </style>
 <div class="row">
 @if(count($questions) == 0)
-    <br><br><br><br><br><br><br>
+    <br><br>
     <div class="col-md-12">
-        <center><h1>¡Obtuviste una calificación perfecta!</h1></center>
+        <center>
+            <h1>¡Obtuviste una calificación perfecta!</h1>
+            <h3>¡Felicidades!</h3>
+            <img src="{{URL::asset('images/nerd.png')}}" style="width:250px;height:250px;" />
+        </center>
     </div>
 @else
     <div class="col-md-12">
