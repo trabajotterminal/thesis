@@ -9,6 +9,7 @@ use App\Category;
 use App\User;
 use App\Glance;
 Use DB;
+Use View;
 
 class Questionnaire extends Controller
 {
@@ -48,10 +49,14 @@ class Questionnaire extends Controller
         $try_number     = $request -> tries;
         $xml            = simplexml_load_string($xmlstring);
         $right_answers  = [];
+        $feedbacks      = [];
+        $questions      = [];
         $i = 0;
         $try_number = (int)$try_number;
         if($try_number < $xml['cuestionarios']){
             for($i = 0; $i < count($xml->children()[$try_number]); $i++) {
+                array_push($questions, $xml -> children()[$try_number] -> bloque[$i] -> pregunta);
+                array_push($feedbacks, $xml -> children()[$try_number] -> bloque[$i] -> retroalimentacion);
                 for($j = 0; $j < count($xml -> children()[$try_number] -> bloque[$i] -> opcion); $j++){
                     if($xml -> children()[$try_number] -> bloque[$i] -> opcion[$j]['value'] == 'true'){
                         array_push($right_answers, $j + 1);
@@ -60,18 +65,28 @@ class Questionnaire extends Controller
                 }
             }
         }
-        return response() -> json(['success' => $right_answers]);
+        return response() -> json(['answers' => $right_answers, 'feedbacks' => $feedbacks, 'questions' => $questions]);
     }
 
     public function evaluate(Request $request){
         $user_answers   = $request -> user_answers;
         $topic_name     = $request -> topic_name;
         $right_answers  = $request -> right_answers;
+        $questions      = $request -> questions;
+        $feedbacks      = $request -> feedbacks;
+        $feedbacks_to_display = [];
+        $questions_to_display = [];
+        $right_answers_to_display = [];
         $total = count($right_answers);
         $correct = 0;
         for($i = 0; $i < count($user_answers); $i++){
-            if($user_answers[$i] == $right_answers[$i])
+            if($user_answers[$i] == $right_answers[$i]) {
                 ++$correct;
+            }else{
+                array_push($questions_to_display, $questions[$i]);
+                array_push($feedbacks_to_display, $feedbacks[$i]);
+                array_push($right_answers_to_display, $right_answers[$i]);
+            }
         }
         $points = ($correct * 10.0) / ($total * 1.0);
         $user_id = session('user_id');
@@ -79,10 +94,10 @@ class Questionnaire extends Controller
         $topic = Topic::where('approved_name', '=', $request -> topic_name) -> orWhere('pending_name', '=', $request -> topic_name)-> first();
         $mark = User::where('id', '=', $user_id) -> first() -> student() -> first() -> marks() -> where('topic_id', '=', $topic -> id) -> first();
         if($mark == null){
-            $mark = new Mark(['try_number' => 1, 'points' => $points, 'user_id' => $user_id, 'student_id' => $student -> id, 'group_id' => $student -> group_id, 'school_id' => $student -> school_id, 'topic_id' => $topic -> id, 'category_id' => $topic -> category_id]);
+            $mark = new Mark(['try_number' => 0, 'points' => $points, 'user_id' => $user_id, 'student_id' => $student -> id, 'group_id' => $student -> group_id, 'school_id' => $student -> school_id, 'topic_id' => $topic -> id, 'category_id' => $topic -> category_id]);
             $mark -> save();
         }else{
-            $mark -> try_number = $mark -> try_number + 1;
+            $mark -> try_number = $mark -> try_number;
             $mark -> points = $points;
             $mark -> save();
         }
@@ -96,6 +111,6 @@ class Questionnaire extends Controller
         if(count($hasGlance) == 0){
             $student -> glances() -> attach($glance -> id);
         }
-        return response() -> json(['success' => $mark]);
+        return response() -> json(['view' => View::make('display_feedback', ['user_answers' => $user_answers, 'right_answers' => $right_answers_to_display, 'feedbacks' => $feedbacks_to_display, 'questions' => $questions_to_display, 'topic_name' => $topic_name]) -> render()]);
     }
 }

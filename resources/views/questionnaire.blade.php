@@ -40,13 +40,13 @@
     @include('layouts/menu', ['page' => 'category'])
 @endsection
 @section('content')
-    <center><h5 class="uppercase weight3 pull">{{$topic_name}}</h5></center>
-    <div class="carousel_holder">
+    <center><h3 class="uppercase weight3 pull margin-top1">{{$topic_name}}</h3></center>
+    <div class="carousel_holder" id="questionnaire" style="overflow-x: hidden;">
         <div id="owl-demo7" class="owl-carousel" style="min-height:540px;">
             @foreach($questions as $key => $question)
                 <div class="item">
                     <div class="row">
-                        <div class="col-md-6" style="height:450px;">
+                        <div class="col-md-12" style="height:450px;">
                             <div class="row" style="height:100px;margin:30px;">
                                 <div class="col">
                                     <h4> {{$question}} </h4>
@@ -64,9 +64,6 @@
                                     @endforeach
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 bmargin">
-                            <img  src="{{$input_images[$key]}}" style="margin-top:10px;width:600px;height:300px;"/>
                         </div>
                         @if($key + 1 == count($questions))
                             <div class="row">
@@ -89,6 +86,9 @@
             @endif
         </div>
     </div>
+    <div class="container" id="feedback" style="min-height:530px;overflow-x: hidden;">
+
+    </div>
     <form action="{{url('/questionnaire/answers')}}" method="POST" id="getAnswers">
         {{ csrf_field() }}
     </form>
@@ -104,8 +104,11 @@
     <script src="{{ asset('/js/owl-carousel/owl.carousel.js')}}"></script>
     <script src="{{ asset('/js/owl-carousel/custom.js')}}"></script>
     <script>
-        var answers = [];
+        var answers     = [];
+        var questions   = [];
+        var feedbacks   = [];
         $(document).ready(function(){
+            $('#feedback').hide();
             $("#getAnswers").submit(function(e) {
                 var url = $('#getAnswers').attr('action');
                 var topic_name = <?php echo json_encode($topic_name); ?>;
@@ -116,8 +119,10 @@
                     type: 'POST',
                     data: {"topic_name": topic_name, "tries": tries},
                     dataType: 'json',
-                    success: function( _response ){
-                        answers = _response.success;
+                    success: function( data ){
+                        answers = data.answers;
+                        questions = data.questions;
+                        feedbacks = data.feedbacks;
                     },
                     error: function(xhr, status, error) {
                         alert(error);
@@ -140,10 +145,11 @@
                 beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
                 url: url,
                 type: 'POST',
-                data: {"user_answers": user_answers, "topic_name": topic_name, "right_answers": right_answers},
+                data: {"user_answers": user_answers, "topic_name": topic_name, "right_answers": right_answers, "questions": questions, "feedbacks": feedbacks},
                 dataType: 'json',
-                success: function( _response ){
-                    location.reload();
+                success: function( data ){
+                    $('#questionnaire').hide();
+                    $('#feedback').fadeIn(2000).append(data.view);
                 },
                 error: function(xhr, status, error) {
                     alert(error);
