@@ -36,7 +36,6 @@ El contenido de la plataforma se divide en tres componentes principales:
 <p align="justify">Aplica y evalúa una serie de cuestionarios de opción múltiple de los temas de la plataforma. Una vez finalizado un cuestionario, le brinda al usuario una retroalimentación de las preguntas que fueron contestadas incorrectamente.</p>
 
 <p align="justify">Asimismo, posee un apartado administrativo en el que se podrá obtener estádisticas relacionadas a la actividad de los usuarios registrados y visitantes en el sistema.</p>        
-<p align="center"><img src="https://image.ibb.co/d6bJ4x/Screen_Shot_2018_04_07_at_6_58_21_PM.png" style="width:300px;height:300px;"></p>
 
 ## Prerrequisitos
 
