@@ -65,7 +65,7 @@
                                                 @foreach($notifications as $key => $notification)
                                                     <li style="overflow-x: hidden;">
                                                         @if($notification -> seen == false)
-                                                            <div class="row" style="background-color: rgba(74, 147, 223, 0.1);">
+                                                            <div class="row" style="background-color: #edf2fa;">
                                                         @else
                                                             <div class="row">
                                                         @endif
