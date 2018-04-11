@@ -1,5 +1,6 @@
 ## Plataforma de aprendizaje de algoritmos computacionales para la programación competitiva
 <p align="center"><img src="https://image.ibb.co/d6bJ4x/Screen_Shot_2018_04_07_at_6_58_21_PM.png" style="width:300px;height:300px;"></p>
+
 ## Contenido
 - Introducción
 - Componentes del Sistema
