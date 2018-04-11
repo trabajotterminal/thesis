@@ -4,6 +4,7 @@
 
 @section('statics-css')
     @include('layouts/statics-css-1')
+
     <link rel="stylesheet" href="{{ URL::asset('/css/codemirror.css')}}"  type="text/css" />
     <link rel="stylesheet" href="{{ URL::asset('/css/monokai.css')}}"  type="text/css" />
     <script src="{{ URL::asset('/js/codemirror.js')}}"></script>
@@ -13,6 +14,8 @@
     <script src="{{ URL::asset('/js/sublime.js')}}"></script>
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
     <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{{ URL::asset('/css/summernote-ext-emoji-ajax.css')}}"  type="text/css" />
 
 @endsection
 
@@ -80,7 +83,20 @@
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
     <script src="{{ URL::asset('/js/summernote-es-ES.js')}}"></script>
+    <script src="{{ URL::asset('/js/summernote-ext-emoji-ajax.js')}}"></script>
     <script>
+        var HelloButton = function (context) {
+            var ui = $.summernote.ui;
+            var button = ui.button({
+                contents: '<b>Σ</b>',
+                tooltip: 'Inserta fórmula',
+                click: function () {
+                    context.invoke('editor.insertText', ' `Introduce LaTeX aquí` ');
+                }
+            });
+            return button.render();   // return button as jquery object
+        };
+
         $(document).ready(function() {
             $('#paragraph_1').summernote({
                 lang: "es-ES",
@@ -93,8 +109,13 @@
                     ['height', ['height']],
                     ['picture',['picture']],
                     ['link',['link']],
-                    ['video',['video']]
+                    ['video',['video']],
+                    ['mybutton', ['hello']],
+                    ['insert', ['emoji']],
                 ],
+                buttons: {
+                    hello: HelloButton
+                },
                 placeholder: 'Introduce tu párrafo',
                 tabsize: 2,
                 height: 200,
@@ -156,8 +177,13 @@
                     ['height', ['height']],
                     ['picture',['picture']],
                     ['link',['link']],
-                    ['video',['video']]
+                    ['video',['video']],
+                    ['mybutton', ['hello']],
+                    ['insert', ['emoji']],
                 ],
+                buttons: {
+                    hello: HelloButton
+                },
                 placeholder: 'Introduce tu párrafo',
                 tabsize: 2,
                 height: 200,

@@ -37,6 +37,7 @@
 @section('statics-css')
     @include('layouts/statics-css-1')
     <link rel="stylesheet" href="{{ asset('/css/monokai-sublime.css') }}" />
+    <link rel="stylesheet" href="{{ URL::asset('/css/summernote-ext-emoji-ajax.css')}}"  type="text/css" />
 @endsection
 
 @section('menu')
