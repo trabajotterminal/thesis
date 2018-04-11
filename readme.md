@@ -41,22 +41,33 @@ El contenido de la plataforma se divide en tres componentes principales:
 
 - Sistemas operativos soportados 
 
-        . Windows 8 de 32/64 bits o versiones superiores. 
-        . OS X Maverics 10.9 o versiones posteriores
-        . Una versión de 32 o 64 bits de: Ubuntu 14.04, Debian 8, openSUSE 13.3 o Fedora Linux 24 o posteriores.
-        . Android versión estable 8.1.0 "Oreo"
-        . IOS versión estable 11.2.6
+    . Windows 8 de 32/64 bits o versiones superiores.
+     
+    . OS X Maverics 10.9 o versiones posteriores
+    
+    . Una versión de 32 o 64 bits de: Ubuntu 14.04, Debian 8, openSUSE 13.3 o Fedora Linux 24 o posteriores.
+    
+    . Android versión estable 8.1.0 "Oreo"
+    
+    . IOS versión estable 11.2.6
 
 - Herramientas
 
-        . Navegador Firefox versión estable 58 o posterior. [<a href="https://www.mozilla.org/en-US/firefox/new/">Descargar</a>]
-        . Navegador Google Chrome versión estable 64.0.3282.140 o posterior. [<a href="https://www.google.com.mx/chrome/">Descargar</a>]
-        . Navegador Safari versión estable 11 o posterior. [<a href="https://support.apple.com/es_MX/downloads/safari">Descargar</a>]
-        . XAMPP v5.6.34 o posterior. [<a href="https://www.apachefriends.org/download.html">Descargar</a>]
-            - PHP versión 5.6.34 o superior.
-            - phpMyAdmin versión 4.7.9 o superior.
-        . Composer. [<a href="https://getcomposer.org/download/">Descargar</a>]
-        . Laravel versión 5.6 o posterior. [<a href="https://laravel.com/docs/5.6/installation">Descargar</a>]
+    . Navegador Firefox versión estable 58 o posterior. [ <a href="https://www.mozilla.org/en-US/firefox/new/">Descargar</a>]
+    
+    . Navegador Google Chrome versión estable 64.0.3282.140 o posterior. [<a href="https://www.google.com.mx/chrome/">Descargar</a>]
+    
+    . Navegador Safari versión estable 11 o posterior. [<a href="https://support.apple.com/es_MX/downloads/safari">Descargar</a>]
+    
+    . XAMPP v5.6.34 o posterior. [<a href="https://www.apachefriends.org/download.html">Descargar</a>]
+    
+        - PHP versión 5.6.34 o superior.
+        
+        - phpMyAdmin versión 4.7.9 o superior.
+        
+    . Composer. [<a href="https://getcomposer.org/download/">Descargar</a>]
+    
+    . Laravel versión 5.6 o posterior. [<a href="https://laravel.com/docs/5.6/installation">Descargar</a>]
 
 ## Instrucciones de Instalación
 
