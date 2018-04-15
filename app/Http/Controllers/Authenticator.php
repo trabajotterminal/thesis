@@ -26,7 +26,7 @@ class Authenticator extends Controller
             'register_password'  => 'required|max:30'
         ], $customMessages);
 
-        $user_email = User::where('email', '=', $request -> email) -> first();
+        $user_email = User::where('email', '=', $request -> register_email) -> first();
         $user_name  = User::where('username', '=', $request -> username) -> first();
         if($user_email || $user_name){
             if($user_email)
