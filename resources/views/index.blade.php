@@ -57,8 +57,11 @@
                     </div>
                 </div>
                 <div class="row no-padding no-margin" style="margin:0px;padding:0px;">
-                    <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="margin:0px;padding:0px;">
-                        <div class="panel price panel-red">
+                    <div class="col-md-4 col-centered">
+                        <img src="{{ URL::asset('/images/best_user.png')}}" style="margin-top:-50px;width:50%;height:50%;"/>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-top:-10px;padding:0px;">
+                        <div class="panel price panel-red no-margin no-padding">
                             <div class="panel-body text-center">
                                 <p  style="font-size:30px">
                                     <strong>Los mejores usuarios</strong>
@@ -97,10 +100,6 @@
                                 @endif
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <img src="{{ URL::asset('/images/best_user.png')}}" style="width:80%;height:80%; margin-top: 50%;"/>
-                        <h3>{{$users_table[0]}}</h3>
                     </div>
                 </div>
             </div>
