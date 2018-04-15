@@ -1,3 +1,9 @@
+@php
+    $routeQ             = "";
+    $routeS             = "";
+    $routeT             = "";
+    $user = session('user');
+@endphp
 @extends('layouts.app')
 @section('title', 'Búsqueda')
 @section('statics-css')
@@ -33,19 +39,45 @@
                         <div class="circle">
                         </div>
                         <p style="font-size:30px;">{{$result -> topic_name}}</p>
+                        @php
+                            for($j = 0; $j < count($references[$key]); $j++){
+                                if($references[$key][$j] ->  type == 'C'){
+                                    $routeQ = $references[$key][$j] -> approved_route;
+                                }
+                                if($references[$key][$j] ->  type == 'S'){
+                                    $routeS = $references[$key][$j] -> approved_route;
+                                }
+                                if($references[$key][$j] ->  type == 'T'){
+                                    $routeT = $references[$key][$j] -> approved_route;
+                                }
+                            }
+                        @endphp
                         <div class="row" style="width:110%;margin-left:50px;margin-top:40px;">
-                            <div class="col-md-3">
-                                <p><a href="#">Teoria</a></p>
-                            </div>
-                            <div class="col-md-3">
-                                <p><a href="#">Simulación</a></p>
-                            </div>
-                            <div class="col-md-3">
-                                <p><a href="#">Cuestionarios</a></p>
-                            </div>
+                            @if(strlen($routeT))
+                                <div class="col-md-3">
+                                    <center><p><a href={{ url('/theory', $result -> topic_name) }}>Teoría</a></p></center>
+                                </div>
+                            @endif
+                            @if(strlen($routeS))
+                                <div class="col-md-3">
+                                    <center><p><a href={{ url('/simulation', $result -> topic_name) }}>Simulación</a></p></center>
+                                </div>
+                            @endif
+                            @if(strlen($routeQ))
+                                @if($user)
+                                    <div class="col-md-3">
+                                        <center><p><a href={{ url('/questionnaire', $result -> topic_name) }}>Cuestionarios</a></p></center>
+                                    </div>
+                                @endif
+                            @endif
                         </div>
                     </div>
                 </div>
+                @php
+                    $routeQ = "";
+                    $routeT = "";
+                    $routeS = "";
+                @endphp
             @endforeach
             @if(count($search_results) == 0)
                 <div class="col-md-12">

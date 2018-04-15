@@ -27,7 +27,7 @@
                                 <div>
                                     <div class="section">
                                         <label class="field prepend-icon">
-                                            {!! Form::text('email', '', ['placeholder' => 'ejemplo@gmail.com', 'class' => 'gui-input']) !!}
+                                            {!! Form::text('email', '', ['placeholder' => 'usuario  / email', 'class' => 'gui-input']) !!}
                                             {!! $errors->first('email', '<p class="help-block" style="color:red;">:message</p>') !!}
                                             <span class="field-icon"><i class="fa fa-envelope"></i></span> </label>
                                     </div>

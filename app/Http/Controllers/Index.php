@@ -195,8 +195,13 @@ class Index extends Controller{
           where t.approved_name like ? 
           OR t.approved_name IN (SELECT approved_name from topics t JOIN tag_topic tt ON t.id=tt.topic_id 
           RIGHT JOIN tags tg ON tt.tag_id=tg.id where tg.name like ?) OR t.approved_name IN (SELECT t.approved_name as topic_name 
-          from topics t join categories c on t.category_id=c.id where c.approved_name like ?);", ['%'.$request -> input_search.'%', '%'.$request -> input_search.'%', '%'.$request -> input_search.'%']);
+          from topics t join categories c on t.category_id=c.id where c.approved_name like ?) order by t.approved_name asc;", ['%'.$request -> input_search.'%', '%'.$request -> input_search.'%', '%'.$request -> input_search.'%']);
         $predicted_word = $predicted_word ? $mapped_string[$predicted_word] : "";
-        return view('search_results', compact(['search_results', 'input', 'predicted_word', 'should_display_predicted_word']));
+        $references = [];
+        for($i = 0; $i < count($search_results); $i++){
+            $topic = Topic::where('approved_name', '=', $search_results[$i] -> topic_name) -> first();
+            $references[$i] = $topic -> references() -> where('approved_route', '!=', '') -> get();
+        }
+        return view('search_results', compact(['search_results', 'input', 'predicted_word', 'should_display_predicted_word', 'references']));
     }
 }

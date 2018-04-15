@@ -59,10 +59,10 @@ class Authenticator extends Controller
         ];
 
         $this -> validate($request, [
-            'email'     => 'required|email|max:50',
+            'email'     => 'required|max:50',
             'password'  => 'required|max:30'
         ], $customMessages);
-        $result = User::where('email','=', $request -> email) -> first();
+        $result = User::where('email','=', $request -> email) -> orWhere('username', '=', $request -> email) -> first();
         if($result && Hash::check($request -> password, $result -> password)){
             $type = "";
             $isStudent  = User::where('id', '=', $result -> id) -> get() -> first() -> student;
