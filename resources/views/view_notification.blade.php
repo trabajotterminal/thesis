@@ -102,6 +102,22 @@
                             </blockquote>
                             <blockquote style="font-size:50px;">
                                 {{$topic -> pending_name}}
+                                <cite>Categoria: {{$category_topic}}</cite>
+                                @php
+                                    $tags = "";
+                                    for($i = 0; $i < count($tags_topic); $i++){
+                                        $tags.= $tags_topic[$i] -> name;
+                                        if($i < count($tags_topic) - 1)
+                                            $tags.=', ';
+                                        else
+                                            $tags.='.';
+                                    }
+                                @endphp
+                                @if(count($tags_topic))
+                                    <cite>Tags: {{$tags}}</cite>
+                                @else
+                                    <cite>Sin tags</cite>
+                                @endif
                             </blockquote>
                         @endif
                         @if($is_category)
@@ -111,12 +127,29 @@
                             <blockquote style="font-size:50px;">
                                 {{$category -> pending_name}}
                             </blockquote>
+
                         @endif
                     @endif
                     @if($notification -> type == 'A')
                         <blockquote>
                             @if($is_topic)
                                 {{$topic -> pending_name}}
+                                <cite>Categoria: {{$category_topic}}</cite>
+                                @php
+                                    $tags = "";
+                                    for($i = 0; $i < count($tags_topic); $i++){
+                                        $tags.= $tags_topic[$i] -> name;
+                                        if($i < count($tags_topic) - 1)
+                                            $tags.=', ';
+                                        else
+                                            $tags.='.';
+                                    }
+                                @endphp
+                                @if(count($tags_topic))
+                                    <cite>Tags: {{$tags}}</cite>
+                                @else
+                                    <cite>Sin tags</cite>
+                                @endif
                             @endif
                             @if($is_category)
                                 {{$category -> pending_name}}

@@ -19,12 +19,18 @@ use Mockery\Matcher\Not;
 class Admin extends Controller{
     public function viewNotification($id){
         $notification_id = $id;
-        $notification = Notification::where('id', '=', $notification_id) -> first();
-        $sender       = User::where('id', '=', $notification -> sender_id) -> first();
-        $topic        = Topic::where('id', '=', $notification -> topic_id) -> first();
-        $category     = Category::where('id', '=', $notification -> category_id) -> first();
-        $reference    = Reference::where('id', '=', $notification -> reference_id) -> first();
-        return view('view_notification', compact(['notification', 'sender', 'topic', 'category', 'reference']));
+        $notification   = Notification::where('id', '=', $notification_id) -> first();
+        $sender         = User::where('id', '=', $notification -> sender_id) -> first();
+        $topic          = Topic::where('id', '=', $notification -> topic_id) -> first();
+        $category_topic = "";
+        $tags_topic     = "";
+        if($topic) {
+            $category_topic = Category::where('id', '=', $topic->category_id)->first()->approved_name;
+            $tags_topic     = $topic -> tags() -> get();
+        }
+        $category       = Category::where('id', '=', $notification -> category_id) -> first();
+        $reference      = Reference::where('id', '=', $notification -> reference_id) -> first();
+        return view('view_notification', compact(['notification', 'sender', 'topic', 'category', 'reference', 'category_topic', 'tags_topic']));
     }
 
     public function viewTheoryNotification($id){
