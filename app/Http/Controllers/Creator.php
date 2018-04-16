@@ -200,9 +200,8 @@ class Creator extends Controller{
     }
 
     public function deleteTopic(Request $request){
-        $topic = Topic::where('name', '=', $request -> topic_name) -> first();
+        $topic = Topic::where('pending_name', '=', $request -> topic_name) -> first();
         $category = Category::where('id', '=', $topic->category_id) -> first();
-        Log::info('DELETING');
         Log::info(json_encode($topic -> name));
         $topic -> delete();
         Storage::disk('local') -> deleteDirectory('public/'. $category -> name. '/'.$topic -> name);

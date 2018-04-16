@@ -54,12 +54,12 @@
                                             <input name="submit" value="Enviar revisión" class="btn btn-warning btn-space" type="submit" data-id="{{$topic}}">
                                         </form>
                                     @endif
-                                    @if($has_been_approved_once[$key])
+                                    @if(!$has_been_approved_once[$key])
                                         <span class="input-group-btn"></span>
                                         <form action="{{ url('creator/topics/delete') }}" method="POST" class="deleteTopic">
                                             {{(csrf_field())}}
                                             <input type="hidden" name="deletedElementName" >
-                                            <input name="submit" value="Solicitar eliminación" class="btn btn-danger btn-space" type="submit" data-id="{{$topic}}">
+                                            <input name="submit" value="Eliminar" class="btn btn-danger btn-space" type="submit" data-id="{{$topic}}">
                                         </form>
                                     @endif
                                 </div>

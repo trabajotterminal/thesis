@@ -23,12 +23,12 @@
                                             <input name="submit" value="Enviar revisión" class="btn btn-warning" type="submit" data-id="{{$name}}">
                                         </form>
                                     @endif
-                                    @if($has_been_approved_once[$key])
+                                    @if(!$has_been_approved_once[$key])
                                         <span class="input-group-btn"></span>
                                         <form action="{{ url('creator/categories/delete') }}" method="POST" class="deleteCategory">
                                             {{(csrf_field())}}
                                             <input type="hidden" name="deletedElementName" value="{{$name}}" >
-                                            <input name="submit" value="Solicitar eliminación" class="btn btn-danger" type="submit" data-id="{{$name}}">
+                                            <input name="submit" value="Eliminar" class="btn btn-danger" type="submit" data-id="{{$name}}">
                                         </form>
                                     @endif
                                 </div>
