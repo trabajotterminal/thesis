@@ -3,6 +3,16 @@
 
 @section('statics-css')
     @include('layouts/statics-css-1')
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{{ URL::asset('/css/summernote-ext-emoji-ajax.css')}}"  type="text/css" />
+    <style>
+        .btn-sm {
+            width:35px;
+            height: 35px;
+            padding:3px;
+        }
+    </style>
 @endsection
 
 @section('menu')
@@ -41,21 +51,16 @@
             <div class="row" id="questionnaire">
                 <u><h4 style="margin-left:15px;">Cuestionario 1</h4></u>
                 <div class="col-md-12">
-                    <h3>Pregunta 1:</h3>
-                    <div class="input_holder">
-                        <input class="email_input" style="color:black;border-color:black;" type="search" name="question_1" id="question_1">
+                    <h3>Pregunta 1</h3>
+                    <div class="col-md-12 margin-top3" style="width:90%;margin-left:-10px;">
+                        <div id="question_1"></div>
                     </div>
                 </div>
                 <div class="col-md-12 margin-top3">
                     <h3>Retroalimentación</h3>
-                    <div class="input_holder">
-                        <input class="email_input" style="color:black;border-color:black;" type="search" id="feedback_1">
+                    <div class="col-md-12 margin-top3" style="width:90%;margin-left:-10px;">
+                        <div id="feedback_1"></div>
                     </div>
-                </div>
-                <div class="col-md-12 margin-top3">
-                    <h3>Imágen auxiliar</h3>
-                    <input name="input_image" type="file" id="1" onchange="encodeImageFileAsURL(this)">
-                    <img src="" id="preview_image_1" style="width:250px;height:250px;display:none;margin-top: 10px;"/>
                 </div>
                 <div class="col-md-12 margin-top3" id="options_1">
                     <h3>Opciones</h3>
@@ -95,7 +100,72 @@
 
 @section('statics-js')
     @include('layouts/statics-js-1')
+    <script src="/ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
+    <script src="{{ URL::asset('/js/summernote-es-ES.js')}}"></script>
+    <script src="{{ URL::asset('/js/summernote-ext-emoji-ajax.js')}}"></script>
     <script>
+        var HelloButton = function (context) {
+            var ui = $.summernote.ui;
+            var button = ui.button({
+                contents: '<b>Σ</b>',
+                tooltip: 'Inserta fórmula',
+                click: function () {
+                    context.invoke('editor.insertText', ' `Introduce LaTeX aquí` ');
+                }
+            });
+            return button.render();   // return button as jquery object
+        };
+        $(document).ready(function() {
+            $('#question_1').summernote({
+                lang: "es-ES",
+                toolbar: [
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    ['font', ['strikethrough', 'superscript', 'subscript']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['picture',['picture']],
+                    ['link',['link']],
+                    ['video',['video']],
+                    ['mybutton', ['hello']],
+                    ['insert', ['emoji']],
+                ],
+                buttons: {
+                    hello: HelloButton
+                },
+                placeholder: 'Introduce el titulo de tu pregunta, también puedes agregar contenido adicional como imágenes o videos.',
+                tabsize: 2,
+                height: 200,
+            });
+
+            $('#feedback_1').summernote({
+                lang: "es-ES",
+                toolbar: [
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    ['font', ['strikethrough', 'superscript', 'subscript']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['picture',['picture']],
+                    ['link',['link']],
+                    ['video',['video']],
+                    ['mybutton', ['hello']],
+                    ['insert', ['emoji']],
+                ],
+                buttons: {
+                    hello: HelloButton
+                },
+                placeholder: 'En caso de que el usuario se equivoque en la pregunta, el texto introducido aquí, será mostrado a modo de retroalimentación.',
+                tabsize: 2,
+                height: 200,
+            });
+        });
+
         var input_images;
         $(document).ready(function(){
             input_images = [];
@@ -145,22 +215,13 @@
             }
             var preview_variable = "preview_image_" + (questions + 1);
             var new_question = '<div class="clearfix" /><br>\n' +
-                '                '+title+'<div class="col-md-12">\n' +
                 '                    <h3>Pregunta '+(questions + 1)+':</h3>\n' +
-                '                    <div class="input_holder">\n' +
-                '                        <input class="email_input" style="color:black;border-color:black;" type="search" id="question_'+(questions + 1)+'">\n' +
-                '                    </div>\n' +
+                '                '+title+'<div class="col-md-12 margin-top3">' +
+                '                           <div id="question_'+(questions + 1)+'" style="width:90%;margin-left:-10px;"></div> ' +
                 '                </div>\n' +
                 '                <div class="col-md-12 margin-top3">\n' +
                 '                    <h3>Retroalimentación</h3>\n' +
-                '                    <div class="input_holder">\n' +
-                '                        <input class="email_input" style="color:black;border-color:black;" type="search" id="feedback_'+(questions +1)+'">\n' +
-                '                    </div>\n' +
-                '                </div>\n' +
-                '                <div class="col-md-12 margin-top3">\n' +
-                '                       <h3>Imágen auxiliar</h3>\n' +
-                '                       <input name="input_image" type="file" id="'+(questions + 1)+'" onchange="encodeImageFileAsURL(this)">' +
-                '                       <img src="" id="'+preview_variable+'" style="width:250px;height:250px;display:none;margin-top: 10px;" />' +
+                '                           <div id="feedback_'+(questions + 1)+'" style="width:90%;margin-left:-10px;"></div> ' +
                 '                </div>\n' +
                 '                <div class="col-md-12 margin-top3" id="options_'+(questions + 1)+'">\n' +
                 '                    <h3>Opciones</h3>\n' +
@@ -184,8 +245,52 @@
                 '                        <input type="text" class="form-check-label" for="inlineRadio4" id="option_'+(questions + 1)+'_4" value="Cuarta Opción"/>\n' +
                 '                    </div>\n' +
                 '                </div>\n';
-            ++questions;
             $(new_question).hide().appendTo('#questionnaire').fadeIn();
+            $('#question_'+(questions + 1)).summernote({
+                lang: "es-ES",
+                toolbar: [
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    ['font', ['strikethrough', 'superscript', 'subscript']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['picture',['picture']],
+                    ['link',['link']],
+                    ['video',['video']],
+                    ['mybutton', ['hello']],
+                    ['insert', ['emoji']],
+                ],
+                buttons: {
+                    hello: HelloButton
+                },
+                placeholder: "Introduce el titulo de tu pregunta, también puedes agregar contenido adicional como imágenes o videos.",
+                tabsize: 2,
+                height: 200,
+            });
+            $('#feedback_'+(questions + 1)).summernote({
+                lang: "es-ES",
+                toolbar: [
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    ['font', ['strikethrough', 'superscript', 'subscript']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['picture',['picture']],
+                    ['link',['link']],
+                    ['video',['video']],
+                    ['mybutton', ['hello']],
+                    ['insert', ['emoji']],
+                ],
+                buttons: {
+                    hello: HelloButton
+                },
+                placeholder: 'En caso de que el usuario se equivoque en la pregunta, el texto introducido aquí, será mostrado a modo de retroalimentación.',
+                tabsize: 2,
+                height: 200,
+            });
+            ++questions;
             if(questions == requiredQuestions){
                 $("#saveQuestionnaire").show();
                 $("#addQuestion").hide();
@@ -203,9 +308,9 @@
             var next       = questionnaire_id * $("#questions_per_questionnaire").val();
             for(var i = 1; i <= questions; i++){
                 xmlContent += "<bloque>\n";
-                xmlContent += "<pregunta>\n";
-                xmlContent += $("#question_" + i).val();
-                xmlContent += "</pregunta>\n";
+                xmlContent += "<pregunta><![CDATA[";
+                xmlContent += $('#question_'+(i)).summernote('code') + '\n';
+                xmlContent += " ]]></pregunta>\n";
                 var answer_id = $('input[name="options_'+i+'"]:checked').val();
                 for(var j = 1; j <= 4; j++){
                     if(answer_id == j)
@@ -215,12 +320,9 @@
                     xmlContent += $('#option_'+(i)+'_'+j).val();
                     xmlContent += '</opcion>\n'
                 }
-                xmlContent += '<imagen>\n';
-                xmlContent += input_images[i];
-                xmlContent += '\n</imagen>';
-                xmlContent += '<retroalimentacion>\n';
-                xmlContent += $("#feedback_" + i).val();
-                xmlContent += '</retroalimentacion>\n';
+                xmlContent += '<retroalimentacion><![CDATA[\n';
+                xmlContent += $('#feedback_'+(i)).summernote('code') + '\n';
+                xmlContent += ']]></retroalimentacion>\n';
                 xmlContent += "</bloque>\n";
                 if(next === i){
                     if(i === questions){

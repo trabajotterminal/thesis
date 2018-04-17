@@ -12,7 +12,6 @@
         foreach($xml->children()[$k] as $index => $bloque) {
             array_push($questions, $bloque -> pregunta);
             array_push($feedbacks, $bloque -> retroalimentacion);
-            array_push($input_images, $bloque -> imagen);
             $option_list = [];
             $j = 0;
             foreach($bloque -> opcion  as $option){
@@ -52,25 +51,25 @@
             @foreach($questions as $key => $question)
                 <div class="item">
                     <div class="row">
-                        <div class="col-md-6" style="height:450px;">
-                            <div class="row" style="height:100px;margin:30px;">
-                                <h4> {{$question}} </h4>
+                        <div class="col-md-12" style="min-height:450px;">
+                            <div class="row" style="height:auto;">
+                                {!! $question !!}
                             </div>
-                            <div class="row" style="margin-top:50px;margin-left:100px;">
-                                <div class="col">
-                                    @foreach($options[$key] as $secondKey => $option)
+                            <div class="row" style="margin-left:100px;">
+                                @foreach($options[$key] as $secondKey => $option)
+                                    <div class="col-md-3">
                                         <div class="form-check" id="{{$key}}">
                                             <input class="form-check-input" type="radio" name="options_{{($key + 1)}}" value="">
                                             <label class="form-check-label" for="options_{{($key + 1)}}">
                                                 <h5>{{$option}}</h5>
                                             </label>
                                         </div>
-                                    @endforeach
-                                </div>
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
                         <div class="col-md-6 bmargin">
-                            <img src="{{$input_images[$key]}}" style="width:300px;height:300px;margin-top:50px;"/>
+
                         </div>
                     </div>
                 </div>

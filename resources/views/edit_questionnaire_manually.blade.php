@@ -3,7 +3,6 @@
     $xml            = simplexml_load_string($xmlstring);
     $questions      = [];
     $feedbacks      = [];
-    $input_images    = [];
     $options        = [];
     $options_length = [];
     $options_length[0] = 1;
@@ -19,7 +18,6 @@
         foreach($xml->children()[$k] as $index => $bloque) {
             array_push($questions, $bloque -> pregunta);
             array_push($feedbacks, $bloque -> retroalimentacion);
-            array_push($input_images, $bloque -> imagen);
             $option_list = [];
             $j = 0;
             foreach($bloque -> opcion  as $option){
@@ -38,6 +36,16 @@
 @section('title', 'Edición')
 @section('statics-css')
     @include('layouts/statics-css-1')
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{{ URL::asset('/css/summernote-ext-emoji-ajax.css')}}"  type="text/css" />
+    <style>
+        .btn-sm {
+            width:35px;
+            height: 35px;
+            padding:3px;
+        }
+    </style>
 @endsection
 @section('menu')
     @include('layouts/menu', ['page' => 'category'])
@@ -75,32 +83,34 @@
             <div class="row" id="questionnaire">
                 @foreach($questions as $key => $question)
                     <div class="col-md-12">
-                        <h3>Pregunta {{($key + 1)}}:</h3>
-                        <div class="input_holder">
-                            <input class="email_input" style="color:black;border-color:black;" type="search" name="question_{{($key + 1)}}" id="question_{{($key + 1)}}" value="{{$questions[$key]}}">
+                        <h3>Pregunta {{($key + 1)}}: </h3>
+                        <div class="col-md-12 margin-top3" style="width:90%;margin-left:-10px;">
+                            <div id="question_{{($key + 1)}}"></div>
                         </div>
+                        <script>
+                            setTimeout(function () {
+                                var string = <? echo json_encode(htmlspecialchars_decode($questions[$key])) ?>;
+                                $("#question_{{($key + 1)}}").summernote('code', string);
+                            }, 1000);
+                        </script>
                     </div>
                     <div class="col-md-12 margin-top3">
                         <h3>Retroalimentación</h3>
-                        <div class="input_holder">
-                            <input class="email_input" style="color:black;border-color:black;" type="search" id="feedback_{{($key + 1)}}" value="{{$feedbacks[$key]}}">
+                        <div class="col-md-12 margin-top3" style="width:90%;margin-left:-10px;">
+                            <div id="feedback_{{($key + 1)}}"></div>
                         </div>
-                    </div>
-                    <div class="col-md-3 margin-top3">
-                        <h3>Imágen auxiliar</h3>
-                        <input name="input_image" type="file" id="{{($key + 1)}}" onchange="encodeImageFileAsURL(this)">
-                        <br>
-                        @if(strpos($input_images[$key], 'undefined') == false)
-                            <img src="{{$input_images[$key]}}" id ='preview_image_{{($key + 1)}}' style="width:250px;height:250px;"/>
-                        @else
-                            <img src="" id="preview_image_1" style="width:250px;height:250px;display:none;margin-top: 10px;"/>
-                        @endif
+                        <script>
+                            setTimeout(function () {
+                                var string = <? echo json_encode(htmlspecialchars_decode($feedbacks[$key])) ?>;
+                                $("#feedback_{{($key + 1)}}").summernote('code', string);
+                            }, 1000);
+                        </script>
                     </div>
                     <div class="col-md-12 margin-top3" id="options_{{($key + 1)}}">
                         <h3>Opciones</h3>
                         @foreach($options[$key] as $secondKey => $option)
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="options_{{($key + 1)}}" id="inlineRadio{{($key + 1)}}" value="{{($key + 1)}}" checked>
+                                <input class="form-check-input" type="radio" name="options_{{($key + 1)}}" id="inlineRadio{{($key + 1)}}" value="{{($secondKey + 1)}}" checked>
                                 <input type="text" class="form-check-label" for="inlineRadio{{($key + 1)}}" id='option_{{($key + 1)}}_{{($secondKey + 1)}}' value="{{$option}}"/>
                             </div>
                             <br>
@@ -123,34 +133,89 @@
 
 @section('statics-js')
     @include('layouts/statics-js-1')
+    <script src="/ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
+    <script src="{{ URL::asset('/js/summernote-es-ES.js')}}"></script>
+    <script src="{{ URL::asset('/js/summernote-ext-emoji-ajax.js')}}"></script>
     <script>
-        var input_images = [];
-        var questions_per_questionnaire_php = 0;
-        var number_of_questionnaires_php = 0;
-        var numberOfQuestionnaires = 0;
-        var questionsPerQuestionnaire = 0;
-        var requiredQuestions = 0;
         var questions       = <?php  echo json_decode(count($questions)); ?>;
         var feedbacks       = <?php  echo json_decode(count($feedbacks)); ?>;
-        var options         = [];
+        $(document).ready(function() {
+            questions       = <?php  echo json_decode(count($questions)); ?>;
+            feedbacks       = <?php  echo json_decode(count($feedbacks)); ?>;
+            var HelloButton = function (context) {
+                var ui = $.summernote.ui;
+                var button = ui.button({
+                    contents: '<b>Σ</b>',
+                    tooltip: 'Inserta fórmula',
+                    click: function () {
+                        context.invoke('editor.insertText', ' `Introduce LaTeX aquí` ');
+                    }
+                });
+                return button.render();   // return button as jquery object
+            };
+            for(var j = 1; j <= questions; j++){
+                $('#question_'+ j).summernote({
+                    lang: "es-ES",
+                    toolbar: [
+                        ['style', ['bold', 'italic', 'underline', 'clear']],
+                        ['font', ['strikethrough', 'superscript', 'subscript']],
+                        ['fontsize', ['fontsize']],
+                        ['color', ['color']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['height', ['height']],
+                        ['picture',['picture']],
+                        ['link',['link']],
+                        ['video',['video']],
+                        ['mybutton', ['hello']],
+                        ['insert', ['emoji']],
+                    ],
+                    buttons: {
+                        hello: HelloButton
+                    },
+                    placeholder: 'Introduce el titulo de tu pregunta, también puedes agregar contenido adicional como imágenes o videos.',
+                    tabsize: 2,
+                    height: 200,
+                });
 
-        function encodeImageFileAsURL(element) {
-            var file = element.files[0];
-            var id   = parseInt(element.id);
-            var reader = new FileReader();
-            reader.onloadend = function() {
-                input_images[id] = reader.result;
-                document.getElementById("preview_image_" + id).src = reader.result;
-                $('#preview_image_'+id).fadeIn(2000).css('display','block');
+                $('#feedback_' + j).summernote({
+                    lang: "es-ES",
+                    toolbar: [
+                        ['style', ['bold', 'italic', 'underline', 'clear']],
+                        ['font', ['strikethrough', 'superscript', 'subscript']],
+                        ['fontsize', ['fontsize']],
+                        ['color', ['color']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['height', ['height']],
+                        ['picture',['picture']],
+                        ['link',['link']],
+                        ['video',['video']],
+                        ['mybutton', ['hello']],
+                        ['insert', ['emoji']],
+                    ],
+                    buttons: {
+                        hello: HelloButton
+                    },
+                    placeholder: 'En caso de que el usuario se equivoque en la pregunta, el texto introducido aquí, será mostrado a modo de retroalimentación.',
+                    tabsize: 2,
+                    height: 200,
+                });
             }
-            reader.readAsDataURL(file);
-        }
-
+        });
+        var questions_per_questionnaire_php     = 0;
+        var number_of_questionnaires_php        = 0;
+        var numberOfQuestionnaires              = 0;
+        var questionsPerQuestionnaire           = 0;
+        var requiredQuestions                   = 0;
+        var options                             = [];
+        var right_answers                       = [];
         $( document ).ready(function() {
-            input_images = <? echo json_encode($input_images); ?>;
-            input_images.unshift("");
-            for(var i = 0; i < input_images.length; i++){
-                input_images[i] = Object.values(input_images[i])[0];
+            right_answers = <?php echo json_encode($right_answers); ?>;
+            for(var i = 0; i < right_answers.length; i++){
+                var string = "input:radio[name=options_"+(i+1)+"]:nth("+(right_answers[i] - 1)+")";
+                $(string).attr('checked',true);
             }
             questions_per_questionnaire_php = <?php echo json_decode($questions_per_questionnaire); ?>;
             number_of_questionnaires_php = <?php echo json_decode($number_of_questionnaires); ?>;
@@ -187,62 +252,7 @@
                 $('#addQuestion').show();
             }
         });
-        $("#addQuestion").click(function(e) {
-            var title = "";
-            var next  =  title_id * $("#questions_per_questionnaire").val();
-            if(questions == next){
-                title = '<u><h4 style="margin-left:15px;">Cuestionario '+(++title_id)+'</h4></u>';
-            }
-            var preview_variable = "preview_image_" + (questions + 1);
-            var new_question = '<div class="clearfix" /><br>\n' +
-                '                '+title+'<div class="col-md-12">\n' +
-                '                    <h3>Pregunta '+(questions + 1)+':</h3>\n' +
-                '                    <div class="input_holder">\n' +
-                '                        <input class="email_input" style="color:black;border-color:black;" type="search" id="question_'+(questions + 1)+'">\n' +
-                '                    </div>\n' +
-                '                </div>\n' +
-                '                <div class="col-md-12 margin-top3">\n' +
-                '                    <h3>Retroalimentación</h3>\n' +
-                '                    <div class="input_holder">\n' +
-                '                        <input class="email_input" style="color:black;border-color:black;" type="search" id="feedback_'+(questions +1)+'">\n' +
-                '                    </div>\n' +
-                '                </div>\n' +
-                '                <div class="col-md-12 margin-top3">\n' +
-                '                    <h3>Imágen auxiliar</h3>\n' +
-                '                       <input name="input_image" type="file" id="'+(questions + 1)+'" onchange="encodeImageFileAsURL(this)">' +
-                '                       <img src="" id="'+preview_variable+'" style="width:250px;height:250px;display:none;margin-top: 10px;" />' +
-                '                </div>\n' +
-                '                <div class="col-md-12 margin-top3" id="options_'+(questions + 1)+'">\n' +
-                '                    <h3>Opciones</h3>\n' +
-                '                    <div class="form-check form-check-inline">\n' +
-                '                        <input class="form-check-input" type="radio" name="options_'+(questions + 1)+'" id="inlineRadio1" value="1" checked>\n' +
-                '                        <input type="text" class="form-check-label" for="inlineRadio1" id="option_'+(questions + 1)+'_1" value="Primera Opción"/>\n' +
-                '                    </div>\n' +
-                '                    <br>\n' +
-                '                    <div class="form-check form-check-inline">\n' +
-                '                        <input class="form-check-input" type="radio" name="options_'+(questions + 1)+'" id="inlineRadio2" value="2">\n' +
-                '                        <input type="text" class="form-check-label" for="inlineRadio2" id="option_'+(questions + 1)+'_2" value="Segunda Opción"/>\n' +
-                '                    </div>\n' +
-                '                    <br>\n' +
-                '                    <div class="form-check form-check-inline">\n' +
-                '                        <input class="form-check-input" type="radio" name="options_'+(questions + 1)+'" id="inlineRadio3" value="3">\n' +
-                '                        <input type="text" class="form-check-label" for="inlineRadio3" id="option_'+(questions + 1)+'_3" value="Tercera Opción"/>\n' +
-                '                    </div>\n' +
-                '                    <br>\n' +
-                '                    <div class="form-check form-check-inline">\n' +
-                '                        <input class="form-check-input" type="radio" name="options_'+(questions + 1)+'" id="inlineRadio4" value="4">\n' +
-                '                        <input type="text" class="form-check-label" for="inlineRadio4" id="option_'+(questions + 1)+'_4" value="Cuarta Opción"/>\n' +
-                '                    </div>\n' +
-                '                </div>\n';
-            ++questions;
-            $(new_question).hide().appendTo('#questionnaire').fadeIn();
-            if(questions == requiredQuestions){
-                $("#saveQuestionnaire").show();
-                $("#addQuestion").hide();
-            }
-            e.preventDefault();
-            return 0;
-        });
+
 
         $("#finish").submit(function(e) {
             var xmlContent = '<xml cuestionarios="'+numberOfQuestionnaires+'" preguntas_por_cuestionario="'+questionsPerQuestionnaire+'">\n';
@@ -251,10 +261,11 @@
             var next       = questionnaire_id * $("#questions_per_questionnaire").val();
             for(var i = 1; i <= questions; i++){
                 xmlContent += "<bloque>\n";
-                xmlContent += "<pregunta>\n";
-                xmlContent += $("#question_" + i).val();
-                xmlContent += "</pregunta>\n";
+                xmlContent += "<pregunta><![CDATA[";
+                xmlContent += $('#question_'+(i)).summernote('code') + '\n';
+                xmlContent += " ]]></pregunta>\n";
                 var answer_id = $('input[name="options_'+i+'"]:checked').val();
+                console.warn(answer_id);
                 for(var j = 1; j <= 4; j++){
                     if(answer_id == j)
                         xmlContent += '<opcion value="true">\n';
@@ -263,12 +274,9 @@
                     xmlContent += $('#option_'+(i)+'_'+j).val();
                     xmlContent += '</opcion>\n'
                 }
-                xmlContent += '<imagen>\n';
-                xmlContent += input_images[i];
-                xmlContent += '\n</imagen>';
-                xmlContent += '<retroalimentacion>\n';
-                xmlContent += $("#feedback_" + i).val();
-                xmlContent += '</retroalimentacion>\n';
+                xmlContent += '<retroalimentacion><![CDATA[\n';
+                xmlContent += $('#feedback_'+(i)).summernote('code') + '\n';
+                xmlContent += ']]></retroalimentacion>\n';
                 xmlContent += "</bloque>\n";
                 if(next === i){
                     if(i === questions){
