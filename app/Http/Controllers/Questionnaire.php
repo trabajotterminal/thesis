@@ -10,6 +10,7 @@ use App\User;
 use App\Glance;
 Use DB;
 Use View;
+Use Log;
 
 class Questionnaire extends Controller
 {
@@ -27,8 +28,9 @@ class Questionnaire extends Controller
         return view('questionnaire', compact(['topic_name', 'category_name', 'tries']));
     }
 
-    public function getAnswers(Request $request){
+    public function evaluate(Request $request){
         $topic_name     = $request -> topic_name;
+        $user_answers   = $request -> user_answers;
         $topic          = Topic::where('approved_name', '=', $topic_name) -> orWhere('pending_name', '=', $topic_name) -> first();
         $category       = Category::where('id', '=', $topic -> category_id) -> first();
         $category_path      = "";
@@ -51,29 +53,23 @@ class Questionnaire extends Controller
         $right_answers  = [];
         $feedbacks      = [];
         $questions      = [];
+        $answers_map_value = [];
         $i = 0;
         $try_number = (int)$try_number;
         if($try_number < $xml['cuestionarios']){
             for($i = 0; $i < count($xml->children()[$try_number]); $i++) {
-                array_push($questions, $xml -> children()[$try_number] -> bloque[$i] -> pregunta);
-                array_push($feedbacks, $xml -> children()[$try_number] -> bloque[$i] -> retroalimentacion);
+                array_push($questions, htmlspecialchars_decode($xml -> children()[$try_number] -> bloque[$i] -> pregunta));
+                array_push($feedbacks, htmlspecialchars_decode($xml -> children()[$try_number] -> bloque[$i] -> retroalimentacion));
                 for($j = 0; $j < count($xml -> children()[$try_number] -> bloque[$i] -> opcion); $j++){
                     if($xml -> children()[$try_number] -> bloque[$i] -> opcion[$j]['value'] == 'true'){
                         array_push($right_answers, $j + 1);
+                        $answers_map_value[$j + 1] = $xml -> children()[$try_number] -> bloque[$i] -> opcion[$j];
                         break;
                     }
                 }
             }
         }
-        return response() -> json(['answers' => $right_answers, 'feedbacks' => $feedbacks, 'questions' => $questions]);
-    }
 
-    public function evaluate(Request $request){
-        $user_answers   = $request -> user_answers;
-        $topic_name     = $request -> topic_name;
-        $right_answers  = $request -> right_answers;
-        $questions      = $request -> questions;
-        $feedbacks      = $request -> feedbacks;
         $feedbacks_to_display = [];
         $questions_to_display = [];
         $right_answers_to_display = [];
@@ -111,6 +107,9 @@ class Questionnaire extends Controller
         if(count($hasGlance) == 0){
             $student -> glances() -> attach($glance -> id);
         }
-        return response() -> json(['view' => View::make('display_feedback', ['user_answers' => $user_answers, 'right_answers' => $right_answers_to_display, 'feedbacks' => $feedbacks_to_display, 'questions' => $questions_to_display, 'topic_name' => $topic_name]) -> render()]);
+        $right_answers = $right_answers_to_display;
+        $feedbacks = $feedbacks_to_display;
+        $questions = $questions_to_display;
+        return view('display_feedback', compact(['user_answers', 'right_answers', 'feedbacks', 'questions', 'topic_name', 'answers_map_value']));
     }
 }

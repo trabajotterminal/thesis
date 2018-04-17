@@ -1,9 +1,23 @@
+@extends('layouts.app')
+@section('title', 'Cuestionario')
+@section('statics-css')
+    @include('layouts/statics-css-2')
+    <link rel="stylesheet" type="text/css" href="/js/smart-forms/smart-forms.css">
+    <link rel="stylesheet" href="/js/masterslider/style/masterslider.css" />
+    <link href="/js/owl-carousel/owl.carousel.css" rel="stylesheet">
+    <script src="{{ asset('/js/cytoscape.js')}}"></script>
+@endsection
+@section('menu')
+    @include('layouts/menu', ['page' => 'category'])
+@endsection
 <style>
+    body{
+        overflow-x: hidden;
+    }
     .card {
         background: #fff;
         border-radius: 2px;
         display: inline-block;
-        height: 100%;
         position: relative;
         width: 99%;
         margin: 20px;
@@ -35,36 +49,50 @@
     }
 
 </style>
+@section('content')
 <div class="row">
-@if(count($questions) == 0)
-    <br><br>
-    <div class="col-md-12">
-        <center>
-            <h1>¡Obtuviste una calificación perfecta!</h1>
-            <h3>¡Felicidades!</h3>
-            <img src="{{URL::asset('images/nerd.png')}}" style="width:250px;height:250px;" />
-        </center>
-    </div>
-@else
-    <div class="col-md-12">
-        <center>
-            <h1>¡Ups! Al parecer cometiste algunos errores</h1>
-            <img src="{{URL::asset('images/oops.png')}}" style="width:200px;height:200px;"/>
-        </center>
-    </div>
-    @foreach($questions as $key => $question)
-        <div class="col-md-12 col-centered">
-            <div class="card card-1">
-                <h4>{{$questions[$key][0]}}</h4>
-                <h5>Respuesta correcta:{{$right_answers[$key][0]}}</h5>
-                <h5>Retroalimentación:  {{$feedbacks[$key][0]}}</h5>
-            </div>
+    @if(count($questions) == 0)
+        <br><br>
+        <div class="col-md-12">
+            <center>
+                <h1>¡Obtuviste una calificación perfecta!</h1>
+                <h3>¡Felicidades!</h3>
+                <img src="{{URL::asset('images/nerd.png')}}" style="width:250px;height:250px;" />
+            </center>
         </div>
-    @endforeach
-    <div class="col-md-12" style="margin-top:20px;margin-bottom:20px;">
-        <center>
-            <a href="{{url('questionnaire/'.$topic_name)}}" class="btn btn-success">Volver a intentarlo</a>
-        </center>
-    </div>
-@endif
+    @else
+        <div class="col-md-12 col-centered" style="margin-top:50px;">
+            <center>
+                <h1>¡Ups! Al parecer cometiste algunos errores</h1>
+                <img src="{{URL::asset('images/oops.png')}}" style="width:200px;height:200px;"/>
+            </center>
+        </div>
+        @foreach($questions as $key => $question)
+            <div class="col-md-10 col-centered">
+                <div class="card card-1">
+                    <h4>{!!  $questions[$key]  !!}</h4>
+                    <h5>Respuesta correcta: {{$right_answers[$key]}}) {{$answers_map_value[$right_answers[$key]]}}</h5>
+                    <h5>Retroalimentación:  {!! $feedbacks[$key] !!}</h5>
+                </div>
+            </div>
+        @endforeach
+        <div class="col-md-12" style="margin-top:20px;margin-bottom:20px;">
+            <center>
+                <a href="{{url('questionnaire/'.$topic_name)}}" class="btn btn-success">Volver a intentarlo</a>
+            </center>
+        </div>
+    @endif
 </div>
+@endsection
+
+@section('footer')
+    @include('layouts/footer')
+@endsection
+
+@section('statics-js')
+    @include('layouts/statics-js-2')
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_CHTML"></script>
+    <script src="{{ asset('/js/questionnaire_simulation_provider.js')}}"></script>
+    <script src="{{ asset('/js/owl-carousel/owl.carousel.js')}}"></script>
+    <script src="{{ asset('/js/owl-carousel/custom.js')}}"></script>
+@endsection

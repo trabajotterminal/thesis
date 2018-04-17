@@ -95,7 +95,6 @@
     <script src="{{ asset('/js/highlight.pack.js')}}"></script>
     <script>hljs.initHighlightingOnLoad();</script>
     <script src="{{ asset('/js/scripts/functions.js')}}" type="text/javascript"></script>
-    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_CHTML"></script>
     <script>
         var action  = "";
         var message = $('textarea[name="comment"]').val();
