@@ -17,6 +17,9 @@ class Questionnaire extends Controller
     public function showQuestionnaire($id){
         $topic_name = $id;
         $topic = Topic::where('approved_name', '=', $topic_name) -> orWhere('pending_name', '=', $topic_name) -> first();
+        if(!$topic){
+            return view('not_found');
+        }
         $category = Category::where('id', '=', $topic -> category_id) -> first();
         $user_id = session('user_id');
         $user_mark = User::where('id', '=', $user_id) -> first() -> student() -> first() -> marks() -> where('topic_id', '=', $topic -> id) -> first();

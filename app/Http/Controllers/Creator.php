@@ -320,6 +320,9 @@ class Creator extends Controller{
         $topic_name             = $name;
         $urls                   = [];
         $topic                  = Topic::where('approved_name', '=', $topic_name) -> orWhere('pending_name', '=', $topic_name) -> first();
+        if(!$topic){
+            return view('not_found');
+        }
         $R                      = $topic -> references() -> get();
         $references             = [];
         $references['T']        = false;
@@ -352,14 +355,29 @@ class Creator extends Controller{
     }
 
     public function topicTheoryManager($name){
+        $topic_name = $name;
+        $topic                  = Topic::where('approved_name', '=', $topic_name) -> orWhere('pending_name', '=', $topic_name) -> first();
+        if(!$topic){
+            return view('not_found');
+        }
         return view('theorymanager', compact('name'));
     }
 
     public function topicSimulationManager($name){
+        $topic_name = $name;
+        $topic                  = Topic::where('approved_name', '=', $topic_name) -> orWhere('pending_name', '=', $topic_name) -> first();
+        if(!$topic){
+            return view('not_found');
+        }
         return view('simulationmanager', compact('name'));
     }
 
     public function topicQuestionnaireManager($name){
+        $topic_name = $name;
+        $topic                  = Topic::where('approved_name', '=', $topic_name) -> orWhere('pending_name', '=', $topic_name) -> first();
+        if(!$topic){
+            return view('not_found');
+        }
         return view('questionnairemanager', compact('name'));
     }
 

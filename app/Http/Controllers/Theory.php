@@ -16,6 +16,9 @@ class Theory extends Controller
 {
     public function theory($topic_name){
         $topic = Topic::where('approved_name','=', $topic_name) -> orWhere('pending_name', '=', $topic_name) -> get() -> first();
+        if(!$topic){
+            return view('not_found');
+        }
         $category_id = $topic -> category_id;
         $category = Category::where('id', '=', $category_id) -> get() -> first();
         $category_path      = "";
