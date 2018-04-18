@@ -392,18 +392,30 @@ class Admin extends Controller{
         return view('schools_ranking', compact(['ranked_schools', 'non_ranked_schools']));
     }
 
-    public function userStatistics($id){
-        $user_id = $id;
+    public function userStatistics($user_name){
+        $user = User::where('username', '=', $user_name) -> first();
+        if(!$user){
+            return view('not_found');
+        }
+        $user_id = $user_name;
         return view('user_ranking', compact(['user_id']));
     }
 
     public function groupStatistics($name){
         $group_name = $name;
+        $group = Group::where('name', '=', $group_name) -> first();
+        if(!$group){
+            return view('not_found');
+        }
         return view('group_statistics', compact(['group_name']));
     }
 
     public function schoolStatistics($name){
         $school_name = $name;
+        $school = School::where('name', '=', $school_name) -> first();
+        if(!$school){
+            return view('not_found');
+        }
         return view('school_statistics', compact(['school_name']));
     }
 
