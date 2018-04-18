@@ -281,6 +281,7 @@ class Admin extends Controller{
             $path_changes   = 'storage/'.$category_path.'/'.$topic_path.'/Simulacion/changes/';
             $path_latest    = 'storage/'.$category_path.'/'.$topic_path.'/Simulacion/latest/';
             $reference -> approved_route = $reference-> pending_route;
+            File::deleteDirectory($path_latest);
             File::copyDirectory(public_path($path_changes), public_path($path_latest), true);
             $notification_to_send -> type = "MP";
         }else{
