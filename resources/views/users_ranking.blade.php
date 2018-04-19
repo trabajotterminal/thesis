@@ -18,6 +18,11 @@
     .gray-color{
         background:  #4790d5  !important;
     }
+    table{
+        border-collapse: collapse;
+        border-radius: 1em;
+        overflow: hidden;
+    }
 </style>
 <table id="table_users" class="table table-striped" cellspacing="0" width="100%">
     <thead>
