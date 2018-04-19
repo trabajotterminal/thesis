@@ -61,6 +61,11 @@
                             @else
                                 <p>La teoría está esperando la aprobación del administrador.</p>
                             @endif
+                            <form  method="post" class="margin-top-1" action="{{ url('creator/topic/theory/download') }}">
+                                {{ csrf_field() }}
+                                <a href="#" style="position:absolute;right:5px;bottom:2px;text-decoration:underline;" onclick="$(this).closest('form').submit()">Descargar teoría</a>
+                                <input type="hidden" name="topic_name" value="{{$topic_name}}">
+                            </form>
                         @else
                             <p>Sin archivo de teoria.</p>
                             <a class="read-more black" href="{{url('creator/topic/'.$topic_name.'/theory')}}">Agregar Teoría</a>
@@ -153,6 +158,11 @@
                                         </div>
                                     </form>
                                 @endif
+                                <form  method="post" class="margin-top-1" action="{{ url('creator/topic/questionnaire/download') }}">
+                                    {{ csrf_field() }}
+                                    <a href="#" style="position:absolute;right:5px;bottom:2px;text-decoration:underline;" onclick="$(this).closest('form').submit()">Descargar cuestionario</a>
+                                    <input type="hidden" name="topic_name" value="{{$topic_name}}">
+                                </form>
                             @else
                                 <p>Los cuestionarios están esperando la aprobación del administrador.</p>
                             @endif

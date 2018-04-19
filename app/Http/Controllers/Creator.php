@@ -23,7 +23,6 @@ use Log;
 use File;
 use Illuminate\Support\Facades\Redirect;
 
-
 class Creator extends Controller{
     public function categories(){
         return view('creator_categories_interface');
@@ -412,7 +411,7 @@ class Creator extends Controller{
                     $topic_path = $topic->approved_name;
                 }
                 $destinationPath = public_path('storage/' . $category_path . '/' . $topic_path . '/Teoria/changes');
-                $request->input_file->move($destinationPath, $name);
+                $request->input_file->move($destinationPath, 'teoria.xml');
                 $reference = new Reference();
                 $reference->type = 'T';
                 $reference->pending_route = $destinationPath;
@@ -568,7 +567,7 @@ class Creator extends Controller{
                 }
                 $destinationPath = public_path('storage/' . $category_path . '/' . $topic_path . '/Teoria/changes');
                 File::cleanDirectory($destinationPath);
-                $request->input_file->move($destinationPath, $name);
+                $request->input_file->move($destinationPath, 'teoria.xml');
                 $reference = Reference::where('topic_id', '=', $topic->id)->where('type', '=', 'T')->first();
                 $reference->needs_approval = true;
                 $reference->is_approval_pending = false;
@@ -579,6 +578,51 @@ class Creator extends Controller{
             }
         }else{
             return Redirect::back()->with('file_errors_theory', ['Selecciona un archivo XML']);
+        }
+    }
+
+    public function editTopicQuestionnaireFile(Request $request){
+        if ($request->hasFile('input_file')) {
+            $file_size = $request->file('input_file')->getClientSize();
+            $messages = array(
+                'file_size' => 'Elige un archivo XML que pese como máximo 500KB.',
+            );
+            // 1MB
+            Validator::extend('file_size', function ($attribute, $value) {
+                return $value->getClientSize() / 1024.0 <= 500;
+            });
+            $array_validations = [];
+            $array_validations['input_file'] = 'file_size';
+            $validator = Validator::make($request->all(), $array_validations, $messages);
+            if ($validator->passes()) {
+                $topic = Topic::where('approved_name', '=', $request->topic_name)->orWhere('pending_name', '=', $request->topic_name)->first();
+                $category = Category::where('id', '=', $topic->category_id)->first();
+                $name = $request->file('input_file')->getClientOriginalName();
+                $category_path = "";
+                $topic_path = "";
+                if ($category->needs_approval || $category->is_approval_pending) {
+                    $category_path = $category->pending_name;
+                } else {
+                    $category_path = $category->approved_name;
+                }
+                if ($topic->needs_approval || $topic->is_approval_pending) {
+                    $topic_path = $topic->pending_name;
+                } else {
+                    $topic_path = $topic->approved_name;
+                }
+                $destinationPath = public_path('storage/' . $category_path . '/' . $topic_path . '/Cuestionario/changes');
+                File::cleanDirectory($destinationPath);
+                $request->input_file->move($destinationPath, 'cuestionario.xml');
+                $reference = Reference::where('topic_id', '=', $topic->id)->where('type', '=', 'C')->first();
+                $reference->needs_approval = true;
+                $reference->is_approval_pending = false;
+                $reference->save();
+                return redirect('creator/topic/' . $topic->pending_name);
+            }else{
+                return Redirect::back()->with('file_errors_questionnaire', $validator -> errors() -> all());
+            }
+        }else{
+            return Redirect::back()->with('file_errors_questionnaire', ['Selecciona un archivo XML']);
         }
     }
 
@@ -649,108 +693,6 @@ class Creator extends Controller{
         return response() -> json(['success' => 'OK']);
     }
 
-
-    public function editTopicSimulationFile(Request $request){
-        if ($request->hasFile('input_file')) {
-            $topic = Topic::where('approved_name', '=', $request -> topic_name) -> orWhere('pending_name', '=', $request -> topic_name) -> first();
-            $category   = Category::where('id', '=', $topic -> category_id) -> first();
-            $name = $request -> file('input_file') -> getClientOriginalName();
-            $file_size = $request -> file('input_file') -> getClientSize();
-            $messages = array(
-                'file_size'      => 'Elige un archivo zip que pese máximo 1MB.',
-            );
-            Log::debug($request -> input_file -> getClientSize());
-            // 500 KB
-            Validator::extend('file_size', function($attribute, $value){
-                return strlen($value -> getClientSize()) / 1024.0 <= 1000;
-            });
-            $array_validations = [];
-            $array_validations['input_file'] = 'file_size';
-            $validator = Validator::make($request->all(), $array_validations, $messages);
-            if($validator->passes()) {
-                $topic = Topic::where('approved_name', '=', $request->topic_name)->orWhere('pending_name', '=', $request->topic_name)->first();
-                $category = Category::where('id', '=', $topic->category_id)->first();
-                $file = $request->file('input_file');
-                $name = $request->file('input_file')->getClientOriginalName();
-                $category_path = "";
-                $topic_path = "";
-                if ($category->needs_approval || $category->is_approval_pending) {
-                    $category_path = $category->pending_name;
-                } else {
-                    $category_path = $category->approved_name;
-                }
-                if ($topic->needs_approval || $topic->is_approval_pending) {
-                    $topic_path = $topic->pending_name;
-                } else {
-                    $topic_path = $topic->approved_name;
-                }
-                $destinationPath = public_path('storage/' . $category_path . '/' . $topic_path . '/Simulacion/changes/');
-                File::cleanDirectory($destinationPath);
-                $request->input_file->move($destinationPath, 'archivo.zip');
-                $zip = new ZipArchive();
-                $zip_reference = $zip->open($destinationPath . 'archivo.zip');
-                if ($zip_reference) {
-                    $zip->extractTo($destinationPath);
-                    $zip->close();
-                    unlink($destinationPath . 'archivo.zip');
-                    $reference = Reference::where('topic_id', '=', $topic->id)->where('type', '=', 'S')->first();
-                    $reference->needs_approval = true;
-                    $reference->is_approval_pending = false;
-                    $reference->save();
-                }
-                return redirect('creator/topic/' . $topic->pending_name);
-            }else{
-                return Redirect::back()->with('file_errors_simulation', $validator -> errors() -> all());
-            }
-        }else{
-            return Redirect::back()->with('file_errors_simulation', ['Selecciona un archivo zip.']);
-        }
-    }
-
-    public function editTopicQuestionnaireFile(Request $request){
-        if ($request->hasFile('input_file')) {
-            $file_size = $request->file('input_file')->getClientSize();
-            $messages = array(
-                'file_size' => 'Elige un archivo XML que pese como máximo 500KB.',
-            );
-            // 1MB
-            Validator::extend('file_size', function ($attribute, $value) {
-                return $value->getClientSize() / 1024.0 <= 500;
-            });
-            $array_validations = [];
-            $array_validations['input_file'] = 'file_size';
-            $validator = Validator::make($request->all(), $array_validations, $messages);
-            if ($validator->passes()) {
-                $topic = Topic::where('approved_name', '=', $request->topic_name)->orWhere('pending_name', '=', $request->topic_name)->first();
-                $category = Category::where('id', '=', $topic->category_id)->first();
-                $name = $request->file('input_file')->getClientOriginalName();
-                $category_path = "";
-                $topic_path = "";
-                if ($category->needs_approval || $category->is_approval_pending) {
-                    $category_path = $category->pending_name;
-                } else {
-                    $category_path = $category->approved_name;
-                }
-                if ($topic->needs_approval || $topic->is_approval_pending) {
-                    $topic_path = $topic->pending_name;
-                } else {
-                    $topic_path = $topic->approved_name;
-                }
-                $destinationPath = public_path('storage/' . $category_path . '/' . $topic_path . '/Cuestionario/changes');
-                File::cleanDirectory($destinationPath);
-                $request->input_file->move($destinationPath, 'cuestionario.xml');
-                $reference = Reference::where('topic_id', '=', $topic->id)->where('type', '=', 'C')->first();
-                $reference->needs_approval = true;
-                $reference->is_approval_pending = false;
-                $reference->save();
-                return redirect('creator/topic/' . $topic->pending_name);
-            }else{
-                return Redirect::back()->with('file_errors_questionnaire', $validator -> errors() -> all());
-            }
-        }else{
-            return Redirect::back()->with('file_errors_questionnaire', ['Selecciona un archivo XML']);
-        }
-    }
 
     public function registerTheoryManually(Request $request){
         $topic_name = $request -> topic_name;
@@ -1006,5 +948,43 @@ class Creator extends Controller{
         $notification -> seen = true;
         $notification -> save();
         return view('creator_view_notification', compact(['notification', 'sender', 'topic', 'category', 'reference', 'topic_name', 'category_name', 'reference_type']));
+    }
+
+    public function downloadTheoryFile(Request $request){
+        $topic = Topic::where('pending_name', '=', $request -> topic_name) -> orWhere('approved_name', '=', $request -> topic_name) -> first();
+        $category = Category::where('id', '=', $topic -> category_id) -> first();
+        $category_path  = "";
+        $topic_path     = "";
+        if($category -> needs_approval || $category -> is_approval_pending){
+            $category_path = $category -> pending_name;
+        }else{
+            $category_path = $category -> approved_name;
+        }
+        if($topic -> needs_approval || $topic -> is_approval_pending){
+            $topic_path = $topic -> pending_name;
+        }else{
+            $topic_path = $topic -> approved_name;
+        }
+        $destinationPath = public_path('storage/'.$category_path.'/'.$topic_path.'/Teoria/changes/teoria.xml');
+        return response() -> download($destinationPath, 'teoria.xml');
+    }
+
+    public function downloadQuestionnaireFile(Request $request){
+        $topic = Topic::where('pending_name', '=', $request -> topic_name) -> orWhere('approved_name', '=', $request -> topic_name) -> first();
+        $category = Category::where('id', '=', $topic -> category_id) -> first();
+        $category_path  = "";
+        $topic_path     = "";
+        if($category -> needs_approval || $category -> is_approval_pending){
+            $category_path = $category -> pending_name;
+        }else{
+            $category_path = $category -> approved_name;
+        }
+        if($topic -> needs_approval || $topic -> is_approval_pending){
+            $topic_path = $topic -> pending_name;
+        }else{
+            $topic_path = $topic -> approved_name;
+        }
+        $destinationPath = public_path('storage/'.$category_path.'/'.$topic_path.'/Cuestionario/changes/cuestionario.xml');
+        return response() -> download($destinationPath, 'cuestionario.xml');
     }
 }
