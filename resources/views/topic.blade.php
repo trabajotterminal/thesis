@@ -22,41 +22,30 @@
                         <br/>
                         @if($references['T'])
                             @if(!$is_approval_pending['T'])
-                                @if($creation_type['T'] == 'file')
-                                    <form enctype="multipart/form-data" method="post" class="margin-top-1" action="{{ url('creator/topic/theory/edit/file') }}">
-                                        {{ csrf_field() }}
-                                        <center><input class="btn btn-default" style="margin-bottom:10px;width:100%;" name="input_file" type="file" id="input_file" accept="text/xml"></center>
-                                        <input type="hidden" name="topic_name" value="{{$topic_name}}">
-                                        @php
-                                            $errors = Session::get('file_errors_theory');
-                                            if($errors){
-                                                for($i = 0; $i < count($errors); $i++){
-                                                    echo "<p style='margin-left:20px;color:red'>".$errors[$i]."</p>";
-                                               }
-                                            }
-                                        @endphp
-                                        @php
-                                            $success = Session::get('file_success_theory');
-                                            if($success){
-                                                for($i = 0; $i < count($success); $i++){
-                                                    echo "<p style='margin-left:20px;color:green'>".$success[$i]."</p>";
-                                               }
-                                            }
-                                        @endphp
-                                        <div class="form-group">
-                                            <input class="form-control btn-primary margin-top" style="margin-top:33px;" type="submit" value="Reemplazar el archivo">
-                                        </div>
-                                    </form>
-                                @else
-                                    <br><br><br><br>
-                                    <form  method="post" class="margin-top-1" action="{{ url('creator/topic/theory/edit/manually') }}">
-                                        {{ csrf_field() }}
-                                        <input type="hidden" name="topic_name" value="{{$topic_name}}">
-                                        <div class="form-group">
-                                            <input class="form-control btn-primary margin-top" style="margin-top:33px;" type="submit" value="Editar teoría">
-                                        </div>
-                                    </form>
-                                @endif
+                                <form enctype="multipart/form-data" method="post" class="margin-top-1" action="{{ url('creator/topic/theory/edit/file') }}">
+                                    {{ csrf_field() }}
+                                    <center><input class="btn btn-default" style="margin-bottom:10px;width:100%;" name="input_file" type="file" id="input_file" accept="text/xml"></center>
+                                    <input type="hidden" name="topic_name" value="{{$topic_name}}">
+                                    @php
+                                        $errors = Session::get('file_errors_theory');
+                                        if($errors){
+                                            for($i = 0; $i < count($errors); $i++){
+                                                echo "<p style='margin-left:20px;color:red'>".$errors[$i]."</p>";
+                                           }
+                                        }
+                                    @endphp
+                                    @php
+                                        $success = Session::get('file_success_theory');
+                                        if($success){
+                                            for($i = 0; $i < count($success); $i++){
+                                                echo "<p style='margin-left:20px;color:green'>".$success[$i]."</p>";
+                                           }
+                                        }
+                                    @endphp
+                                    <div class="form-group">
+                                        <input class="form-control btn-primary margin-top" style="margin-top:33px;" type="submit" value="Remplazar con un nuevo archivo">
+                                    </div>
+                                </form>
                                 @if($needs_approval['T'])
                                     <form  method="post" class="margin-top-1" action="{{ url('creator/topic/theory/submitReview') }}">
                                         {{ csrf_field() }}
@@ -69,6 +58,11 @@
                             @else
                                 <p>La teoría está esperando la aprobación del administrador.</p>
                             @endif
+                            <form  method="post" class="margin-top-1" action="{{ url('creator/topic/theory/edit/manually') }}">
+                                {{ csrf_field() }}
+                                <input type="hidden" name="topic_name" value="{{$topic_name}}">
+                                <a href="#" style="position:absolute;left:5px;bottom:2px;text-decoration:underline;" onclick="$(this).closest('form').submit()">Editar por interfaz</a>
+                            </form>
                             <form  method="post" class="margin-top-1" action="{{ url('creator/topic/theory/download') }}">
                                 {{ csrf_field() }}
                                 <a href="#" style="position:absolute;right:5px;bottom:2px;text-decoration:underline;" onclick="$(this).closest('form').submit()">Descargar teoría</a>
@@ -109,7 +103,7 @@
                                             }
                                         @endphp
                                         <div class="form-group">
-                                            <input class="form-control btn-primary margin-top" style="margin-top:33px;" type="submit" value="Reemplazar el archivo">
+                                            <input class="form-control btn-primary margin-top" style="margin-top:33px;" type="submit" value="Remplazar con un nuevo archivo">
                                         </div>
                                     </form>
                                 @endif
@@ -138,41 +132,30 @@
                         <br/>
                         @if($references['C'])
                             @if(!$is_approval_pending['C'])
-                                @if($creation_type['C'] == 'file')
-                                    <form enctype="multipart/form-data" method="post" class="margin-top-1" action="{{ url('creator/topic/questionnaire/edit/file') }}">
-                                        {{ csrf_field() }}
-                                        <center><input class="btn btn-default" style="margin-bottom:10px;width:100%;" name="input_file" type="file" id="input_file"></center>
-                                        <input type="hidden" name="topic_name" value="{{$topic_name}}">
-                                        @php
-                                            $errors = Session::get('file_errors_questionnaire');
-                                            if($errors){
-                                                for($i = 0; $i < count($errors); $i++){
-                                                    echo "<p style='margin-left:20px;color:red'>".$errors[$i]."</p>";
-                                               }
-                                            }
-                                        @endphp
-                                        @php
-                                            $success = Session::get('file_success_questionnaire');
-                                            if($success){
-                                                for($i = 0; $i < count($success); $i++){
-                                                    echo "<p style='margin-left:20px;color:green'>".$success[$i]."</p>";
-                                               }
-                                            }
-                                        @endphp
-                                        <div class="form-group">
-                                            <input class="form-control btn-primary margin-top" style="margin-top:33px;" type="submit" value="Reemplazar el archivo">
-                                        </div>
-                                    </form>
-                                @else
-                                    <br><br><br><br>
-                                    <form  method="post" class="margin-top-1" action="{{ url('creator/topic/questionnaire/edit/manually') }}">
-                                        {{ csrf_field() }}
-                                        <input type="hidden" name="topic_name" value="{{$topic_name}}">
-                                        <div class="form-group">
-                                            <input class="form-control btn-primary margin-top" style="margin-top:33px;" type="submit" value="Editar cuestionario">
-                                        </div>
-                                    </form>
-                                @endif
+                                <form enctype="multipart/form-data" method="post" class="margin-top-1" action="{{ url('creator/topic/questionnaire/edit/file') }}">
+                                    {{ csrf_field() }}
+                                    <center><input class="btn btn-default" style="margin-bottom:10px;width:100%;" name="input_file" type="file" id="input_file"></center>
+                                    <input type="hidden" name="topic_name" value="{{$topic_name}}">
+                                    @php
+                                        $errors = Session::get('file_errors_questionnaire');
+                                        if($errors){
+                                            for($i = 0; $i < count($errors); $i++){
+                                                echo "<p style='margin-left:20px;color:red'>".$errors[$i]."</p>";
+                                           }
+                                        }
+                                    @endphp
+                                    @php
+                                        $success = Session::get('file_success_questionnaire');
+                                        if($success){
+                                            for($i = 0; $i < count($success); $i++){
+                                                echo "<p style='margin-left:20px;color:green'>".$success[$i]."</p>";
+                                           }
+                                        }
+                                    @endphp
+                                    <div class="form-group">
+                                        <input class="form-control btn-primary margin-top" style="margin-top:33px;" type="submit" value="Remplazar con un nuevo archivo">
+                                    </div>
+                                </form>
                                 @if($needs_approval['C'])
                                     <form  method="post" class="margin-top-1" action="{{ url('creator/topic/questionnaire/submitReview') }}">
                                         {{ csrf_field() }}
@@ -185,6 +168,11 @@
                             @else
                                 <p>Los cuestionarios están esperando la aprobación del administrador.</p>
                             @endif
+                            <form  method="post" class="margin-top-1" action="{{ url('creator/topic/questionnaire/edit/manually') }}">
+                                {{ csrf_field() }}
+                                <input type="hidden" name="topic_name" value="{{$topic_name}}">
+                                <a href="#" style="position:absolute;left:5px;bottom:2px;text-decoration:underline;" onclick="$(this).closest('form').submit()">Editar por interfaz</a>
+                            </form>
                             <form  method="post" class="margin-top-1" action="{{ url('creator/topic/questionnaire/download') }}">
                                 {{ csrf_field() }}
                                 <a href="#" style="position:absolute;right:5px;bottom:2px;text-decoration:underline;" onclick="$(this).closest('form').submit()">Descargar cuestionario</a>
