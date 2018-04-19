@@ -18,22 +18,29 @@
                     <p class="sub-title">Elige la forma de subir contenido teórico para el tema.</p>
                 </div>
                 <div class="col-md-6">
-                    <div class="feature-box12 text-center bmargin" style="height:350px;">
+                    <div class="feature-box12 text-center bmargin" style="height:370px;">
                         <h3>Subir un archivo</h3>
                         <center><img src="{{ URL::asset('/images/folder-circle.png')}}" style="width:100px;height:100px;margin-bottom:30px;"/></center>
                         <form enctype="multipart/form-data" method="post" class="margin-top-1" action="{{ url('creator/topic/theory/register/file') }}">
                             {{ csrf_field() }}
-                            <center><input class="btn btn-default" style="margin-bottom:10px;" name="input_file" type="file" id="input_file"></center>
+                            <center><input class="btn btn-default" style="margin-bottom:10px;" name="input_file" type="file" id="input_file" accept="text/xml"></center>
                             <input type="hidden" name="topic_name" value="{{$name}}">
+                            @php
+                                $errors = Session::get('file_errors_theory');
+                                if($errors){
+                                    for($i = 0; $i < count($errors); $i++){
+                                        echo "<p style='margin-left:20px;color:red'>".$errors[$i]."</p>";
+                                   }
+                                }
+                            @endphp
                             <div class="form-group">
                                 <input class="form-control btn-primary margin-top" style="margin-top:33px;" type="submit" value="Subir archivo">
                             </div>
                         </form>
                     </div>
                 </div>
-
                 <div class="col-md-6">
-                    <div class="feature-box12 text-center bmargin" style="height:350px;">
+                    <div class="feature-box12 text-center bmargin" style="height:370px;">
                         <h3>Ingresar datos manualmente</h3>
                         <center><img src="{{ URL::asset('/images/keyboard.png')}}" style="width:150px;height:150px;margin-bottom:55px;"/></center>
                         <form method="post" action="{{ url('creator/topic/theory/register/manually') }}">
@@ -46,7 +53,6 @@
                         <br/>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>

@@ -122,7 +122,7 @@
         <h4 class="margin-left-5 margin-top3">Simulación {{$action}} por {{ucwords($creator_username)}}</h4>
         <div class="row">
             <div class="col-md-12">
-                <div id="content" style="height:590px;">
+                <div id="content" style="height:700px;">
                     <iframe width="100%" height="100%;" frameborder="0" id="iFrameContent"></iframe>
                 </div>
             </div>

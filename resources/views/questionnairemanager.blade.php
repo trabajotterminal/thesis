@@ -19,13 +19,21 @@
                 </div>
                 <div class="clearfix"></div>
                 <div class="col-md-6">
-                    <div class="feature-box12 text-center bmargin" style="height:350px;">
+                    <div class="feature-box12 text-center bmargin" style="height:370px;">
                         <h3 >Subir un archivo</h3>
                         <center><img src="{{ URL::asset('/images/folder-circle.png')}}" style="width:100px;height:100px;margin-bottom:30px;margin-top:30px;"/></center>
                         <form enctype="multipart/form-data" method="post" action="{{ url('creator/topic/questionnaire/register/file') }}">
                             {{ csrf_field() }}
-                            <center><input name="input_file" type="file" id="input_file"></center>
+                            <center><input name="input_file" type="file" id="input_file" accept="text/xml"></center>
                             <input type="hidden" name="topic_name" value="{{$name}}">
+                            @php
+                                $errors = Session::get('file_errors_questionnaire');
+                                if($errors){
+                                    for($i = 0; $i < count($errors); $i++){
+                                        echo "<p style='margin-left:20px;color:red'>".$errors[$i]."</p>";
+                                   }
+                                }
+                            @endphp
                             <div class="form-group">
                                 <input class="form-control btn-success" type="submit" style="margin-top:25px;" value="Subir archivo">
                             </div>
@@ -34,7 +42,7 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="feature-box12 text-center bmargin" style="height:350px;">
+                    <div class="feature-box12 text-center bmargin" style="height:370px;">
                         <h3>Ingresar datos manualmente</h3>
                         <center><img src="{{ URL::asset('/images/keyboard.png')}}" style="width:150px;height:150px;margin-bottom:35px;"/></center>
                         <br>

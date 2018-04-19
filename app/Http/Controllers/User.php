@@ -34,13 +34,17 @@ class User extends Controller{
             'match_old_password'        => 'La contraseña actual es incorrecta',
             'new_institution'           => 'El nombre de la institución ya existe',
             'new_club'                  => 'El nombre del club ya existe',
+            'profile_picture_size'      => 'Elige una foto que pese menos qur 50KB',
         );
         $validator = "";
         $array_validations = [];
         $user_id = $request -> user_id;
-
         Validator::extend('alpha_spaces', function($attribute, $value){
             return preg_match('/^[\pL\s]+$/u', $value);
+        });
+        //50 KBS
+        Validator::extend('profile_picture_size', function($attribute, $value){
+            return strlen(base64_decode($value)) / 1024.0 <= 50.0;
         });
 
         Validator::extend('match_old_password', function($field, $value, $parameters){
@@ -71,7 +75,7 @@ class User extends Controller{
             $array_validations['password'] = 'required|match_old_password:'.$user_id;
             $array_validations['new_password'] = 'required';
         }
-
+        $array_validations['profile_picture'] = 'profile_picture_size';
         $validator = Validator::make($request->all(), $array_validations, $messages);
 
         if($validator->passes()){

@@ -20,6 +20,10 @@ class Admin extends Controller{
     public function viewNotification($id){
         $notification_id = $id;
         $notification   = Notification::where('id', '=', $notification_id) -> first();
+        $user_id = session('user_id');
+        if(!$notification || $notification -> recipient_id != $user_id){
+            return view('not_found');
+        }
         $sender         = User::where('id', '=', $notification -> sender_id) -> first();
         $topic          = Topic::where('id', '=', $notification -> topic_id) -> first();
         $category_topic = "";

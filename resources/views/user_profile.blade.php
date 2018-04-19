@@ -21,7 +21,7 @@
                         <br>
                         <label class="btn btn-default btn-file">
                             Cambiar foto de perfil
-                            <input type="file" style="display: none;" onchange="encodeImageFileAsURL(this)">
+                            <input type="file" style="display: none;" name="input_file" onchange="encodeImageFileAsURL(this)" accept="image/*">
                         </label>
                     </center>
                 </div>

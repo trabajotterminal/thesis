@@ -105,7 +105,7 @@
 @endphp
 
 @extends('layouts.app')
-@section('title', 'Revisión.')
+@section('title', 'Simulación')
 @section('statics-css')
     @include('layouts/statics-css-1')
 @endsection
@@ -114,7 +114,7 @@
     @include('layouts/menu', ['page' => 'category'])
 @endsection
 @section('content')
-    <div id="content" style="height:590px;">
+    <div id="content" style="height:700px;">
         <iframe width="100%" height="100%;" frameborder="0" id="iFrameContent"></iframe>
         @if($user != null && $user_type == 'student')
             <form id="updateGlance" method="POST" action="{{url('/simulation/updateGlance')}}">

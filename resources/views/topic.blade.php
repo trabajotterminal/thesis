@@ -25,8 +25,16 @@
                                 @if($creation_type['T'] == 'file')
                                     <form enctype="multipart/form-data" method="post" class="margin-top-1" action="{{ url('creator/topic/theory/edit/file') }}">
                                         {{ csrf_field() }}
-                                        <center><input class="btn btn-default" style="margin-bottom:10px;width:50%;" name="input_file" type="file" id="input_file"></center>
+                                        <center><input class="btn btn-default" style="margin-bottom:10px;width:100%;" name="input_file" type="file" id="input_file" accept="text/xml"></center>
                                         <input type="hidden" name="topic_name" value="{{$topic_name}}">
+                                        @php
+                                            $errors = Session::get('file_errors_theory');
+                                            if($errors){
+                                                for($i = 0; $i < count($errors); $i++){
+                                                    echo "<p style='margin-left:20px;color:red'>".$errors[$i]."</p>";
+                                               }
+                                            }
+                                        @endphp
                                         <div class="form-group">
                                             <input class="form-control btn-primary margin-top" style="margin-top:33px;" type="submit" value="Reemplazar el archivo">
                                         </div>
@@ -69,8 +77,16 @@
                                 @if($creation_type['S'] == 'file')
                                     <form enctype="multipart/form-data" method="post" class="margin-top-1" action="{{ url('creator/topic/simulation/edit/file') }}">
                                         {{ csrf_field() }}
-                                        <center><input class="btn btn-default" style="margin-bottom:10px;width:50%;" name="input_file" type="file" id="input_file"></center>
+                                        <center><input class="btn btn-default" style="margin-bottom:10px;width:100%;" name="input_file" type="file" id="input_file" accept="application/zip"></center>
                                         <input type="hidden" name="topic_name" value="{{$topic_name}}">
+                                        @php
+                                            $errors = Session::get('file_errors_simulation');
+                                            if($errors){
+                                                for($i = 0; $i < count($errors); $i++){
+                                                    echo "<p style='margin-left:20px;color:red'>".$errors[$i]."</p>";
+                                               }
+                                            }
+                                        @endphp
                                         <div class="form-group">
                                             <input class="form-control btn-primary margin-top" style="margin-top:33px;" type="submit" value="Reemplazar el archivo">
                                         </div>
@@ -106,6 +122,14 @@
                                         {{ csrf_field() }}
                                         <center><input class="btn btn-default" style="margin-bottom:10px;width:50%;" name="input_file" type="file" id="input_file"></center>
                                         <input type="hidden" name="topic_name" value="{{$topic_name}}">
+                                        @php
+                                            $errors = Session::get('file_errors_questionnaire');
+                                            if($errors){
+                                                for($i = 0; $i < count($errors); $i++){
+                                                    echo "<p style='margin-left:20px;color:red'>".$errors[$i]."</p>";
+                                               }
+                                            }
+                                        @endphp
                                         <div class="form-group">
                                             <input class="form-control btn-primary margin-top" style="margin-top:33px;" type="submit" value="Reemplazar el archivo">
                                         </div>
