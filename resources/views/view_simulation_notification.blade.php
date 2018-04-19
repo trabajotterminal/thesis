@@ -119,7 +119,7 @@
 @endsection
 @section('content')
     <section>
-        <h4 class="margin-left-5 margin-top3">Simulación {{$action}} por {{ucwords($creator_username)}}</h4>
+        <h4 class="margin-left-5 margin-top3">Simulación {{$action}} por {{strtolower($creator_username)}}  para el tema: {{$topic_name}}</h4>
         <div class="row">
             <div class="col-md-12">
                 <div id="content" style="height:700px;">

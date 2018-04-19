@@ -39,6 +39,9 @@ class Admin extends Controller{
 
     public function viewTheoryNotification($id){
         $notification       = Notification::where('id', '=', $id) -> first();
+        if(!$notification){
+            return view('not_found');
+        }
         $action = "";
         if($notification -> type == 'A'){
             $action = 'creada';
@@ -70,12 +73,16 @@ class Admin extends Controller{
         }
         $path = 'public/'.$category_path.'/'.$topic_path.'/Teoria/changes/';
         $xmlFilePath = Storage::allFiles($path);
-        return view('view_theory_notification', compact(['xmlFilePath', 'creator_username', 'action', 'notification']));
+        $topic_name = $topic -> pending_name ? $topic -> pending_name : $topic -> approved_name;
+        return view('view_theory_notification', compact(['xmlFilePath', 'creator_username', 'action', 'notification', 'topic_name']));
     }
 
     public function viewQuestionnaireNotification($id){
         $notification_id    = $id;
         $notification       = Notification::where('id', '=', $notification_id) -> first();
+        if(!$notification){
+            return view('not_found');
+        }
         $reference          = Reference::where('id', '=', $notification -> reference_id) -> first();
         $topic              = Topic::where('id', '=', $reference -> topic_id) -> first();
         $category           = Category::where('id', '=', $topic -> category_id) -> first();
@@ -105,11 +112,15 @@ class Admin extends Controller{
         if($notification -> type == 'D'){
             $action = 'eliminado';
         }
-        return view('view_questionnaire_notification', compact(['topic_name', 'category_name', 'creator_username', 'action', 'notification']));
+        $topic_name = $topic -> pending_name ? $topic -> pending_name : $topic -> approved_name;
+        return view('view_questionnaire_notification', compact(['topic_name', 'category_name', 'creator_username', 'action', 'notification', 'topic_name']));
     }
 
     public function viewSimulationNotification($id){
         $notification   = Notification::where('id', '=', $id) -> first();
+        if(!$notification){
+            return view('not_found');
+        }
         $creator_user_id    = $notification -> sender_id;
         $creator_username   = User::where('id', '=', $creator_user_id) -> first() -> username;
         $action = "";
@@ -197,7 +208,6 @@ class Admin extends Controller{
         $message           = $request -> message;
         $action            = $request -> action;
         $notification = Notification::where('id', '=', $notification_id) -> first();
-
         $reference      = Reference::where('id', '=', $notification -> reference_id) -> first();
         $reference -> needs_approval = false;
         $reference -> is_approval_pending = false;

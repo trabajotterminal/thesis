@@ -46,7 +46,7 @@
 @section('content')
     <section>
         <div class="container" style="min-height:550px;">
-            <h4 style="margin-top:40px;">Teoría {{$action}} por {{ucwords($creator_username)}} </h4>
+            <h4 style="margin-top:40px;">Teoría {{$action}} por {{strtolower($creator_username)}} para el tema: {{$topic_name}}</h4>
             <div class="divider-line solid light opacity-7"></div>
             <div class="row sec-moreless-padding slide-controls-color-7">
                 <div class="col-xs-12 text-left">

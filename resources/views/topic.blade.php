@@ -13,7 +13,7 @@
 @section('content')
     <section class="parallax-section11">
         <h1 style="margin-left:30px;margin-top:30px;">{{$topic_name}}</h1>
-        <div class="container sec-tpadding-2" style="min-height:380px;">
+        <div class="container " style="min-height:380px;">
             <div class="row">
                 <div class="col-md-4">
                     <div class="feature-box12">
@@ -32,6 +32,14 @@
                                             if($errors){
                                                 for($i = 0; $i < count($errors); $i++){
                                                     echo "<p style='margin-left:20px;color:red'>".$errors[$i]."</p>";
+                                               }
+                                            }
+                                        @endphp
+                                        @php
+                                            $success = Session::get('file_success_theory');
+                                            if($success){
+                                                for($i = 0; $i < count($success); $i++){
+                                                    echo "<p style='margin-left:20px;color:green'>".$success[$i]."</p>";
                                                }
                                             }
                                         @endphp
@@ -92,6 +100,14 @@
                                                }
                                             }
                                         @endphp
+                                        @php
+                                            $success = Session::get('file_success_simulation');
+                                            if($success){
+                                                for($i = 0; $i < count($success); $i++){
+                                                    echo "<p style='margin-left:20px;color:green'>".$success[$i]."</p>";
+                                               }
+                                            }
+                                        @endphp
                                         <div class="form-group">
                                             <input class="form-control btn-primary margin-top" style="margin-top:33px;" type="submit" value="Reemplazar el archivo">
                                         </div>
@@ -125,13 +141,21 @@
                                 @if($creation_type['C'] == 'file')
                                     <form enctype="multipart/form-data" method="post" class="margin-top-1" action="{{ url('creator/topic/questionnaire/edit/file') }}">
                                         {{ csrf_field() }}
-                                        <center><input class="btn btn-default" style="margin-bottom:10px;width:50%;" name="input_file" type="file" id="input_file"></center>
+                                        <center><input class="btn btn-default" style="margin-bottom:10px;width:100%;" name="input_file" type="file" id="input_file"></center>
                                         <input type="hidden" name="topic_name" value="{{$topic_name}}">
                                         @php
                                             $errors = Session::get('file_errors_questionnaire');
                                             if($errors){
                                                 for($i = 0; $i < count($errors); $i++){
                                                     echo "<p style='margin-left:20px;color:red'>".$errors[$i]."</p>";
+                                               }
+                                            }
+                                        @endphp
+                                        @php
+                                            $success = Session::get('file_success_questionnaire');
+                                            if($success){
+                                                for($i = 0; $i < count($success); $i++){
+                                                    echo "<p style='margin-left:20px;color:green'>".$success[$i]."</p>";
                                                }
                                             }
                                         @endphp
@@ -158,14 +182,14 @@
                                         </div>
                                     </form>
                                 @endif
-                                <form  method="post" class="margin-top-1" action="{{ url('creator/topic/questionnaire/download') }}">
-                                    {{ csrf_field() }}
-                                    <a href="#" style="position:absolute;right:5px;bottom:2px;text-decoration:underline;" onclick="$(this).closest('form').submit()">Descargar cuestionario</a>
-                                    <input type="hidden" name="topic_name" value="{{$topic_name}}">
-                                </form>
                             @else
                                 <p>Los cuestionarios están esperando la aprobación del administrador.</p>
                             @endif
+                            <form  method="post" class="margin-top-1" action="{{ url('creator/topic/questionnaire/download') }}">
+                                {{ csrf_field() }}
+                                <a href="#" style="position:absolute;right:5px;bottom:2px;text-decoration:underline;" onclick="$(this).closest('form').submit()">Descargar cuestionario</a>
+                                <input type="hidden" name="topic_name" value="{{$topic_name}}">
+                            </form>
                         @else
                             <p>Sin archivos de cuestionario.</p>
                             <a class="read-more black" href="{{url('creator/topic/'.$topic_name.'/questionnaire')}}">Agregar Cuestionarios</a>

@@ -44,7 +44,7 @@
     @include('layouts/menu', ['page' => 'category'])
 @endsection
 @section('content')
-    <h4 class="margin-left-5 margin-top3">Cuestionario {{$action}} por {{ucwords($creator_username)}}</h4>
+    <h4 class="margin-left-5 margin-top3">Cuestionario {{$action}} por {{strtolower($creator_username)}} para el tema: {{$topic_name}}</h4>
     <center><h5 class="uppercase weight3 pull">{{$topic_name}}</h5></center>
     <div class="carousel_holder">
         <div id="owl-demo7" class="owl-carousel" style="min-height:490px;">
