@@ -7,14 +7,14 @@
     $title_end_position = strpos($T, '</titulo>');
     $title = substr($T, $title_start_position, $title_end_position - $title_start_position);
     $T = substr($T, strpos($T, '</titulo>') + 9);
-
+    $T = str_replace(']]>', '', $T);
     $T = str_replace('<subtitulo>', '<h4>', $T);
     $T = str_replace('</subtitulo>', '</h4>', $T);
 
-    $T = str_replace('<parrafo>', '<p>', $T);
+    $T = str_replace('<parrafo><![CDATA[', '<p>', $T);
     $T = str_replace('</parrafo>', '</p><br>', $T);
 
-    $T = str_replace('<codigo>', '<pre><code>', $T);
+    $T = preg_replace('/(<codigo.*?>)/', '<pre><code>', $T);
     $T = str_replace('</codigo>', '</pre></code><br>', $T);
 
     $T = str_replace('<referencia>', '', $T);
@@ -38,8 +38,12 @@
     @include('layouts/statics-css-1')
     <link rel="stylesheet" href="{{ asset('/css/monokai-sublime.css') }}" />
     <link rel="stylesheet" href="{{ URL::asset('/css/summernote-ext-emoji-ajax.css')}}"  type="text/css" />
+    <style>
+        body{
+            overflow-x: hidden;
+        }
+    </style>
 @endsection
-
 @section('menu')
     @include('layouts/menu', ['page' => 'category'])
 @endsection

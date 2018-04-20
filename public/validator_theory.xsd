@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+elementFormDefault="qualified">
+  <xs:element name="teoria">
+    <xs:complexType>
+        <xs:choice minOccurs="1" maxOccurs="unbounded">
+	        <xs:element name="titulo" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+	        <xs:element name="subtitulo" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+	        <xs:element name="parrafo" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+	        <xs:element name="codigo" minOccurs="1" maxOccurs="unbounded">
+            	<xs:complexType>
+                	<xs:simpleContent>
+                      <xs:extension base="xs:string">
+                          <xs:attribute name="lenguaje" type="xs:string" use="required" />
+                      </xs:extension>
+                	</xs:simpleContent>
+              	</xs:complexType>
+          	</xs:element>
+            <xs:element name="referencia">
+    			<xs:complexType>
+        		<xs:choice minOccurs="1" maxOccurs="unbounded">
+                  <xs:element name="encabezado" type="xs:string"/>
+                  <xs:element name="link" type="xs:string"/>
+                </xs:choice>
+              </xs:complexType>
+            </xs:element> 
+        </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema> 

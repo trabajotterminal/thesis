@@ -399,6 +399,7 @@ class Creator extends Controller{
             $array_validations = [];
             $array_validations['input_file'] = 'file_size';
             $validator = Validator::make($request->all(), $array_validations, $messages);
+
             if($validator->passes()) {
                 $category_path = "";
                 $topic_path = "";
@@ -413,17 +414,29 @@ class Creator extends Controller{
                     $topic_path = $topic->approved_name;
                 }
                 $destinationPath = public_path('storage/' . $category_path . '/' . $topic_path . '/Teoria/changes');
-                $request->input_file->move($destinationPath, "teoria.xml");
-                $reference = new Reference();
-                $reference->type = 'T';
-                $reference->pending_route = $destinationPath;
-                $reference->needs_approval = true;
-                $reference->is_approval_pending = false;
-                $reference->category_id = $category->id;
-                $reference->topic_id = $topic->id;
-                $reference->uploaded_using_file = true;
-                $reference->save();
-                return redirect('creator/topic/' . $topic->pending_name) -> with('file_success_theory', ['Archivo guardado exitosamente.']);
+                $xml = new \DOMDocument();
+                $valid_format   = $xml -> load($request -> input_file);
+                $valid_syntax   = true;
+                try {
+                    $xml->schemaValidate(public_path().'/validator_theory.xsd');
+                } catch (\Exception $e) {
+                    $valid_syntax = false;
+                }
+                if($valid_format && $valid_syntax){
+                    $request->input_file->move($destinationPath, "teoria.xml");
+                    $reference = new Reference();
+                    $reference->type = 'T';
+                    $reference->pending_route = $destinationPath;
+                    $reference->needs_approval = true;
+                    $reference->is_approval_pending = false;
+                    $reference->category_id = $category->id;
+                    $reference->topic_id = $topic->id;
+                    $reference->uploaded_using_file = true;
+                    $reference->save();
+                    return redirect('creator/topic/' . $topic->pending_name) -> with('file_success_theory', ['Archivo guardado exitosamente.']);
+                }else{
+                    return Redirect::back()->with('file_errors_theory', ['Es probable que tu archivo XML contenga errores de sintáxis.']);
+                }
             }else{
                 return Redirect::back()->with('file_errors_theory', $validator -> errors() -> all());
             }
@@ -568,13 +581,25 @@ class Creator extends Controller{
                     $topic_path = $topic->approved_name;
                 }
                 $destinationPath = public_path('storage/' . $category_path . '/' . $topic_path . '/Teoria/changes');
-                File::cleanDirectory($destinationPath);
-                $request->input_file->move($destinationPath, "teoria.xml");
-                $reference = Reference::where('topic_id', '=', $topic->id)->where('type', '=', 'T')->first();
-                $reference->needs_approval = true;
-                $reference->is_approval_pending = false;
-                $reference->save();
-                return redirect('creator/topic/' . $topic->pending_name) -> with('file_success_theory', ['Archivo guardado exitosamente.']);
+                $xml = new \DOMDocument();
+                $valid_format   = $xml -> load($request -> input_file);
+                $valid_syntax   = true;
+                try {
+                    $xml->schemaValidate(public_path().'/validator_theory.xsd');
+                } catch (\Exception $e) {
+                    $valid_syntax = false;
+                }
+                if($valid_format && $valid_syntax) {
+                    File::cleanDirectory($destinationPath);
+                    $request->input_file->move($destinationPath, "teoria.xml");
+                    $reference = Reference::where('topic_id', '=', $topic->id)->where('type', '=', 'T')->first();
+                    $reference->needs_approval = true;
+                    $reference->is_approval_pending = false;
+                    $reference->save();
+                    return redirect('creator/topic/' . $topic->pending_name)->with('file_success_theory', ['Archivo guardado exitosamente.']);
+                }else{
+                    return Redirect::back()->with('file_errors_theory', ['Es probable que tu archivo XML contenga errores de sintáxis.']);
+                }
             }else{
                 return Redirect::back()->with('file_errors_theory', $validator -> errors() -> all());
             }
