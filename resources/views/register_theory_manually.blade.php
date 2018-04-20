@@ -233,14 +233,14 @@
                     xmlContent += '</subtitulo>\n'
                 }
                 if (elements[i] == 'paragraph') {
-                    xmlContent += '<parrafo>\n';
+                    xmlContent += '<parrafo><![CDATA[\n';
                     xmlContent += $('#paragraph_'+(++p)).summernote('code') + '\n';
-                    xmlContent += '</parrafo>\n'
+                    xmlContent += ']]></parrafo>\n'
                 }
                 if (elements[i] == 'code') {
-                    xmlContent += '<codigo>\n';
+                    xmlContent += '<codigo lenguaje="c++"><![CDATA[\n';
                     xmlContent += editors[++c].getValue();
-                    xmlContent += '</codigo>\n'
+                    xmlContent += ']]></codigo>\n'
                 }
                 if(elements[i] == 'reference'){
                    ++left;

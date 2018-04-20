@@ -15,7 +15,7 @@
     $T = str_replace('</parrafo>', '</p><br>', $T);
 
     $T = preg_replace('/(<codigo.*?>)/', '<pre><code>', $T);
-    $T = str_replace('</codigo>', '</pre></code><br>', $T);
+    $T = str_replace('</codigo>', '</pre></code><br><br>', $T);
 
     $T = str_replace('<referencia>', '', $T);
     $T = str_replace('</referencia>', '', $T);
