@@ -106,10 +106,10 @@
     $T = str_replace('</subtitulo>', '</h4>', $T);
 
     $T = str_replace('<parrafo><![CDATA[', '<p>', $T);
-    $T = str_replace(']]></parrafo>', '</p><br>', $T);
+    $T = str_replace('</parrafo>', '</p><br>', $T);
 
-    $T = preg_replace('/(<codigo.*?>)/', '<pre><code>', $T);
-    $T = str_replace(']]></codigo>', '</pre></code><br>', $T);
+    $T = preg_replace('/(<codigo lenguaje=".*?.">)/', '<pre><code>', $T);
+    $T = str_replace('</codigo>', '</pre></code><br>', $T);
 
     $T = str_replace('<referencia>', '', $T);
     $T = str_replace('</referencia>', '', $T);
@@ -127,7 +127,7 @@
 @endphp
 @extends('layouts.app')
 
-@section('title', 'Simulación')
+@section('title', 'Teoría')
 
 @section('statics-css')
     @include('layouts/statics-css-1')
