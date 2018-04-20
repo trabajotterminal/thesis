@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+elementFormDefault="qualified">
+  <xs:element name="contenido">
+    <xs:complexType>
+        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="cuestionario">
+              <xs:complexType>
+                  <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                    <xs:element name="bloque">
+                      <xs:complexType>
+                        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                          <xs:element name="pregunta" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+                          <xs:element name="retroalimentacion" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+                          <xs:element name="opcion" minOccurs="1" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:simpleContent>
+                                <xs:extension base="xs:string">
+                                  <xs:attribute name="value" type="xs:boolean" use="required" />
+                                </xs:extension>
+                              </xs:simpleContent>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+              </xs:complexType>
+            </xs:element> 
+        </xs:sequence>
+        <xs:attribute name="cuestionarios" type="xs:int" use="required"/>
+        <xs:attribute name="preguntas_por_cuestionario" type="xs:int" use="required"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema> 

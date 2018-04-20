@@ -255,7 +255,7 @@
 
 
         $("#finish").submit(function(e) {
-            var xmlContent = '<xml cuestionarios="'+numberOfQuestionnaires+'" preguntas_por_cuestionario="'+questionsPerQuestionnaire+'">\n';
+            var xmlContent = '<contenido cuestionarios="'+numberOfQuestionnaires+'" preguntas_por_cuestionario="'+questionsPerQuestionnaire+'">\n';
             xmlContent     += '<cuestionario>\n';
             var questionnaire_id = 1;
             var next       = questionnaire_id * $("#questions_per_questionnaire").val();
@@ -287,7 +287,7 @@
                     next = ++questionnaire_id * $("#questions_per_questionnaire").val();
                 }
             }
-            xmlContent += '</xml>';
+            xmlContent += '</contenido>';
             var url = $('#finish').attr('action');
             var topic_name = $('#hiddenTopicName').val();
             $.ajax({

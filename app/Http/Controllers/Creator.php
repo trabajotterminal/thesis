@@ -531,17 +531,29 @@ class Creator extends Controller{
                     $topic_path = $topic->approved_name;
                 }
                 $destinationPath = public_path('storage/' . $category_path . '/' . $topic_path . '/Cuestionario/changes');
-                $request->input_file->move($destinationPath, 'cuestionario.xml');
-                $reference = new Reference();
-                $reference->type = 'C';
-                $reference->pending_route = $destinationPath;
-                $reference->needs_approval = true;
-                $reference->is_approval_pending = false;
-                $reference->uploaded_using_file = true;
-                $reference->category_id = $category->id;
-                $reference->topic_id = $topic->id;
-                $reference->save();
-                return redirect('creator/topic/' . $topic->pending_name) -> with('file_success_questionnaire', ['Archivo guardado exitosamente.']);
+                $xml = new \DOMDocument();
+                $valid_format   = $xml -> load($request -> input_file);
+                $valid_syntax   = true;
+                try {
+                    $xml->schemaValidate(public_path().'/validator_questionnaire.xsd');
+                } catch (\Exception $e) {
+                    $valid_syntax = false;
+                }
+                if($valid_format && $valid_syntax){
+                    $request->input_file->move($destinationPath, 'cuestionario.xml');
+                    $reference = new Reference();
+                    $reference->type = 'C';
+                    $reference->pending_route = $destinationPath;
+                    $reference->needs_approval = true;
+                    $reference->is_approval_pending = false;
+                    $reference->uploaded_using_file = true;
+                    $reference->category_id = $category->id;
+                    $reference->topic_id = $topic->id;
+                    $reference->save();
+                    return redirect('creator/topic/' . $topic->pending_name) -> with('file_success_questionnaire', ['Archivo guardado exitosamente.']);
+                }else{
+                    return Redirect::back()->with('file_errors_questionnaire', ['Es probable que tu archivo XML contenga errores de sintáxis.']);
+                }
             }else{
                 return Redirect::back()->with('file_errors_questionnaire', $validator -> errors() -> all());
             }
@@ -695,13 +707,25 @@ class Creator extends Controller{
                     $topic_path = $topic->approved_name;
                 }
                 $destinationPath = public_path('storage/' . $category_path . '/' . $topic_path . '/Cuestionario/changes');
-                File::cleanDirectory($destinationPath);
-                $request->input_file->move($destinationPath, 'cuestionario.xml');
-                $reference = Reference::where('topic_id', '=', $topic->id)->where('type', '=', 'C')->first();
-                $reference->needs_approval = true;
-                $reference->is_approval_pending = false;
-                $reference->save();
-                return redirect('creator/topic/' . $topic->pending_name) -> with('file_success_questionnaire', ['Archivo guardado exitosamente.']);
+                $xml = new \DOMDocument();
+                $valid_format   = $xml -> load($request -> input_file);
+                $valid_syntax   = true;
+                try {
+                    $xml->schemaValidate(public_path().'/validator_questionnaire.xsd');
+                } catch (\Exception $e) {
+                    $valid_syntax = false;
+                }
+                if($valid_format && $valid_syntax) {
+                    File::cleanDirectory($destinationPath);
+                    $request->input_file->move($destinationPath, 'cuestionario.xml');
+                    $reference = Reference::where('topic_id', '=', $topic->id)->where('type', '=', 'C')->first();
+                    $reference->needs_approval = true;
+                    $reference->is_approval_pending = false;
+                    $reference->save();
+                    return redirect('creator/topic/' . $topic->pending_name)->with('file_success_questionnaire', ['Archivo guardado exitosamente.']);
+                }else{
+                    return Redirect::back()->with('file_errors_questionnaire', ['Es probable que tu archivo XML contenga errores de sintáxis.']);
+                }
             }else{
                 return Redirect::back()->with('file_errors_questionnaire', $validator -> errors() -> all());
             }
