@@ -311,6 +311,9 @@
                 xmlContent += "<pregunta><![CDATA[";
                 xmlContent += $('#question_'+(i)).summernote('code') + '\n';
                 xmlContent += " ]]></pregunta>\n";
+                xmlContent += '<retroalimentacion><![CDATA[\n';
+                xmlContent += $('#feedback_'+(i)).summernote('code') + '\n';
+                xmlContent += ']]></retroalimentacion>\n';
                 var answer_id = $('input[name="options_'+i+'"]:checked').val();
                 for(var j = 1; j <= 4; j++){
                     if(answer_id == j)
@@ -320,9 +323,6 @@
                     xmlContent += $('#option_'+(i)+'_'+j).val();
                     xmlContent += '</opcion>\n'
                 }
-                xmlContent += '<retroalimentacion><![CDATA[\n';
-                xmlContent += $('#feedback_'+(i)).summernote('code') + '\n';
-                xmlContent += ']]></retroalimentacion>\n';
                 xmlContent += "</bloque>\n";
                 if(next === i){
                     if(i === questions){
