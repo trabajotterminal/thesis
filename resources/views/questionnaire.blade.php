@@ -59,6 +59,7 @@
                                     {!!  $question !!}
                             </div>
                             <div class="row no-margin">
+                                <center>
                                     @foreach($options[$key] as $secondKey => $option)
                                     <div class="col-md-3">
                                         <div class="form-check" id="{{$key}}">
@@ -69,6 +70,7 @@
                                         </div>
                                     </div>
                                     @endforeach
+                                </center>
                             </div>
                         </div>
                         @if($key + 1 == count($questions))

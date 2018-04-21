@@ -60,6 +60,7 @@
                                 {!! $question !!}
                             </div>
                             <div class="row no-margin" style="margin-left:100px;">
+                                <center>
                                 @foreach($options[$key] as $secondKey => $option)
                                     <div class="col-md-3">
                                         <div class="form-check" id="{{$key}}">
@@ -70,6 +71,7 @@
                                         </div>
                                     </div>
                                 @endforeach
+                                </center>
                             </div>
                         </div>
                         <div class="col-md-6 bmargin">
