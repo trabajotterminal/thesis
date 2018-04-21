@@ -43,15 +43,15 @@
                         <div class="domain-search-holder">
                             <form method="get" action="{{url('/search')}}" id="domain-search-holder">
                                 <div>
-                                    <input class="input-text" name="input_search" id="dsearch" placeholder="Búsca algún algoritmo" type="text" />
+                                    <input class="input-text" name="input_search" id="dsearch" placeholder="Búsca algún algoritmo" type="text" required />
                                     <input id="searchsubmit" value="Buscar" style="background-color: black" type="submit" />
                                 </div>
                             </form>
                         </div>
-                        <center><span class="left-move"><a class="text-white uppercase tag" href="#">Segment T.</a></span>
-                            <span class="left-move"><a class="text-white uppercase tag" href="#">Fenwick T.</a></span>
-                            <span class="right-move"><a class="text-white uppercase tag" href="#">Búsqueda Binaria</a></span>
-                            <span class="right-move"><a class="text-white uppercase tag" href="#">DFS</a></span>
+                        <center><span class="left-move"><a class="text-white uppercase tag" href="{{URL('search?input_search=Segment Tree')}}">Segment Tree</a></span>
+                            <span class="left-move"><a class="text-white uppercase tag" href="{{URL('search?input_search=Fenwick Tree')}}">Fenwick Tree</a></span>
+                            <span class="right-move"><a class="text-white uppercase tag" href="{{URL('search?input_search=Búsqueda Binaria')}}">Búsqueda Binaria</a></span>
+                            <span class="right-move"><a class="text-white uppercase tag" href="{{URL('search?input_search=Kruskal')}}">Kruskal</a></span>
                         </center>
                         <!--<span class="text-white">Plataforma para el aprendizaje de algoritmos</span> </div>-->
                     </div>

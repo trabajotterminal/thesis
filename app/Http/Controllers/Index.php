@@ -61,6 +61,9 @@ class Index extends Controller{
 
     public function searchEngine(Request $request){
         $input          = $request -> input_search;
+        if(!$input){
+            return redirect('/');
+        }
         $chars = array(
             chr(195).chr(128) => 'A', chr(195).chr(129) => 'A',
             chr(195).chr(130) => 'A', chr(195).chr(131) => 'A',
