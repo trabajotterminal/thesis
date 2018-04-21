@@ -30,6 +30,7 @@
 @section('title', 'Revisión.')
 @section('statics-css')
     @include('layouts/statics-css-2')
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_CHTML"></script>
     <link rel="stylesheet" type="text/css" href="/js/smart-forms/smart-forms.css">
     <link rel="stylesheet" href="/js/masterslider/style/masterslider.css" />
     <link href="/js/owl-carousel/owl.carousel.css" rel="stylesheet">
@@ -37,6 +38,7 @@
     <style>
         body{
             overflow-x: hidden;
+            color: black;
         }
     </style>
 @endsection
@@ -44,15 +46,14 @@
     @include('layouts/menu', ['page' => 'category'])
 @endsection
 @section('content')
-    <h4 class="margin-left-5 margin-top3">Cuestionario {{$action}} por {{strtolower($creator_username)}} para el tema: {{$topic_name}}</h4>
-    <center><h5 class="uppercase weight3 pull">{{$topic_name}}</h5></center>
+    <h4 class="margin-left-5 margin-top3">Cuestionario / {{$topic_name}}</h4>
     <div class="carousel_holder">
         <div id="owl-demo7" class="owl-carousel" style="min-height:490px;">
             @foreach($questions as $key => $question)
                 <div class="item">
                     <div class="row">
                         <div class="col-md-12" style="min-height:450px;">
-                            <div class="row" style="height:auto;">
+                            <div class="row" style="height:auto; margin-bottom:0px;padding-left:30px;padding-right:50px;">
                                 {!! $question !!}
                             </div>
                             <div class="row" style="margin-left:100px;">

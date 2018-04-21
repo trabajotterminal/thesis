@@ -40,7 +40,7 @@
     @include('layouts/menu', ['page' => 'category'])
 @endsection
 @section('content')
-    <center><h3 class="uppercase weight3 pull margin-top1">{{$topic_name}}</h3></center>
+    <center><h3 class="uppercase weight1 pull margin-top1">{{$topic_name}}</h3></center>
     <div class="carousel_holder" id="questionnaire" style="overflow-x: hidden;">
         <div id="owl-demo7" class="owl-carousel" style="min-height:540px;">
             @foreach($questions as $key => $question)
@@ -52,7 +52,7 @@
                                     <h4> {!!  $question !!} </h4>
                                 </div>
                             </div>
-                            <div class="row" style="margin-top:50px;margin-left:100px;">
+                            <div class="row" style="margin-top:0px;margin-left:100px;">
                                     @foreach($options[$key] as $secondKey => $option)
                                     <div class="col-md-3">
                                         <div class="form-check" id="{{$key}}">

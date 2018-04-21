@@ -50,7 +50,7 @@
 
 </style>
 @section('content')
-<div class="row">
+<div class="row" style="min-height:550px;">
     @if(count($questions) == 0)
         <br><br>
         <div class="col-md-12">
@@ -71,7 +71,7 @@
             <div class="col-md-10 col-centered">
                 <div class="card card-1">
                     <h4>{!!  $questions[$key]  !!}</h4>
-                    <h5>Respuesta correcta: {{$right_answers[$key]}}) {{$answers_map_value[$right_answers[$key]]}}</h5>
+                    <h5>Respuesta correcta: {{$right_answers[$key]}}) {{$answers_value_to_display[$key]}}</h5>
                     <h5>Retroalimentación:  {!! $feedbacks[$key] !!}</h5>
                 </div>
             </div>

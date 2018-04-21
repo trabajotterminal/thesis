@@ -56,7 +56,7 @@ class Questionnaire extends Controller
         $right_answers  = [];
         $feedbacks      = [];
         $questions      = [];
-        $answers_map_value = [];
+        $answers_value = [];
         $i = 0;
         $try_number = (int)$try_number;
         if($try_number < $xml['cuestionarios']){
@@ -66,7 +66,7 @@ class Questionnaire extends Controller
                 for($j = 0; $j < count($xml -> children()[$try_number] -> bloque[$i] -> opcion); $j++){
                     if($xml -> children()[$try_number] -> bloque[$i] -> opcion[$j]['value'] == 'true'){
                         array_push($right_answers, $j + 1);
-                        $answers_map_value[$j + 1] = $xml -> children()[$try_number] -> bloque[$i] -> opcion[$j];
+                        array_push($answers_value, $xml -> children()[$try_number] -> bloque[$i] -> opcion[$j]);
                         break;
                     }
                 }
@@ -76,6 +76,7 @@ class Questionnaire extends Controller
         $feedbacks_to_display = [];
         $questions_to_display = [];
         $right_answers_to_display = [];
+        $answers_value_to_display = [];
         $total = count($right_answers);
         $correct = 0;
         for($i = 0; $i < count($user_answers); $i++){
@@ -85,6 +86,7 @@ class Questionnaire extends Controller
                 array_push($questions_to_display, $questions[$i]);
                 array_push($feedbacks_to_display, $feedbacks[$i]);
                 array_push($right_answers_to_display, $right_answers[$i]);
+                array_push($answers_value_to_display, $answers_value[$i]);
             }
         }
         $points = ($correct * 10.0) / ($total * 1.0);
@@ -113,6 +115,6 @@ class Questionnaire extends Controller
         $right_answers = $right_answers_to_display;
         $feedbacks = $feedbacks_to_display;
         $questions = $questions_to_display;
-        return view('display_feedback', compact(['user_answers', 'right_answers', 'feedbacks', 'questions', 'topic_name', 'answers_map_value']));
+        return view('display_feedback', compact(['user_answers', 'right_answers', 'feedbacks', 'questions', 'topic_name', 'answers_value_to_display']));
     }
 }
