@@ -506,11 +506,11 @@ class Creator extends Controller{
         if ($request->hasFile('input_file')) {
             $file_size = $request->file('input_file')->getClientSize();
             $messages = array(
-                'file_size' => 'Elige un archivo XML que pese como máximo 500KB.',
+                'file_size' => 'Elige un archivo XML que pese como máximo 1MB.',
             );
             // 1MB
             Validator::extend('file_size', function ($attribute, $value) {
-                return $value->getClientSize() / 1024.0 <= 500;
+                return $value->getClientSize() / 1024.0 <= 1000;
             });
             $array_validations = [];
             $array_validations['input_file'] = 'file_size';
@@ -681,11 +681,11 @@ class Creator extends Controller{
         if ($request->hasFile('input_file')) {
             $file_size = $request->file('input_file')->getClientSize();
             $messages = array(
-                'file_size' => 'Elige un archivo XML que pese como máximo 500KB.',
+                'file_size' => 'Elige un archivo XML que pese como máximo 1MB.',
             );
             // 1MB
             Validator::extend('file_size', function ($attribute, $value) {
-                return $value->getClientSize() / 1024.0 <= 500;
+                return $value->getClientSize() / 1024.0 <= 1000;
             });
             $array_validations = [];
             $array_validations['input_file'] = 'file_size';
