@@ -48,10 +48,21 @@
                                 </div>
                             </form>
                         </div>
-                        <center><span class="left-move"><a class="text-white uppercase tag" href="{{URL('search?input_search=Segment Tree')}}">Segment Tree</a></span>
-                            <span class="left-move"><a class="text-white uppercase tag" href="{{URL('search?input_search=Fenwick Tree')}}">Fenwick Tree</a></span>
-                            <span class="right-move"><a class="text-white uppercase tag" href="{{URL('search?input_search=Búsqueda Binaria')}}">Búsqueda Binaria</a></span>
-                            <span class="right-move"><a class="text-white uppercase tag" href="{{URL('search?input_search=Kruskal')}}">Kruskal</a></span>
+                        <center>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <span class="left-move"><a class="text-white uppercase tag" href="{{URL('search?input_search=Segment')}}">Segment</a></span>
+                                </div>
+                                <div class="col-md-3">
+                                    <span class="left-move"><a class="text-white uppercase tag" href="{{URL('search?input_search=Fenwick')}}">Fenwick</a></span>
+                                </div>
+                                <div class="col-md-3">
+                                    <span class="right-move"><a class="text-white uppercase tag" href="{{URL('search?input_search=Búsqueda')}}">Búsqueda</a></span>
+                                </div>
+                                <div class="col-md-3">
+                                    <span class="right-move"><a class="text-white uppercase tag" href="{{URL('search?input_search=Kruskal')}}">Kruskal</a></span>
+                                </div>
+                            </div>
                         </center>
                         <!--<span class="text-white">Plataforma para el aprendizaje de algoritmos</span> </div>-->
                     </div>

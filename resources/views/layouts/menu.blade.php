@@ -1,4 +1,4 @@
-<script src="{{ URL::asset('/js/bootstrap/bootstrap.min.js')}}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
 @php
     $menu_classes       = [];
     $menu_classes[0]    = $page == 'index' ? 'active' : '';
