@@ -40,6 +40,9 @@
             overflow-x: hidden;
             color: black;
         }
+        .no-margin {
+            margin: 0px !important;
+        }
     </style>
 @endsection
 @section('menu')
@@ -53,10 +56,10 @@
                 <div class="item">
                     <div class="row">
                         <div class="col-md-12" style="min-height:450px;">
-                            <div class="row" style="height:auto; margin-bottom:0px;padding-left:30px;padding-right:50px;">
+                            <div class="row no-margin" style="height:auto; margin-bottom:0px;padding-left:30px;padding-right:50px;">
                                 {!! $question !!}
                             </div>
-                            <div class="row" style="margin-left:100px;">
+                            <div class="row no-margin" style="margin-left:100px;">
                                 @foreach($options[$key] as $secondKey => $option)
                                     <div class="col-md-3">
                                         <div class="form-check" id="{{$key}}">

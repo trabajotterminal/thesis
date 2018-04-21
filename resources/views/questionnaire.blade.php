@@ -31,6 +31,14 @@
 @section('title', 'Cuestionario')
 @section('statics-css')
     @include('layouts/statics-css-2')
+    <style>
+        body{
+            color:black;
+        }
+        .no-margin {
+            margin: 0px !important;
+        }
+    </style>
     <link rel="stylesheet" type="text/css" href="/js/smart-forms/smart-forms.css">
     <link rel="stylesheet" href="/js/masterslider/style/masterslider.css" />
     <link href="/js/owl-carousel/owl.carousel.css" rel="stylesheet">
@@ -46,13 +54,11 @@
             @foreach($questions as $key => $question)
                 <div class="item">
                     <div class="row">
-                        <div class="col-md-12" style="height:min-height:450px;">
-                            <div class="row" style="height:auto;margin:30px;">
-                                <div class="col">
-                                    <h4> {!!  $question !!} </h4>
-                                </div>
+                        <div class="col-md-12" style="height:min-height:450px">
+                            <div class="row no-margin">
+                                    {!!  $question !!}
                             </div>
-                            <div class="row" style="margin-top:0px;margin-left:100px;">
+                            <div class="row no-margin">
                                     @foreach($options[$key] as $secondKey => $option)
                                     <div class="col-md-3">
                                         <div class="form-check" id="{{$key}}">
