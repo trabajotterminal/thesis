@@ -55,14 +55,14 @@
                                         </div>
                                     </form>
                                 @endif
+                                <form  method="post" class="margin-top-1" action="{{ url('creator/topic/theory/edit/manually') }}">
+                                    {{ csrf_field() }}
+                                    <input type="hidden" name="topic_name" value="{{$topic_name}}">
+                                    <a href="#" style="position:absolute;left:5px;bottom:2px;text-decoration:underline;" onclick="$(this).closest('form').submit()">Editar por interfaz</a>
+                                </form>
                             @else
                                 <p>La teoría está esperando la aprobación del administrador.</p>
                             @endif
-                            <form  method="post" class="margin-top-1" action="{{ url('creator/topic/theory/edit/manually') }}">
-                                {{ csrf_field() }}
-                                <input type="hidden" name="topic_name" value="{{$topic_name}}">
-                                <a href="#" style="position:absolute;left:5px;bottom:2px;text-decoration:underline;" onclick="$(this).closest('form').submit()">Editar por interfaz</a>
-                            </form>
                             <form  method="post" class="margin-top-1" action="{{ url('creator/topic/theory/download') }}">
                                 {{ csrf_field() }}
                                 <a href="#" style="position:absolute;right:5px;bottom:2px;text-decoration:underline;" onclick="$(this).closest('form').submit()">Descargar teoría</a>
@@ -165,14 +165,14 @@
                                         </div>
                                     </form>
                                 @endif
+                                <form  method="post" class="margin-top-1" action="{{ url('creator/topic/questionnaire/edit/manually') }}">
+                                    {{ csrf_field() }}
+                                    <input type="hidden" name="topic_name" value="{{$topic_name}}">
+                                    <a href="#" style="position:absolute;left:5px;bottom:2px;text-decoration:underline;" onclick="$(this).closest('form').submit()">Editar por interfaz</a>
+                                </form>
                             @else
                                 <p>Los cuestionarios están esperando la aprobación del administrador.</p>
                             @endif
-                            <form  method="post" class="margin-top-1" action="{{ url('creator/topic/questionnaire/edit/manually') }}">
-                                {{ csrf_field() }}
-                                <input type="hidden" name="topic_name" value="{{$topic_name}}">
-                                <a href="#" style="position:absolute;left:5px;bottom:2px;text-decoration:underline;" onclick="$(this).closest('form').submit()">Editar por interfaz</a>
-                            </form>
                             <form  method="post" class="margin-top-1" action="{{ url('creator/topic/questionnaire/download') }}">
                                 {{ csrf_field() }}
                                 <a href="#" style="position:absolute;right:5px;bottom:2px;text-decoration:underline;" onclick="$(this).closest('form').submit()">Descargar cuestionario</a>
