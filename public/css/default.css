@@ -3071,6 +3071,9 @@ a.topbar-btn:hover, a.topbar-btn.active {
 	margin: 0;
 	text-align: center;
 	background-color: #1a1a1a;
+	position: relative;
+	bottom: 0;
+	width: 100%;
 }
 .section-copyrights.section-white {
 	color: #fff;

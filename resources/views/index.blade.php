@@ -24,6 +24,15 @@
 @section('title', 'Inicio')
 @section('statics-css')
     @include('layouts/statics-css-1')
+    <style>
+        .parallax-section26 {
+            background: url({{URL::asset('images/cover.png')}});
+            background-image: url({{URL::asset('images/cover.png')}});
+            background-position-x: -300px;
+            background-position-y: 0px;
+            background-repeat: no-repeat;
+        }
+    </style>
 @endsection
 @section('menu')
     @include('layouts/menu', ['page' => 'index'])

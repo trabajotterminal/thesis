@@ -12,7 +12,7 @@
     @include('layouts/menu', ['page' => 'login'])
 @endsection
 @section('content')
-        <div class="container-fluid" style="min-height:550px;">
+        <div class="container" style="min-height:550px;">
             <div class="row margin-top3">
                 <div class="col-md-6">
                     <center>
