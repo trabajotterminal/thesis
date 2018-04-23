@@ -25,10 +25,10 @@
         <div class="navbar lightblue-3 navbar-default yamm">
             <div class="navbar-header">
                 <button type="button" data-toggle="collapse" data-target="#navbar-collapse-grid" class="navbar-toggle two three"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-                <a href="/" class="navbar-brand less-top-padding"><!--<img src="/images/logoEscom.png" style="width:80px;height:50px;"alt=""/>--></a> </div>
+                <a href="{{URL('/')}}" class="navbar-brand less-top-padding"><!--<img src="/images/logoEscom.png" style="width:80px;height:50px;"alt=""/>--></a> </div>
                 <div id="navbar-collapse-grid" class="navbar-collapse collapse pull-right">
                     <ul class="nav pink-3 navbar-nav">
-                        <li><a href="/" class="dropdown-toggle {{$menu_classes[0]}}">Inicio</a></li>
+                        <li><a href="{{URL('/')}}" class="dropdown-toggle {{$menu_classes[0]}}">Inicio</a></li>
                         @if($user != null)
                             @if($user_type == 'student')
                                 <li class="dropdown"> <a href="#" class="dropdown-toggle {{$menu_classes[1]}}">Categorias</a>
@@ -44,14 +44,14 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li><a href="/profile" class="dropdown-toggle {{$menu_classes[2]}}">Perfil</a></li>
-                                <li><a href="/logout" class="dropdown-toggle">Cerrar Sesión</a></li>
+                                <li><a href="{{URL('/profile')}}" class="dropdown-toggle {{$menu_classes[2]}}">Perfil</a></li>
+                                <li><a href="{{URL('/logout')}}" class="dropdown-toggle">Cerrar Sesión</a></li>
                             @endif
                             @if($user_type == 'creator')
                                 <li class="dropdown"> <a href="#" class="dropdown-toggle  {{$menu_classes[1]}}">Administrar</a>
                                     <ul class="dropdown-menu" role="menu">
-                                        <li> <a href="/creator/categories">Mis categorias</a> </li>
-                                        <li> <a href="/creator/topics">Mis temas</a> </li>
+                                        <li> <a href="{{URL('/creator/categories')}}">Mis categorias</a> </li>
+                                        <li> <a href="{{URL('/creator/topics')}}">Mis temas</a> </li>
                                     </ul>
                                 </li>
                                 <li class="dropdown">

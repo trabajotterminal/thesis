@@ -39,9 +39,9 @@
             margin: 0px !important;
         }
     </style>
-    <link rel="stylesheet" type="text/css" href="/js/smart-forms/smart-forms.css">
-    <link rel="stylesheet" href="/js/masterslider/style/masterslider.css" />
-    <link href="/js/owl-carousel/owl.carousel.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{URL::asset('/js/smart-forms/smart-forms.css')}}">
+    <link rel="stylesheet" href="{{URL::asset('/js/masterslider/style/masterslider.css')}}" />
+    <link href="{{URL::asset('/js/owl-carousel/owl.carousel.css')}}" rel="stylesheet">
     <script src="{{ asset('/js/cytoscape.js')}}"></script>
 @endsection
 @section('menu')

@@ -4,9 +4,9 @@
 
 @section('statics-css')
     @include('layouts/statics-css-1')
-    <link rel="stylesheet" type="text/css" href="/js/smart-forms/smart-forms.css">
-    <link rel="stylesheet" href="/js/masterslider/style/masterslider.css" />
-    <link href="/js/owl-carousel/owl.carousel.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{URL::asset('/js/smart-forms/smart-forms.css')}}" rel="stylesheet" >
+    <link rel="stylesheet" type="text/css" href="{{URL::asset('/js/masterslider/style/masterslider.css')}}" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="{{URL::asset('/js/owl-carousel/owl.carousel.css')}}" rel="stylesheet" >
 @endsection
 
 @section('menu')

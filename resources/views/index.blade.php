@@ -107,7 +107,7 @@
                             </ul>
                             <div class="panel-footer">
                                 @if(!($user_id))
-                                    <a class="btn btn-lg btn-danger" href="/login">Registrate ahora</a>
+                                    <a class="btn btn-lg btn-danger" href="{{URL('/login')}}">Registrate ahora</a>
                                 @endif
                             </div>
                         </div>
