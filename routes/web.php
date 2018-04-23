@@ -15,6 +15,11 @@ Route::group(['middleware' => 'web'], function(){
     Route::get('/theory/{name}', 'Theory@theory');
     Route::post('/theory/updateGlance', 'Theory@updateGlance');
     Route::post('/simulation/updateGlance', 'Simulation@updateGlance');
+    Route::get('/startProduction', function(){
+        Artisan::call('migrate:refresh');
+        Artisan::call('storage:link');
+        Artisan::call('db:seed');
+    });
 });
 
 Route::get('/questionnaire/{name}', 'Questionnaire@showQuestionnaire') -> middleware('checkIfLoggedIn');
