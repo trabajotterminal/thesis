@@ -141,7 +141,7 @@
             $.ajax({
                 beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
                 type: "POST",
-                url: url,
+                url: '{{URL('/simulation/updateGlance')}}',
                 data: {"topic_name": topic_name, "user_id": user_id, "type": 'S'},
                 error: function(data){
                     console.warn('Error occurred while saving some data to server');

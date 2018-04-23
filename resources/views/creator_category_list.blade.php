@@ -87,7 +87,7 @@
         var url = $('.deleteCategory').attr('action');
         $.ajax({
             beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
-            url: url,
+            url: '{{URL('creator/categories/delete')}}',
             type: 'POST',
             data: {"category_name" : category_name},
             dataType: 'json',
@@ -109,7 +109,7 @@
         var url = $('.reviewCategory').attr('action');
         $.ajax({
             beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
-            url: url,
+            url: '{{URL('creator/categories/submitReview')}}',
             type: 'POST',
             data: {"category_name" : category_name},
             dataType: 'text',
@@ -134,7 +134,7 @@
         var newCategoryName = document.getElementById('editedText').value;
         $.ajax({
             beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
-            url: url,
+            url: '{{URL('creator/categories/edit')}}',
             type: 'POST',
             data: {"category_name" : category_name, "new_category_name": newCategoryName},
             dataType: 'json',

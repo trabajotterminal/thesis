@@ -55,7 +55,7 @@
             $(".print-error-msg").css('display','none');
             $.ajax({
                 beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
-                url: url,
+                url: '{{URL('creator/categories/register')}}',
                 type: 'POST',
                 data: {"category_name" : category_name},
                 dataType: 'json',

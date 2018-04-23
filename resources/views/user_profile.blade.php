@@ -114,7 +114,7 @@
                 beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
                 type: 'GET',
                 data: {},
-                url: "/user/schools/json",
+                url: '{{URL("/user/schools/json")}}',
                 datatype: "json",
                 success: function(data) {
                     if($.isEmptyObject(data.error)){
@@ -135,7 +135,7 @@
                     beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
                     type: 'GET',
                     data: {'user_id': user_id},
-                    url: "/user/getInfo/json",
+                    url: '{{URL("/user/getInfo/json")}}',
                     datatype: "json",
                     success: function(data) {
                         if($.isEmptyObject(data.error)){
@@ -155,7 +155,7 @@
                                 beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
                                 type: 'GET',
                                 data: {'school_name': selected_institution_value},
-                                url: "/user/school/clubs/json",
+                                url: '{{URL("/user/school/clubs/json")}}',
                                 datatype: "json",
                                 success: function(data) {
                                     if($.isEmptyObject(data.error)){
@@ -227,7 +227,7 @@
                 beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
                 type: 'GET',
                 data: {'school_name': selected_institution_value},
-                url: "/user/school/clubs/json",
+                url: '{{URL("/user/school/clubs/json")}}',
                 datatype: "json",
                 success: function(data) {
                     if($.isEmptyObject(data.error)){
@@ -280,7 +280,7 @@
             $(".print-success-msg").css('display','none');
             $.ajax({
                 beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
-                url: url,
+                url: '{{URL('user/updateInfo')}}',
                 type: 'POST',
                 data: {
                     'institution': institution,

@@ -338,7 +338,7 @@
             var topic_name = $('#hiddenTopicName').val();
             $.ajax({
                 beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
-                url: url,
+                url: '{{URL('creator/topic/questionnaire/register/manually/save')}}',
                 type: 'POST',
                 data: {"xmlContent": xmlContent, "topic_name": topic_name},
                 dataType: 'json',

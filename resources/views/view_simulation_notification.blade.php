@@ -169,7 +169,7 @@
                 beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
                 type: 'POST',
                 data: {'notification_id': notification_id, 'action': action.name, 'message': message},
-                url: url,
+                url: '{{URL('admin/notification/simulation/resolve')}}',
                 datatype: "json",
                 success: function(data) {
                     window.location = "/";

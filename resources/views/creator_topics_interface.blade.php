@@ -92,7 +92,7 @@
             $(".print-error-msg").css('display','none');
             $.ajax({
                 beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
-                url: url,
+                url: '{{URL('creator/topics/register')}}',
                 type: 'POST',
                 data: {"category_name" : category_name, "topic_name": topic_name, "tags": tags},
                 dataType: 'json',

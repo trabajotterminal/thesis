@@ -142,7 +142,7 @@
             beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
             type: 'GET',
             data: {'topic': topic_name},
-            url: "/creator/categories/list/json",
+            url: '{{URL("/creator/categories/list/json")}}',
             datatype: "json",
             success: function(data) {
                 console.warn(data);
@@ -169,7 +169,7 @@
                 var tags = $('#tag_input').tagit('assignedTags');
                 $.ajax({
                     beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
-                    url: url,
+                    url: '{{URL('creator/topics/edit')}}',
                     type: 'POST',
                     data: {"topic_name" : textPressed, "new_topic_name": topic_name, "new_category_name": category_name, "tags": tags},
                     dataType: 'json',
@@ -205,7 +205,7 @@
         var url = $('.deleteTopic').attr('action');
         $.ajax({
             beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
-            url: url,
+            url: '{{URL('creator/topics/delete')}}',
             type: 'POST',
             data: {"topic_name" : topic_name},
             dataType: 'json',
@@ -234,7 +234,7 @@
         var url = $('.reviewTopic').attr('action');
         $.ajax({
             beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
-            url: url,
+            url: '{{URL('creator/topics/submitReview')}}',
             type: 'POST',
             data: {"topic_name" : topic_name},
             dataType: 'text',

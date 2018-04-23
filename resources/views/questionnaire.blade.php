@@ -113,35 +113,10 @@
         var feedbacks   = [];
 
         $("#questionnaireDone").submit(function(e) {
-
             var number_of_questions = $('#numberOfQuestions').val();
             for(i = 0; i < number_of_questions; i++) {
                 $('#questionnaireDone').append('<input type="hidden" name="user_answers[]" value="'+$('input[name="options_'+(i+1)+'"]:checked').val()+'" />');
-
             }
-
-            /*var user_answers = [];
-            for(var i = 0; i < number_of_questions; i++)
-                user_answers.push();
-            var url = $('#questionnaireDone').attr('action');
-            var topic_name = $('#hiddenTopicName').val();
-            var right_answers = answers;
-            $.ajax({
-                beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
-                url: url,
-                type: 'POST',
-                data: {"user_answers": user_answers, "topic_name": topic_name, "right_answers": right_answers, "questions": questions, "feedbacks": feedbacks},
-                dataType: 'json',
-                success: function( data ){
-                    $('#questionnaire').hide();
-                    $('#feedback').fadeIn(2000).append(data.view);
-                },
-                error: function(xhr, status, error) {
-                    alert(error);
-                },
-            });
-            e.preventDefault();
-            return 0;*/
         });
     </script>
 @endsection
