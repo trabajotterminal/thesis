@@ -109,8 +109,8 @@
 @endsection
 @section('statics-js')
     @include('layouts/statics-js-1')
-    <script src="/js/owl-carousel/owl.carousel.js"></script>
-    <script src="/js/owl-carousel/custom.js"></script>
+    <script src="{{URL::asset('/js/owl-carousel/owl.carousel.js')}}"></script>
+    <script src="{{URL::asset('/js/owl-carousel/custom.js')}}"></script>
     <script>
         $(document).ready(function() {
             var carousel = $("#owl-demo3");

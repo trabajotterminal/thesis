@@ -120,7 +120,7 @@
                                         </div>
                                     </ul>
                                 </li>
-                                <li><a href="/logout" class="dropdown-toggle"  {{$menu_classes[3]}}">Cerrar Sesión</a></li>
+                                <li><a href="{{URL('/logout')}}" class="dropdown-toggle"  {{$menu_classes[3]}}">Cerrar Sesión</a></li>
                             @endif
                             @if($user_type == 'admin')
                                     <li class="dropdown">
@@ -176,8 +176,8 @@
                                             </div>
                                         </ul>
                                     </li>
-                                    <li><a href="/admin/statistics" class="dropdown-toggle  {{$menu_classes[2]}}">Ver estadisticas</a></li>
-                                    <li><a href="/logout" class="dropdown-toggle"  {{$menu_classes[3]}}">Cerrar Sesión</a></li>
+                                    <li><a href="{{URL('/admin/statistics')}}" class="dropdown-toggle  {{$menu_classes[2]}}">Ver estadisticas</a></li>
+                                    <li><a href="{{URL('/logout')}}" class="dropdown-toggle"  {{$menu_classes[3]}}">Cerrar Sesión</a></li>
                             @endif
                         @else
                             <li class="dropdown"> <a href="#" class="dropdown-toggle {{$menu_classes[1]}}">Categorias</a>
@@ -193,7 +193,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li><a href="/login" class="dropdown-toggle {{$menu_classes[2]}}">Inicia Sesión</a></li>
+                            <li><a href="{{URL('/login')}}" class="dropdown-toggle {{$menu_classes[2]}}">Inicia Sesión</a></li>
                         @endif
                     </ul>
                 </div>
