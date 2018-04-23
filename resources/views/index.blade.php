@@ -28,9 +28,12 @@
         .parallax-section26 {
             background: url({{URL::asset('images/cover.png')}});
             background-image: url({{URL::asset('images/cover.png')}});
-            background-position-x: -300px;
+            background-position-x: center;
             background-position-y: 0px;
-            background-repeat: no-repeat;
+            background-repeat: repeat-x;
+        }
+        body{
+            min-height:100vh;
         }
     </style>
 @endsection
