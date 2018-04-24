@@ -66,7 +66,7 @@
             if(index == 1){
                 $('#user_ranking_theory').hide();
                 $('#user_ranking_simulation').hide();
-                $('#user_ranking_questionnaire').load('{{URL('/admin/user/ranking/'.$user_id'./questionnaire')}}',function(){}).hide().fadeIn();
+                $('#user_ranking_questionnaire').load('{{URL('/admin/user/ranking/'.$user_id.'/questionnaire')}}',function(){}).hide().fadeIn();
             }
             if(index == 2){
                 $('#user_ranking_theory').hide();
