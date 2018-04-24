@@ -25,7 +25,7 @@
 @section('statics-css')
     @include('layouts/statics-css-1')
     <style>
-        .parallax-section26 {
+        .customBack {
             background: url({{URL::asset('images/cover.png')}});
             background-image: url({{URL::asset('images/cover.png')}});
             background-position-x: center;
@@ -34,6 +34,7 @@
         }
         body{
             min-height:100vh;
+            overflow-x: hidden;
         }
     </style>
 @endsection
@@ -41,93 +42,88 @@
     @include('layouts/menu', ['page' => 'index'])
 @endsection
 @section('content')
-    <section class="parallax-section26">
-        <div class="section-overlay bg-opacity-0">
-            <div class="container">
-                <div class="row" style="margin-bottom: 250px;">
-                    <div class="col-md-8 col-centered">
-                        <br><br>
-                        <h1 class="dosis uppercase less-mar3 text-white textoTop margin-top5">Aprende un nuevo algoritmo</h1>
-                        <div class="title-line-4 white align-center"></div>
-                        <div class="clearfix"></div>
-                        <!--end title-->
-                        <br/>
-                        <div class="domain-search-holder">
-                            <form method="get" action="{{url('/search')}}" id="domain-search-holder">
-                                <div>
-                                    <input class="input-text" name="input_search" id="dsearch" placeholder="Búsca algún algoritmo" type="text" required />
-                                    <input id="searchsubmit" value="Buscar" style="background-color: black" type="submit" />
-                                </div>
-                            </form>
+        <div class="row customBack" style="height: 90vh;">
+            <div class="col-md-8 col-centered">
+                <center>
+                    <h1 class="dosis uppercase text-white textoTop" style="margin-top:50px;">Aprende un nuevo algoritmo</h1></center>
+                    <div class="title-line-4 white align-center"></div>
+                <center>
+                <div class="domain-search-holder">
+                    <form method="get" action="{{url('/search')}}" id="domain-search-holder">
+                        <div class="input_holder">
+                            <input class="input-text" name="input_search" id="dsearch" placeholder="Búsca algún algoritmo" type="search" required />
+                            <input id="searchsubmit" value="Buscar" style="background-color: black" type="submit" />
                         </div>
-                        <center>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <span class="left-move"><a class="text-white uppercase" href="{{URL('search?input_search=Segment')}}">Segment</a></span>
-                                </div>
-                                <div class="col-md-3">
-                                    <span class="left-move"><a class="text-white uppercase" href="{{URL('search?input_search=Fenwick')}}">Fenwick</a></span>
-                                </div>
-                                <div class="col-md-3">
-                                    <span class="right-move"><a class="text-white uppercase" href="{{URL('search?input_search=Búsqueda')}}">Búsqueda</a></span>
-                                </div>
-                                <div class="col-md-3">
-                                    <span class="right-move"><a class="text-white uppercase" href="{{URL('search?input_search=Kruskal')}}">Kruskal</a></span>
-                                </div>
-                            </div>
-                        </center>
-                        <!--<span class="text-white">Plataforma para el aprendizaje de algoritmos</span> </div>-->
-                    </div>
+                    </form>
                 </div>
-                <div class="row no-padding no-margin" style="margin:0px;padding:0px;">
-                    <div class="col-md-4 col-centered">
-                        <img src="{{ URL::asset('/images/best_user.png')}}" style="margin-top:-50px;width:50%;height:50%;"/>
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-top:-10px;padding:0px;">
-                        <div class="panel price panel-red no-margin no-padding">
-                            <div class="panel-body text-center">
-                                <p  style="font-size:30px">
-                                    <strong>Los mejores usuarios</strong>
-                                </p>
-                            </div>
-                            <ul class="list-group list-group-flush text-center">
-                                @foreach($users_table as $key => $user)
-                                    <div class="row" style="margin-top:5px;">
-                                        <div class="col-md-3">
-                                            @if(($key + 1) >= 1 && ($key +1) <= 3)
-                                                <img src="{{ URL::asset('/images/gold_medal.png')}}" style="width:35px;height:35px;"/>
-                                            @endif
-                                            @if(($key + 1) >= 4 && ($key +1) <= 7)
-                                                <img src="{{ URL::asset('/images/silver_medal.png')}}" style="width:35px;height:35px;"/>
-                                            @endif
-                                            @if(($key + 1) >= 8 && ($key +1) <= 10)
-                                                <img src="{{ URL::asset('/images/bronze_medal.png')}}" style="width:35px;height:35px;"/>
-                                            @endif
-                                        </div>
-                                        <div class="col-md-3">
-                                            <img src="{{$profile_picture[$key]}}" style="width:35px;height:35px;float:left;margin-right:5px;"/>
-                                            <h5 style="float:left;">{{$users_table[$key]}}</h5>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <h5 style="float:left;font-size:13px;">{{$school_name[$key]}}</h5>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <h5 style="font-size:13px;">{{$group_name[$key]}}</h5>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </ul>
-                            <div class="panel-footer">
-                                @if(!($user_id))
-                                    <a class="btn btn-lg btn-danger" href="{{URL('/login')}}">Registrate ahora</a>
-                                @endif
-                            </div>
+                <input class="input-text" style="visibility: hidden;" type="search"/>
+                </center>
+                <center>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <span class="left-move"><a class="text-white uppercase" href="{{URL('search?input_search=Segment')}}">Segment</a></span>
                         </div>
+                        <div class="col-md-3">
+                            <span class="left-move"><a class="text-white uppercase" href="{{URL('search?input_search=Fenwick')}}">Fenwick</a></span>
+                        </div>
+                        <div class="col-md-3">
+                            <span class="right-move"><a class="text-white uppercase" href="{{URL('search?input_search=Búsqueda')}}">Búsqueda</a></span>
+                        </div>
+                        <div class="col-md-3">
+                            <span class="right-move"><a class="text-white uppercase" href="{{URL('search?input_search=Kruskal')}}">Kruskal</a></span>
+                        </div>
+                    </div>
+                </center>
+            </div>
+        </div>
+        <div class="row no-padding no-margin" style="margin:0px;padding:0px;">
+            <div class="col-md-4 col-centered">
+                <center><img src="{{ URL::asset('/images/best_user.png')}}" style="width:50%;height:50%;"/></center>
+            </div>
+            <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 col-centered" style="margin-top:-10px;padding:0px;">
+                <div class="panel price panel-red no-margin no-padding">
+                    <div class="panel-body text-center">
+                        <p  style="font-size:30px">
+                            <strong>Los mejores usuarios</strong>
+                        </p>
+                    </div>
+                    <ul class="list-group list-group-flush text-center">
+                        @foreach($users_table as $key => $user)
+                            <div class="row" style="margin-top:5px;">
+                                <div class="col-md-3">
+                                    @if(($key + 1) >= 1 && ($key +1) <= 3)
+                                        <img src="{{ URL::asset('/images/gold_medal.png')}}" style="width:35px;height:35px;"/>
+                                    @endif
+                                    @if(($key + 1) >= 4 && ($key +1) <= 7)
+                                        <img src="{{ URL::asset('/images/silver_medal.png')}}" style="width:35px;height:35px;"/>
+                                    @endif
+                                    @if(($key + 1) >= 8 && ($key +1) <= 10)
+                                        <img src="{{ URL::asset('/images/bronze_medal.png')}}" style="width:35px;height:35px;"/>
+                                    @endif
+                                </div>
+                                <div class="col-md-3">
+                                    <img src="{{$profile_picture[$key]}}" style="width:35px;height:35px;float:left;margin-right:5px;"/>
+                                    <h5 style="float:left;">{{$users_table[$key]}}</h5>
+                                </div>
+                                <div class="col-md-3">
+                                    <h5 style="float:left;font-size:13px;">{{$school_name[$key]}}</h5>
+                                </div>
+                                <div class="col-md-3">
+                                    <h5 style="font-size:13px;">{{$group_name[$key]}}</h5>
+                                </div>
+                            </div>
+                        @endforeach
+                    </ul>
+                    <div class="panel-footer">
+                        @if(!($user_id))
+                            <a class="btn btn-lg btn-danger" href="{{URL('/login')}}">Registrate ahora</a>
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+
+
 @endsection
 @section('footer')
     @include('layouts/footer')
