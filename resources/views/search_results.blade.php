@@ -3,6 +3,7 @@
     $routeS             = "";
     $routeT             = "";
     $user = session('user');
+    $user_type = session('user_type');
 @endphp
 @extends('layouts.app')
 @section('title', 'Búsqueda')
@@ -41,7 +42,7 @@
                         <p style="font-size:30px;">{{$result -> topic_name}}</p>
                         @php
                             for($j = 0; $j < count($references[$key]); $j++){
-                                if($references[$key][$j] ->  type == 'C'){
+                                if($references[$key][$j] ->  type == 'C' && $user_type == 'student'){
                                     $routeQ = $references[$key][$j] -> approved_route;
                                 }
                                 if($references[$key][$j] ->  type == 'S'){
