@@ -11,3 +11,12 @@
 <!-- Simulation Space Style -->
 <link rel="stylesheet" href="{{ URL::asset('/css/colors/lightblue.css')}}" type="text/css" />
 <link rel="stylesheet" href="{{ URL::asset('/css/index.css')}}" type="text/css" />
+<style>
+    input.btn {
+        -webkit-user-select: initial;
+        -khtml-user-select: initial;
+        -moz-user-select: initial;
+        -ms-user-select: initial;
+        user-select: initial;
+    }
+</style>

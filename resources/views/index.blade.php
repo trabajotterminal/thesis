@@ -63,16 +63,16 @@
                         <center>
                             <div class="row">
                                 <div class="col-md-3">
-                                    <span class="left-move"><a class="text-white uppercase tag" href="{{URL('search?input_search=Segment')}}">Segment</a></span>
+                                    <span class="left-move"><a class="text-white uppercase" href="{{URL('search?input_search=Segment')}}">Segment</a></span>
                                 </div>
                                 <div class="col-md-3">
-                                    <span class="left-move"><a class="text-white uppercase tag" href="{{URL('search?input_search=Fenwick')}}">Fenwick</a></span>
+                                    <span class="left-move"><a class="text-white uppercase" href="{{URL('search?input_search=Fenwick')}}">Fenwick</a></span>
                                 </div>
                                 <div class="col-md-3">
-                                    <span class="right-move"><a class="text-white uppercase tag" href="{{URL('search?input_search=Búsqueda')}}">Búsqueda</a></span>
+                                    <span class="right-move"><a class="text-white uppercase" href="{{URL('search?input_search=Búsqueda')}}">Búsqueda</a></span>
                                 </div>
                                 <div class="col-md-3">
-                                    <span class="right-move"><a class="text-white uppercase tag" href="{{URL('search?input_search=Kruskal')}}">Kruskal</a></span>
+                                    <span class="right-move"><a class="text-white uppercase" href="{{URL('search?input_search=Kruskal')}}">Kruskal</a></span>
                                 </div>
                             </div>
                         </center>
