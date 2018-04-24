@@ -53,7 +53,7 @@
             $("#filter").val('0');
             $('#user_ranking_questionnaire').hide();
             $('#user_ranking_simulation').hide();
-            $('#user_ranking_theory').load('/admin/user/ranking/{{$user_id}}/theory',function(){}).hide().fadeIn();
+            $('#user_ranking_theory').load('{{URL('/admin/user/ranking/'.$user_id.'/theory')}}',function(){}).hide().fadeIn();
 
         });
         $('#filter').on('change', function() {
@@ -66,12 +66,12 @@
             if(index == 1){
                 $('#user_ranking_theory').hide();
                 $('#user_ranking_simulation').hide();
-                $('#user_ranking_questionnaire').load('/admin/user/ranking/{{$user_id}}/questionnaire',function(){}).hide().fadeIn();
+                $('#user_ranking_questionnaire').load('{{URL('/admin/user/ranking/'.$user_id'./questionnaire')}}',function(){}).hide().fadeIn();
             }
             if(index == 2){
                 $('#user_ranking_theory').hide();
                 $('#user_ranking_questionnaire').hide();
-                $('#user_ranking_simulation').load('/admin/user/ranking/{{$user_id}}/simulation',function(){}).hide().fadeIn();
+                $('#user_ranking_simulation').load('{{URL('/admin/user/ranking/'.$user_id.'/simulation')}}',function(){}).hide().fadeIn();
             }
         })
     </script>

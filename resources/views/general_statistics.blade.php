@@ -63,9 +63,9 @@
             $('#users_ranking_container').hide();
             $('#groups_ranking_container').hide();
             $('#schools_ranking_container').hide();
-            $('#users_ranking').load('/admin/users/ranking',function(){}).hide().fadeIn();
-            $('#groups_ranking').load('/admin/groups/ranking',function(){}).hide().fadeIn();
-            $('#schools_ranking').load('/admin/schools/ranking',function(){}).hide().fadeIn();
+            $('#users_ranking').load('{{URL('/admin/users/ranking')}}',function(){}).hide().fadeIn();
+            $('#groups_ranking').load('{{URL('/admin/groups/ranking')}}',function(){}).hide().fadeIn();
+            $('#schools_ranking').load('{{URL('/admin/schools/ranking')}}',function(){}).hide().fadeIn();
             $('#users_ranking_container').fadeIn(1000);
         });
 

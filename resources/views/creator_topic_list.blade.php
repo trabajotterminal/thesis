@@ -175,7 +175,7 @@
                     dataType: 'json',
                     success: function(data) {
                         if($.isEmptyObject(data.error)){
-                            $("#topic_list").fadeOut(300).load("/creator/topics/list", function(response, status, xhr) {
+                            $("#topic_list").fadeOut(300).load("{{URL('/creator/topics/list')}}", function(response, status, xhr) {
                                 $(this).fadeIn(500);
                             });
                         }else{
@@ -210,7 +210,7 @@
             data: {"topic_name" : topic_name},
             dataType: 'json',
             success: function( _response ){
-                $("#topic_list").fadeOut(300).load("/creator/topics/list", function(response, status, xhr) {
+                $("#topic_list").fadeOut(300).load("{{URL('/creator/topics/list')}}", function(response, status, xhr) {
                     $(this).fadeIn(500);
                 });
             },
@@ -239,7 +239,7 @@
             data: {"topic_name" : topic_name},
             dataType: 'text',
             success: function( _response ){
-                $("#topic_list").fadeOut(300).load("/creator/topics/list", function(response, status, xhr) {
+                $("#topic_list").fadeOut(300).load("{{URL('/creator/topics/list')}}", function(response, status, xhr) {
                     $(this).fadeIn(500);
                 });
             },

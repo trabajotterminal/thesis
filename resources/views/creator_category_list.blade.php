@@ -92,7 +92,7 @@
             data: {"category_name" : category_name},
             dataType: 'json',
             success: function( _response ){
-                $("#category_list").fadeOut(300).load("/creator/categories/list", function(response, status, xhr) {
+                $("#category_list").fadeOut(300).load("{{URL('/creator/categories/list')}}", function(response, status, xhr) {
                     $(this).fadeIn(500);
                 });
             },
@@ -114,7 +114,7 @@
             data: {"category_name" : category_name},
             dataType: 'text',
             success: function( _response ){
-                $("#category_list").fadeOut(300).load("/creator/categories/list", function(response, status, xhr) {
+                $("#category_list").fadeOut(300).load("{{URL('/creator/categories/list')}}", function(response, status, xhr) {
                     $(this).fadeIn(500);
                 });
             },
@@ -140,7 +140,7 @@
             dataType: 'json',
             success: function(data) {
                 if($.isEmptyObject(data.error)){
-                    $("#category_list").fadeOut(300).load("/creator/categories/list", function(response, status, xhr) {
+                    $("#category_list").fadeOut(300).load("{{URL('/creator/categories/list')}}", function(response, status, xhr) {
                         $(this).fadeIn(500);
                     });
                     var text = $('#editedText').val();

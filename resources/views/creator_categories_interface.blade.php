@@ -45,7 +45,7 @@
     @include('layouts/statics-js-1')
     <script>
         $(document).ready(function(){
-            $('#category_list').load('/creator/categories/list',function(){}).hide().fadeIn();
+            $('#category_list').load('{{URL('/creator/categories/list')}}',function(){}).hide().fadeIn();
         });
 
         $("#addCategory").submit(function(e){
@@ -61,7 +61,7 @@
                 dataType: 'json',
                 success: function(data) {
                     if($.isEmptyObject(data.error)){
-                        $("#category_list").fadeOut(300).load("/creator/categories/list", function(response, status, xhr) {
+                        $("#category_list").fadeOut(300).load("{{URL('/creator/categories/list')}}", function(response, status, xhr) {
                             $(this).fadeIn(500);
                         });
                         $("input[name='category_name']").val('');

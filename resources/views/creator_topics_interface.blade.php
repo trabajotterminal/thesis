@@ -81,7 +81,7 @@
 @section('statics-js')
     <script>
         $(document).ready(function(){
-            $('#topic_list').load('/creator/topics/list',function(){}).hide().fadeIn();
+            $('#topic_list').load('{{URL('/creator/topics/list')}}',function(){}).hide().fadeIn();
         });
         $("#addTopic").submit(function(e){
             e.preventDefault();
@@ -98,7 +98,7 @@
                 dataType: 'json',
                 success: function(data) {
                     if($.isEmptyObject(data.error)){
-                        $("#topic_list").fadeOut(300).load("/creator/topics/list", function(response, status, xhr) {
+                        $("#topic_list").fadeOut(300).load("{{URL('/creator/topics/list')}}", function(response, status, xhr) {
                             $(this).fadeIn(500);
                         });
                         $("input[name='topic_name']").val('');
