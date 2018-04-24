@@ -123,6 +123,12 @@
                                 <li><a href="{{URL('/logout')}}" class="dropdown-toggle"  {{$menu_classes[3]}}">Cerrar Sesión</a></li>
                             @endif
                             @if($user_type == 'admin')
+                                    <li class="dropdown"> <a href="#" class="dropdown-toggle  {{$menu_classes[1]}}">Administrar</a>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li> <a href="{{URL('/admin/creators')}}">Creadores de contenido</a> </li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="{{URL('/admin/statistics')}}" class="dropdown-toggle  {{$menu_classes[2]}}">Ver estadisticas</a></li>
                                     <li class="dropdown">
                                         <a href="#" class="dropdown-toggle">Notificaciones <b>{{$unread_notifications}}</b></a>
                                         <ul class="dropdown-menu notify-drop">
@@ -176,7 +182,6 @@
                                             </div>
                                         </ul>
                                     </li>
-                                    <li><a href="{{URL('/admin/statistics')}}" class="dropdown-toggle  {{$menu_classes[2]}}">Ver estadisticas</a></li>
                                     <li><a href="{{URL('/logout')}}" class="dropdown-toggle"  {{$menu_classes[3]}}">Cerrar Sesión</a></li>
                             @endif
                         @else

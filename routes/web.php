@@ -32,6 +32,8 @@ Route::post('/questionnaire/answers', 'Questionnaire@getAnswers') -> middleware(
 Route::post('/user/updateInfo', 'User@updateInfo') -> middleware('checkIfIsStudent');
 
 Route::group(['prefix' => 'admin', 'middleware' => 'checkIfIsAdmin'], function(){
+    Route::get('/creators', 'Admin@creatorsInterface');
+    Route::get('/creator/list', 'Admin@creatorList');
     Route::get('/notification/{id}', 'Admin@viewNotification');
     Route::get('/notification/theory/{id}', 'Admin@viewTheoryNotification');
     Route::get('/notification/questionnaire/{id}', 'Admin@viewQuestionnaireNotification');
@@ -40,6 +42,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'checkIfIsAdmin'], function()
     Route::post('/notification/theory/resolve', 'Admin@resolveTheoryNotification');
     Route::post('/notification/simulation/resolve', 'Admin@resolveSimulationNotification');
     Route::post('/notification/questionnaire/resolve', 'Admin@resolveQuestionnaireNotification');
+    Route::post('/creator/register', 'Admin@registerCreator');
     Route::get('/statistics', 'Admin@statistics');
     Route::get('/users/ranking', 'Admin@usersRanking');
     Route::get('/groups/ranking', 'Admin@groupsRanking');
