@@ -25,7 +25,7 @@
         <div class="navbar lightblue-3 navbar-default yamm">
             <div class="navbar-header">
                 <button type="button" data-toggle="collapse" data-target="#navbar-collapse-grid" class="navbar-toggle two three"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-                <a href="{{URL('/')}}" class="navbar-brand less-top-padding"><!--<img src="/images/logoEscom.png" style="width:80px;height:50px;"alt=""/>--></a> </div>
+                <a href="{{URL('/')}}" class="navbar-brand less-top-padding"><img src="{{URL::asset('/images/logo-header.png')}}" alt=""/></a> </div>
                 <div id="navbar-collapse-grid" class="navbar-collapse collapse pull-right">
                     <ul class="nav pink-3 navbar-nav">
                         <li><a href="{{URL('/')}}" class="dropdown-toggle {{$menu_classes[0]}}">Inicio</a></li>
