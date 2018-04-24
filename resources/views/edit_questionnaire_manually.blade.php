@@ -297,7 +297,7 @@
                 data: {"xmlContent": xmlContent, "topic_name": topic_name},
                 dataType: 'json',
                 success: function( _response ){
-                    window.location.href = "/creator/topic/{{$topic_name}}";
+                    window.location.href = "{{URL('/creator/topic/'. $topic_name)}}";
                 },
                 error: function(xhr, status, error) {
                     alert(error);

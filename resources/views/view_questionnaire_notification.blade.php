@@ -123,7 +123,7 @@
                 url: '{{URL('admin/notification/questionnaire/resolve')}}',
                 datatype: "json",
                 success: function(data) {
-                    window.location = "/";
+                    window.location = "{{URL('/')}}";
                 }
             });
             return false;
