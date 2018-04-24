@@ -84,7 +84,7 @@
                 <div class="panel price panel-red no-margin no-padding">
                     <div class="panel-body text-center">
                         <p  style="font-size:30px">
-                            <strong>Los mejores usuarios</strong>
+                            Mejores usuarios
                         </p>
                     </div>
                     <ul class="list-group list-group-flush text-center">
@@ -116,7 +116,7 @@
                     </ul>
                     <div class="panel-footer">
                         @if(!($user_id))
-                            <a class="btn btn-lg btn-danger" href="{{URL('/login')}}">Registrate ahora</a>
+                            <center><a class="btn btn-lg btn-danger" href="{{URL('/login')}}">Registrate ahora</a></center>
                         @endif
                     </div>
                 </div>
