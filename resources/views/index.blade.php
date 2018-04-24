@@ -51,7 +51,7 @@
                 <div class="domain-search-holder">
                     <form method="get" action="{{url('/search')}}" id="domain-search-holder">
                         <div class="input_holder">
-                            <input class="input-text" name="input_search" id="dsearch" placeholder="Búsca algún algoritmo" type="search" required />
+                            <input class="input-text" name="input_search" id="dsearch" placeholder="Búsca algún algoritmo" type="search" style="width:80%;"required />
                             <input id="searchsubmit" value="Buscar" style="background-color: black" type="submit" />
                         </div>
                     </form>
