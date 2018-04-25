@@ -51,20 +51,21 @@
                                     </div>
                                     <p style="font-size:30px;">{{$topics[$i] -> approved_name}}</p>
                                     <div class="row" style="width:100%;margin-left:50px;margin-top:40px;">
+
                                         @if($count_reference == 3)
                                             @if(strlen($routeT))
-                                                <div class="col-md-3">
+                                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                                     <center><p><a href={{ url('/theory', $topics[$i] -> approved_name) }}>Teoría</a></p></center>
                                                 </div>
                                             @endif
                                             @if(strlen($routeS))
-                                                <div class="col-md-3">
+                                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                                     <center><p><a href={{ url('/simulation', $topics[$i] -> approved_name) }}>Simulación</a></p></center>
                                                 </div>
                                             @endif
                                             @if(strlen($routeQ))
                                                 @if($user)
-                                                    <div class="col-md-3">
+                                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                                         <center><p><a href={{ url('/questionnaire', $topics[$i] -> approved_name) }}>Cuestionarios</a></p></center>
                                                     </div>
                                                 @endif
@@ -72,18 +73,18 @@
                                         @endif
                                         @if($count_reference == 2)
                                             @if(strlen($routeT))
-                                                <div class="col-md-3">
+                                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                                     <center><p><a href={{ url('/theory', $topics[$i] -> approved_name) }}>Teoría</a></p></center>
                                                 </div>
                                             @endif
                                             @if(strlen($routeS))
-                                                <div class="col-md-3">
+                                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                                     <center><p><a href={{ url('/simulation', $topics[$i] -> approved_name) }}>Simulación</a></p></center>
                                                 </div>
                                             @endif
                                             @if(strlen($routeQ))
                                                 @if($user)
-                                                    <div class="col-md-3">
+                                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 ">
                                                         <center><p><a href={{ url('/questionnaire', $topics[$i] -> approved_name) }}>Cuestionarios</a></p></center>
                                                     </div>
                                                 @endif
@@ -91,23 +92,24 @@
                                         @endif
                                         @if($count_reference == 1)
                                             @if(strlen($routeT))
-                                                <div class="col-md-3">
+                                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                                     <center><p><a href={{ url('/theory', $topics[$i] -> approved_name) }}>Teoría</a></p></center>
                                                 </div>
                                             @endif
                                             @if(strlen($routeS))
-                                                <div class="col-md-3">
+                                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                                     <center><p><a href={{ url('/simulation', $topics[$i] -> approved_name) }}>Simulación</a></p></center>
                                                 </div>
                                             @endif
                                             @if(strlen($routeQ))
                                                 @if($user)
-                                                    <div class="col-md-3">
+                                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                                         <center><p><a href={{ url('/questionnaire', $topics[$i] -> approved_name) }}>Cuestionarios</a></p></center>
                                                     </div>
                                                 @endif
                                             @endif
                                         @endif
+
                                     </div>
                                 </div>
                             </div>

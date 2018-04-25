@@ -55,18 +55,18 @@
                         @endphp
                         <div class="row" style="width:110%;margin-left:50px;margin-top:40px;">
                             @if(strlen($routeT))
-                                <div class="col-md-3">
+                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                     <center><p><a href={{ url('/theory', $result -> topic_name) }}>Teoría</a></p></center>
                                 </div>
                             @endif
                             @if(strlen($routeS))
-                                <div class="col-md-3">
+                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                     <center><p><a href={{ url('/simulation', $result -> topic_name) }}>Simulación</a></p></center>
                                 </div>
                             @endif
                             @if(strlen($routeQ))
                                 @if($user)
-                                    <div class="col-md-3">
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                         <center><p><a href={{ url('/questionnaire', $result -> topic_name) }}>Cuestionarios</a></p></center>
                                     </div>
                                 @endif
