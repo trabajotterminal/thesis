@@ -16,7 +16,6 @@ Route::group(['middleware' => 'web'], function(){
     Route::post('/theory/updateGlance', 'Theory@updateGlance');
     Route::post('/simulation/updateGlance', 'Simulation@updateGlance');
     Route::get('/startProduction', function(){
-        Artisan::call('migrate:refresh');
         Artisan::call('storage:link');
         Artisan::call('db:seed');
     });
