@@ -10,10 +10,10 @@
 @if($topics)
     <section>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                 <h5 style="margin-left:15px;">Nombre</h5>
             </div>
-            <div class="col-md-4">
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                 <h5>Categoria</h5>
             </div>
         </div>
@@ -26,7 +26,7 @@
                         <form action ="{{url('creator/topics/edit')}}" method="post" id="editTopic_{{($key + 1)}}">
                             {{(csrf_field())}}
 
-                            <div class="col-md-4">
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                 <h3 class="editable-text" data-id="{{$topic}}">{{$topic}}</h3>
                                 @if($has_been_approved_once[$key])
                                     <a href="{{url('/creator/topic/'.$topic)}}">
@@ -35,12 +35,12 @@
                                     </a>
                                 @endif
                             </div>
-                            <div class="col-md-4" >
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" >
                                 <h3 class="editable-select" data-id="{{$topic}}">{{$topics_categories[$topic]}}</h3>
                                 <input type="submit" style="position: absolute; left: -9999px"/>
                             </div>
                         </form>
-                        <div class="col-md-4" >
+                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" >
                             @if($is_approval_pending[$key])
                                 <span style="float:right;"><u>El tema está en proceso de aprobación.</u></span>
                             @else
@@ -67,7 +67,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-7">
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
                             <span class="editable-tags" data-id="{{$topic}}" data-value="{{$topics_tags[$key]}}" style="color:black;">
                                     @if(count($topics_tags[$key]) > 0)
                                     Tags:

@@ -113,9 +113,19 @@
     <script src="{{URL::asset('/js/owl-carousel/custom.js')}}"></script>
     <script>
         $(document).ready(function() {
+            var goRegister = '<? echo json_encode($goRegister) ?>';
+            goRegister = (goRegister == 'true');
             var carousel = $("#owl-demo3");
-            var indexPage = <?php echo session('indexPage') ?>;
-            carousel.trigger('owl.jumpTo', indexPage)
+            var indexPage = '<?php echo session('indexPage') ? session('indexPage') : -1 ?>';
+            indexPage = parseInt(indexPage);
+            if(goRegister) {
+                carousel.trigger('owl.jumpTo', '1');
+            }
+            else{
+                if (indexPage != -1){
+                    carousel.trigger('owl.jumpTo', indexPage)
+                }
+            }
         });
     </script>
 @endsection

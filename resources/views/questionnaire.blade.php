@@ -12,7 +12,6 @@
         foreach($xml->children()[$tries] as $index => $bloque) {
             array_push($questions, $bloque -> pregunta);
             array_push($feedbacks, $bloque -> retroalimentacion);
-            array_push($input_images, $bloque -> imagen);
             $option_list = [];
             $j = 0;
             foreach($bloque -> opcion  as $option){
@@ -111,7 +110,7 @@
         var answers     = [];
         var questions   = [];
         var feedbacks   = [];
-
+        $("img").addClass("img-responsive");
         $("#questionnaireDone").submit(function(e) {
             var number_of_questions = $('#numberOfQuestions').val();
             for(i = 0; i < number_of_questions; i++) {

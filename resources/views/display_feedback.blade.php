@@ -95,4 +95,7 @@
     <script src="{{ asset('/js/questionnaire_simulation_provider.js')}}"></script>
     <script src="{{ asset('/js/owl-carousel/owl.carousel.js')}}"></script>
     <script src="{{ asset('/js/owl-carousel/custom.js')}}"></script>
+    <script>
+        $("img").addClass("img-responsive");
+    </script>
 @endsection

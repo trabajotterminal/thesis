@@ -9,7 +9,7 @@
 @section('content')
     <h1 style="margin-left:20px;margin-top:20px;">Creadores de contenido</h1>
     <section>
-        <div class="container" id="creator_list" style="min-width: 600px;min-height:470px;"></div>
+        <div class="container" id="creator_list" style="min-height:470px;"></div>
     </section>
     <section class="sec-padding section-dark">
         <div class="container">

@@ -37,29 +37,37 @@
 @section('content')
     <h1 style="margin-left:20px;margin-top:20px;">Mis temas</h1>
     <section>
-        <div class="container" id="topic_list" style="min-width: 600px;min-height:470px;"></div>
+        <div class="container" id="topic_list" style="min-height:470px;"></div>
     </section>
     <section class="sec-padding section-dark">
         <div class="container">
             <div class="row">
-                <div class="col-xs-12 text-center">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
                     <h1 class="dosis text-white lspace-sm">Agregar un nuevo tema</h1>
                     <p class="sub-title text-white"></p>
                 </div>
                 <div class="clearfix"></div>
-                <div class="col-md-12">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="input_holder">
-                        <form id="addTopic" action="{{url('creator/topics/register')}}">
-                            <input style="width:50%;" class="email_input" type="search" name="topic_name" placeholder="Ingresa el nombre del tema">
-                            <select id="topicList" style="width:30%; margin-right:20px;" class="email_input margin-left-3">
-                                <option selected>Selecciona la categoria</option>
-                                @foreach($categories as $category)
-                                    <option value="{{$category}}">{{$category}}</option>
-                                @endforeach
-                            </select>
-                            <input style="width:15%;" value="Agregar" class="email_submit" type="submit">
-                        </form>
-                        <br><br><br><br>
+                        <div class="row">
+                            <form id="addTopic" action="{{url('creator/topics/register')}}">
+                                <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                                    <input  class="email_input" type="search" name="topic_name" style="width:100%;" placeholder="Ingresa el nombre del tema">
+                                </div>
+                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                    <select  id="topicList" style="margin-right:20px;width:100%;"  class="email_input margin-left-3">
+                                        <option selected>Selecciona la categoria</option>
+                                        @foreach($categories as $category)
+                                            <option value="{{$category}}">{{$category}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                    <input  value="Agregar" class="email_submit btn btn-primary" style="width:80%;float:right; word-wrap: break-word;font-size:10px;"  type="submit">
+                                </div>
+                            </form>
+                            <br><br><br><br>
+                        </div>
                         <form>
                             <p style="color:white;">Tags:</p>
                             <ul id="allowSpacesTags">

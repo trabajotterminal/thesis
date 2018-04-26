@@ -132,6 +132,9 @@
 @section('statics-css')
     @include('layouts/statics-css-1')
     <link rel="stylesheet" href="{{ asset('/css/monokai-sublime.css') }}" />
+    <style>
+
+    </style>
 @endsection
 
 @section('menu')
@@ -212,6 +215,7 @@
         }
 
         $(document).ready(function() {
+            $("img").addClass("img-responsive");
             var hasVerticalScroll = false;
             if ($("body").height() > $(window).height()) {
                 hasVerticalScroll = true;

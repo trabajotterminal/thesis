@@ -90,33 +90,39 @@
                     <ul class="list-group list-group-flush text-center">
                         @foreach($users_table as $key => $user)
                             <div class="row" style="margin-top:5px;">
-                                <div class="col-md-3">
+                                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
                                     @if(($key + 1) >= 1 && ($key +1) <= 3)
-                                        <img src="{{ URL::asset('/images/gold_medal.png')}}" style="width:35px;height:35px;"/>
+                                        <img src="{{ URL::asset('/images/gold_medal.png')}}" style="width:25px;height:25px;"/>
                                     @endif
                                     @if(($key + 1) >= 4 && ($key +1) <= 7)
-                                        <img src="{{ URL::asset('/images/silver_medal.png')}}" style="width:35px;height:35px;"/>
+                                        <img src="{{ URL::asset('/images/silver_medal.png')}}" style="width:25px;height:25px;"/>
                                     @endif
                                     @if(($key + 1) >= 8 && ($key +1) <= 10)
-                                        <img src="{{ URL::asset('/images/bronze_medal.png')}}" style="width:35px;height:35px;"/>
+                                        <img src="{{ URL::asset('/images/bronze_medal.png')}}" style="width:25px;height:25px;"/>
                                     @endif
                                 </div>
-                                <div class="col-md-3">
-                                    <img src="{{$profile_picture[$key]}}" style="width:35px;height:35px;float:left;margin-right:5px;"/>
-                                    <h5 style="float:left;">{{$users_table[$key]}}</h5>
+                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                    <center>
+                                        <img src="{{$profile_picture[$key]}}" style="width:35px;height:35px;margin-right:5px;"/>
+                                        <h5 style="font-size:13px;white-space: normal;">{{$users_table[$key]}}</h5>
+                                    </center>
                                 </div>
-                                <div class="col-md-3">
-                                    <h5 style="float:left;font-size:13px;">{{$school_name[$key]}}</h5>
+                                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                    <center>
+                                        <h5 style="font-size:13px;white-space: normal;">{{$school_name[$key]}}</h5>
+                                    </center>
                                 </div>
-                                <div class="col-md-3">
-                                    <h5 style="font-size:13px;">{{$group_name[$key]}}</h5>
+                                <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                                    <center>
+                                        <h5 style="font-size:13px;white-space: normal;">{{$group_name[$key]}}</h5>
+                                    </center>
                                 </div>
                             </div>
                         @endforeach
                     </ul>
                     <div class="panel-footer">
                         @if(!($user_id))
-                            <center><a class="btn btn-lg btn-danger" href="{{URL('/login')}}">Registrate ahora</a></center>
+                            <center><a class="btn btn-lg btn-danger" href="{{URL('/login?register=true')}}">Registrate ahora</a></center>
                         @endif
                     </div>
                 </div>

@@ -4,14 +4,14 @@
             <div class="pagenation-holder">
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                             <form action ="{{url('creator/categories/edit')}}" method="post" class="editText">
-                                <h3 class="editable-text" data-id="{{$name}}">{{$name}}</h3>
+                                <h3 class="editable-text" data-id="{{$name}}" style="white-space: normal;">{{$name}}</h3>
                                 <input type="submit" style="position: absolute; left: -9999px"/>
                             </form>
                             <div id="error_{{($key + 1)}}" style="display:none;color:red;"><ul></ul></div>
                         </div>
-                        <div class="col-md-6" >
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                             @if(!$is_approval_pending[$key])
                                 <div class="input-group" style="float:right;">
                                     <input name="submit" class="editButton btn btn-primary" value="Editar" type="submit" data-id="{{$name}}" data-key="{{($key + 1)}}">

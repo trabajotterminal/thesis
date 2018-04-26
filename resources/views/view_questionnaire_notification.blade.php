@@ -30,10 +30,9 @@
 @section('title', 'Revisión.')
 @section('statics-css')
     @include('layouts/statics-css-2')
-    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_CHTML"></script>
-    <link rel="stylesheet" type="text/css" href="/js/smart-forms/smart-forms.css">
-    <link rel="stylesheet" href="/js/masterslider/style/masterslider.css" />
-    <link href="/js/owl-carousel/owl.carousel.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{URL::asset('/js/smart-forms/smart-forms.css')}}">
+    <link rel="stylesheet" href="{{URL::asset('/js/masterslider/style/masterslider.css')}}" />
+    <link href="{{URL::asset('/js/owl-carousel/owl.carousel.css')}}" rel="stylesheet">
     <script src="{{ asset('/js/cytoscape.js')}}"></script>
     <style>
         body{
@@ -104,10 +103,12 @@
 
 @section('statics-js')
     @include('layouts/statics-js-2')
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_CHTML"></script>
     <script src="{{ asset('/js/questionnaire_simulation_provider.js')}}"></script>
     <script src="{{ asset('/js/owl-carousel/owl.carousel.js')}}"></script>
     <script src="{{ asset('/js/owl-carousel/custom.js')}}"></script>
     <script>
+        $("img").addClass("img-responsive");
         var action  = "";
         var message = $('textarea[name="comment"]').val();
         var notification_id = <?php echo json_encode($notification -> id) ?>;

@@ -414,7 +414,12 @@ class Creator extends Controller{
                 }
                 $destinationPath = public_path('storage/' . $category_path . '/' . $topic_path . '/Teoria/changes');
                 $xml = new \DOMDocument();
-                $valid_format   = $xml -> load($request -> input_file);
+                $valid_format   = true;
+                try {
+                    $xml->load($request->input_file);
+                } catch (\Exception $e) {
+                    $valid_format = false;
+                }
                 $valid_syntax   = true;
                 try {
                     $xml->schemaValidate(public_path().'/validator_theory.xsd');
@@ -531,7 +536,12 @@ class Creator extends Controller{
                 }
                 $destinationPath = public_path('storage/' . $category_path . '/' . $topic_path . '/Cuestionario/changes');
                 $xml = new \DOMDocument();
-                $valid_format   = $xml -> load($request -> input_file);
+                $valid_format   = true;
+                try {
+                    $xml->load($request->input_file);
+                } catch (\Exception $e) {
+                    $valid_format = false;
+                }
                 $valid_syntax   = true;
                 try {
                     $xml->schemaValidate(public_path().'/validator_questionnaire.xsd');
@@ -593,7 +603,12 @@ class Creator extends Controller{
                 }
                 $destinationPath = public_path('storage/' . $category_path . '/' . $topic_path . '/Teoria/changes');
                 $xml = new \DOMDocument();
-                $valid_format   = $xml -> load($request -> input_file);
+                $valid_format   = true;
+                try {
+                    $xml->load($request->input_file);
+                } catch (\Exception $e) {
+                    $valid_format = false;
+                }
                 $valid_syntax   = true;
                 try {
                     $xml->schemaValidate(public_path().'/validator_theory.xsd');
@@ -707,7 +722,12 @@ class Creator extends Controller{
                 }
                 $destinationPath = public_path('storage/' . $category_path . '/' . $topic_path . '/Cuestionario/changes');
                 $xml = new \DOMDocument();
-                $valid_format   = $xml -> load($request -> input_file);
+                $valid_format   = true;
+                try {
+                    $xml->load($request->input_file);
+                } catch (\Exception $e) {
+                    $valid_format = false;
+                }
                 $valid_syntax   = true;
                 try {
                     $xml->schemaValidate(public_path().'/validator_questionnaire.xsd');
