@@ -102,13 +102,15 @@
     $T = substr($T, strpos($T, '</titulo>') + 9);
 
     $T = str_replace(']]>', '', $T);
+    $T = str_replace('<![CDATA[', '', $T);
+
     $T = str_replace('<subtitulo>', '<h4>', $T);
     $T = str_replace('</subtitulo>', '</h4>', $T);
 
-    $T = str_replace('<parrafo><![CDATA[', '<p>', $T);
+    $T = str_replace('<parrafo>', '<p>', $T);
     $T = str_replace('</parrafo>', '</p><br>', $T);
 
-    $T = preg_replace('/(<codigo lenguaje=".*?.">)/', '<pre><code>', $T);
+    $T = str_replace('<codigo>', '<pre><code>', $T);
     $T = str_replace('</codigo>', '</pre></code><br>', $T);
 
     $T = str_replace('<referencia>', '', $T);

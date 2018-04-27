@@ -8,6 +8,7 @@
     $options        = [];
     $right_answers  = [];
     $i = 0;
+    $tries = (int)$tries;
     if($tries < $xml['cuestionarios']){
         foreach($xml->children()[$tries] as $index => $bloque) {
             array_push($questions, $bloque -> pregunta);

@@ -397,7 +397,7 @@
                     xmlContent += ']]></parrafo>\n'
                 }
                 if (elements[i] == 'code') {
-                    xmlContent += '<codigo lenguaje="c++"><![CDATA[\n';
+                    xmlContent += '<codigo><![CDATA[\n';
                     xmlContent += editors[++c].getValue();
                     xmlContent += ']]></codigo>\n'
                 }
