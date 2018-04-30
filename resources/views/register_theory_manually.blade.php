@@ -194,6 +194,32 @@
         $("#addCode").click(function() {
             var elm =   '<div class="col-md-12 margin-top3">\n'   +
                             '<h3> Código</h3>' +
+                            '<span>Lenguaje: </span> ' +
+                            '<select style="width: 300px;" id="language_'+(code + 1)+'" >\n' +
+                            '<option value="C">C</option>\n' +
+                            '<option value="C++">C++</option>\n' +
+                            '<option value="C#">C#</option>\n' +
+                            '<option value="Go">Go</option>\n' +
+                            '<option value="Haskell">Haskell</option>\n' +
+                            '<option value="Java">Java</option>\n' +
+                            '<option value="Kotlin">Kotlin</option>\n' +
+                            '<option value="OCaml">OCaml</option>\n' +
+                            '<option value="Delphi">Delphi</option>\n' +
+                            '<option value="Pascal">Pascal</option>\n' +
+                            '<option value="Perl">Perl</option>\n' +
+                            '<option value="PHP">PHP</option>\n' +
+                            '<option value="Python">Python</option>\n' +
+                            '<option value="PyPy">PyPy</option>\n' +
+                            '<option value="Ruby">Ruby</option>\n' +
+                            '<option value="Rust">Rust</option>\n' +
+                            '<option value="Scala">Scala</option>\n' +
+                            '<option value="Javascript">Javascript</option>\n' +
+                            '<option value="Opencobol">Opencobol</option>\n' +
+                            '<option value="Factor">Factor</option>\n' +
+                            '<option value="Secret">Secret</option>\n' +
+                            '<option value="Roco">Roco</option>\n' +
+                            '<option value="Ada">Ada</option>\n' +
+                            '</select><br><br>\n' +
                             '<div id="code_'+(code + 1)+'" style="width:87%;height:auto; line-height:1px;">' +
                         '</div>';
             $(elm).hide().appendTo('#questionnaire').fadeIn();
@@ -238,8 +264,13 @@
                     xmlContent += ']]></parrafo>\n'
                 }
                 if (elements[i] == 'code') {
-                    xmlContent += '<codigo"><![CDATA[\n';
-                    xmlContent += editors[++c].getValue();
+                    xmlContent += '<codigo>\n';
+                    xmlContent += '<codigo-lenguaje>';
+                    xmlContent += $( "#language_" + (c + 1)).val();
+                    xmlContent += '</codigo-lenguaje>\n';
+                    xmlContent += '<codigo-contenido>' + '<![CDATA[\n';
+                    xmlContent +=  editors[++c].getValue();
+                    xmlContent += '</codigo-contenido>\n';
                     xmlContent += ']]></codigo>\n'
                 }
                 if(elements[i] == 'reference'){

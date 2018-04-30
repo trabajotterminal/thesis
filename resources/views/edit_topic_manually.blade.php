@@ -22,8 +22,11 @@
         $paragraph_closing  = [];
         $paragraph_content  = [];
         $code_opening       = [];
+        $language_opening   = [];
         $code_closing       = [];
+        $language_closing   = [];
         $code_content       = [];
+        $language_content   = [];
         $code_tag_end       = [];
         $reference_title_opening = [];
         $reference_title_closing = [];
@@ -37,10 +40,12 @@
         $title_closing          = getSubstringArray('</titulo>', $text);
         $subtitle_opening       = getSubstringArray('<subtitulo>', $text);
         $subtitle_closing       = getSubstringArray('</subtitulo>', $text);
-        $paragraph_opening      = getSubstringArray('<parrafo><![CDATA[', $text);
+        $paragraph_opening      = getSubstringArray('<parrafo>', $text);
         $paragraph_closing      = getSubstringArray('</parrafo>', $text);
-        $code_opening           = getSubstringArray("<codigo>", $text);
-        $code_closing           = getSubstringArray('</codigo>', $text);
+        $code_opening           = getSubstringArray("<codigo-contenido>", $text);
+        $language_opening       = getSubstringArray("<codigo-lenguaje>", $text);
+        $code_closing           = getSubstringArray('</codigo-contenido>', $text);
+        $language_closing       = getSubstringArray("</codigo-lenguaje>", $text);
         $reference_title_opening = getSubstringArray('<encabezado>', $text);
         $reference_title_closing = getSubstringArray('</encabezado>', $text);
         $reference_link_opening  = getSubstringArray('<link>', $text);
@@ -55,7 +60,10 @@
             $paragraph_content[$i] = substr($text, $paragraph_opening[$i] + strlen('<parrafo>'), $paragraph_closing[$i] - $paragraph_opening[$i] -  strlen('</parrafo>') + 1);
         }
         for($i = 0; $i < count($code_opening); $i++){
-            $code_content[$i] = substr($text, $code_opening[$i] + strlen('<codigo>'), $code_closing[$i] - $code_opening[$i] -  strlen('</codigo>') + 1);
+            $code_content[$i] = substr($text, $code_opening[$i] + strlen('<codigo-contenido>'), $code_closing[$i] - $code_opening[$i] -  strlen('</codigo-contenido>') + 1);
+        }
+        for($i = 0; $i < count($code_opening); $i++){
+            $language_content[$i] = substr($text, $language_opening[$i] + strlen('<codigo-lenguaje>'), $language_closing[$i] - $language_opening[$i] -  strlen('</codigo-lenguaje>') + 1);
         }
         for($i = 0; $i < count($reference_title_opening); $i++){
             $reference_title_content[$i] = substr($text, $reference_title_opening[$i] + strlen('<encabezado>'), $reference_title_closing[$i] - $reference_title_opening[$i] -  strlen('</encabezado>') + 1);
@@ -149,11 +157,39 @@
                             @if(in_array($value, $code_opening))
                                 <div class="col-md-12 margin-top3">
                                     <h3> Código</h3>
+                                    <select style="width: 300px;" id="language_{{($codes + 1)}}">
+                                    <option value="C">C</option>
+                                    <option value="C++">C++</option>
+                                    <option value="C#">C#</option>
+                                    <option value="Go">Go</option>
+                                    <option value="Haskell">Haskell</option>
+                                    <option value="Java">Java</option>
+                                    <option value="Kotlin">Kotlin</option>
+                                    <option value="OCaml">OCaml</option>
+                                    <option value="Delphi">Delphi</option>
+                                    <option value="Pascal">Pascal</option>
+                                    <option value="Perl">Perl</option>
+                                    <option value="PHP">PHP</option>
+                                    <option value="Python">Python</option>
+                                    <option value="PyPy">PyPy</option>
+                                    <option value="Ruby">Ruby</option>
+                                    <option value="Rust">Rust</option>
+                                    <option value="Scala">Scala</option>
+                                    <option value="Javascript">Javascript</option>
+                                    <option value="Opencobol">Opencobol</option>
+                                    <option value="Factor">Factor</option>
+                                    <option value="Secret">Secret</option>
+                                    <option value="Roco">Roco</option>
+                                    <option value="Ada">Ada</option>
+                                    </select>
+                                    <br><br>
                                     <div id="code_{{++$codes}}" style="width:87%;height:auto; line-height:1px;"></div>
                                 </div>
                                 <script>
                                     setTimeout(function () {
                                         var string = <?php echo json_encode($code_content[$codes - 1]) ?>;
+                                        var language = <?php echo json_encode($language_content[$codes - 1]) ?>;
+                                        $('#language_{{$codes}} option[value="'+language+'"]').attr('selected','selected');
                                         editors[{{$codes}}].setValue(string);
                                     }, 1000);
                                 </script>
@@ -352,6 +388,32 @@
         $("#addCode").click(function() {
             var elm =   '<div class="col-md-12 margin-top3">\n'   +
                 '<h3> Código</h3>' +
+                '<span>Lenguaje: </span> ' +
+                '<select style="width: 300px;" id="language_'+(code + 1)+'" >\n' +
+                '<option value="C">C</option>\n' +
+                '<option value="C++">C++</option>\n' +
+                '<option value="C#">C#</option>\n' +
+                '<option value="Go">Go</option>\n' +
+                '<option value="Haskell">Haskell</option>\n' +
+                '<option value="Java">Java</option>\n' +
+                '<option value="Kotlin">Kotlin</option>\n' +
+                '<option value="OCaml">OCaml</option>\n' +
+                '<option value="Delphi">Delphi</option>\n' +
+                '<option value="Pascal">Pascal</option>\n' +
+                '<option value="Perl">Perl</option>\n' +
+                '<option value="PHP">PHP</option>\n' +
+                '<option value="Python">Python</option>\n' +
+                '<option value="PyPy">PyPy</option>\n' +
+                '<option value="Ruby">Ruby</option>\n' +
+                '<option value="Rust">Rust</option>\n' +
+                '<option value="Scala">Scala</option>\n' +
+                '<option value="Javascript">Javascript</option>\n' +
+                '<option value="Opencobol">Opencobol</option>\n' +
+                '<option value="Factor">Factor</option>\n' +
+                '<option value="Secret">Secret</option>\n' +
+                '<option value="Roco">Roco</option>\n' +
+                '<option value="Ada">Ada</option>\n' +
+                '</select><br><br>\n' +
                 '<div id="code_'+(code + 1)+'" style="width:87%;height:auto; line-height:1px;">' +
                 '</div>';
             $(elm).hide().appendTo('#theory').fadeIn();
@@ -395,8 +457,13 @@
                     xmlContent += ']]></parrafo>\n'
                 }
                 if (elements[i] == 'code') {
-                    xmlContent += '<codigo><![CDATA[\n';
-                    xmlContent += editors[++c].getValue();
+                    xmlContent += '<codigo>\n';
+                    xmlContent += '<codigo-lenguaje>';
+                    xmlContent += $( "#language_" + (c + 1)).val();
+                    xmlContent += '</codigo-lenguaje>\n';
+                    xmlContent += '<codigo-contenido>' + '<![CDATA[\n';
+                    xmlContent +=  editors[++c].getValue();
+                    xmlContent += '</codigo-contenido>\n';
                     xmlContent += ']]></codigo>\n'
                 }
                 if(elements[i] == 'reference'){

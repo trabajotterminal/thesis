@@ -15,8 +15,11 @@
     $T = str_replace('<parrafo>', '<p>', $T);
     $T = str_replace('</parrafo>', '</p><br>', $T);
 
-    $T = str_replace('<codigo>', '<pre><code>', $T);
-    $T = str_replace('</codigo>', '</pre></code><br><br>', $T);
+    $T = str_replace('<codigo-lenguaje>', '<h5>Lenguaje ', $T);
+    $T = str_replace('</codigo-lenguaje>', '</h5>', $T);
+    
+    $T = str_replace('<codigo-contenido>', '<pre><code>', $T);
+    $T = str_replace('</codigo-contenido>', '</pre></code><br><br>', $T);
 
     $T = str_replace('<referencia>', '', $T);
     $T = str_replace('</referencia>', '', $T);

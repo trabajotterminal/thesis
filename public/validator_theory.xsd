@@ -4,13 +4,20 @@ elementFormDefault="qualified">
   <xs:element name="teoria">
     <xs:complexType>
         <xs:choice minOccurs="1" maxOccurs="unbounded">
-	        <xs:element name="titulo" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
-	        <xs:element name="subtitulo" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
-	        <xs:element name="parrafo" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
-          <xs:element name="codigo" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+          <xs:element name="titulo" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+          <xs:element name="subtitulo" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+          <xs:element name="parrafo" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+          <xs:element name="codigo" minOccurs="1" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="codigo-lenguaje" type="xs:string"/>
+                  <xs:element name="codigo-contenido" type="xs:string"/>
+                </xs:sequence>
+              </xs:complexType>
+          </xs:element>
           <xs:element name="referencia">
-    			<xs:complexType>
-        		<xs:choice minOccurs="1" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:choice minOccurs="1" maxOccurs="unbounded">
                   <xs:element name="encabezado" type="xs:string"/>
                   <xs:element name="link" type="xs:string"/>
                 </xs:choice>
