@@ -32,16 +32,14 @@
         $reference_link_closing  = [];
         $reference_link_content  = [];
         $text = str_replace(']]>', '', $text);
+        $text = str_replace('<![CDATA[', '', $text);
         $title_opening          = getSubstringArray('<titulo>', $text);
         $title_closing          = getSubstringArray('</titulo>', $text);
         $subtitle_opening       = getSubstringArray('<subtitulo>', $text);
         $subtitle_closing       = getSubstringArray('</subtitulo>', $text);
         $paragraph_opening      = getSubstringArray('<parrafo><![CDATA[', $text);
         $paragraph_closing      = getSubstringArray('</parrafo>', $text);
-        $code_opening           = getSubstringArray("<codigo lenguaje=", $text);
-        for($i = 0; $i < count($code_opening); $i++){
-            $code_tag_end[$i] = strpos($text, "<![CDATA[", $code_opening[$i]);
-        }
+        $code_opening           = getSubstringArray("<codigo>", $text);
         $code_closing           = getSubstringArray('</codigo>', $text);
         $reference_title_opening = getSubstringArray('<encabezado>', $text);
         $reference_title_closing = getSubstringArray('</encabezado>', $text);
@@ -54,10 +52,10 @@
             $subtitle_content[$i] = substr($text, $subtitle_opening[$i] + strlen('<subtitulo>'), $subtitle_closing[$i] - $subtitle_opening[$i] - strlen('</subtitulo>') + 1);
         }
         for($i = 0; $i < count($paragraph_opening); $i++){
-            $paragraph_content[$i] = substr($text, $paragraph_opening[$i] + strlen('<parrafo><![CDATA['), $paragraph_closing[$i] - $paragraph_opening[$i] -  strlen('</parrafo>') + 1);
+            $paragraph_content[$i] = substr($text, $paragraph_opening[$i] + strlen('<parrafo>'), $paragraph_closing[$i] - $paragraph_opening[$i] -  strlen('</parrafo>') + 1);
         }
         for($i = 0; $i < count($code_opening); $i++){
-            $code_content[$i] = substr($text, $code_tag_end[$i] + 9, $code_closing[$i] - $code_tag_end[$i] + 8 - strlen('<codigo lenguaje='));
+            $code_content[$i] = substr($text, $code_opening[$i] + strlen('<codigo>'), $code_closing[$i] - $code_opening[$i] -  strlen('</codigo>') + 1);
         }
         for($i = 0; $i < count($reference_title_opening); $i++){
             $reference_title_content[$i] = substr($text, $reference_title_opening[$i] + strlen('<encabezado>'), $reference_title_closing[$i] - $reference_title_opening[$i] -  strlen('</encabezado>') + 1);
