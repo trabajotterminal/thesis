@@ -463,8 +463,8 @@
                     xmlContent += '</codigo-lenguaje>\n';
                     xmlContent += '<codigo-contenido>' + '<![CDATA[\n';
                     xmlContent +=  editors[++c].getValue();
-                    xmlContent += '</codigo-contenido>\n';
-                    xmlContent += ']]></codigo>\n'
+                    xmlContent += ']]>';
+                    xmlContent += '</codigo-contenido>\n' + '</codigo>\n'
                 }
                 if(elements[i] == 'reference'){
                     ++left;

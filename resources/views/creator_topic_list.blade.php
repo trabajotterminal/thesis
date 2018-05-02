@@ -36,7 +36,7 @@
                                 @endif
                             </div>
                             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" >
-                                <h3 class="editable-select" data-id="{{$topic}}">{{$topics_categories[$topic]}}</h3>
+                                <h4 class="editable-select" data-id="{{$topic}}">{{$topics_categories[$topic]}}</h4>
                                 <input type="submit" style="position: absolute; left: -9999px"/>
                             </div>
                         </form>
