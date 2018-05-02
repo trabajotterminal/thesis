@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <div class="col-md-12 margin-top3" style="width:87%;">
-                    <h3>Parrafo</h3>
+                    <h3>Párrafo</h3>
                     <div id="paragraph_1"></div>
                 </div>
             </div>
@@ -61,7 +61,7 @@
                 </div>
             </div>
             <button class="btn btn-light" style="margin-top:30px;margin-left:50px;" id="addSubtitle">Agregar nuevo subtitulo</button>
-            <button class="btn btn-light" style="margin-top:30px;margin-left:50px;" id="addParagraph">Agregar nuevo parrafo</button>
+            <button class="btn btn-light" style="margin-top:30px;margin-left:50px;" id="addParagraph">Agregar nuevo párrafo</button>
             <button class="btn btn-light" style="margin-top:30px;margin-left:50px;" id="addCode">Agregar código</button>
             <button class="btn btn-light" style="margin-top:30px;margin-left:50px;" id="addReference">Agregar referencia</button>
             <form action="{{url('creator/topic/theory/register/manually/save')}}" method="POST" id="finish">
@@ -161,7 +161,7 @@
 
         $("#addParagraph").click(function() {
             var elm = '<div class="col-md-12 margin-top3" style="width:87%;">\n' +
-                '                    <h3>Parrafo</h3>\n' +
+                '                    <h3>Párrafo</h3>\n' +
                 '                    <div id="paragraph_'+(paragraph + 1)+'"></div>' +
                 '      </div>';
 
