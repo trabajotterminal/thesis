@@ -91,13 +91,17 @@
     <script src="{{ URL::asset('/js/closebrackets.js')}}"></script>
     <script src="{{ URL::asset('/js/javascript.js')}}"></script>
     <script src="{{ URL::asset('/js/sublime.js')}}"></script>
-    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
     <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ URL::asset('/css/summernote-ext-emoji-ajax.css')}}"  type="text/css" />
     <style>
         body{
             overflow-x: hidden;
+        }
+        .btn-sm {
+            width:35px;
+            height: 35px;
+            padding:3px;
         }
     </style>
 @endsection
@@ -255,8 +259,6 @@
 @section('statics-js')
     @include('layouts/statics-js-2')
     <script src="{{URL::asset('/ace-builds/src-noconflict/ace.js')}}" type="text/javascript" charset="utf-8"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
-    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
     <script src="{{ URL::asset('/js/summernote-es-ES.js')}}"></script>
     <script src="{{ URL::asset('/js/summernote-ext-emoji-ajax.js')}}"></script>
