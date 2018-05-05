@@ -8,10 +8,9 @@
     $options        = [];
     $right_answers  = [];
     $i = 0;
-    $tries = (int)$tries;
-    $shouldCount = false;
+    $shouldCount = 0;
     if($tries < $xml['cuestionarios']){
-        $shouldCount = true;
+        $shouldCount = 1;
         foreach($xml->children()[$tries] as $index => $bloque) {
             array_push($questions, $bloque -> pregunta);
             array_push($feedbacks, $bloque -> retroalimentacion);
@@ -97,7 +96,8 @@
                                     {!! csrf_field() !!}
                                     <input type="hidden" id="numberOfQuestions" value="{{count($questions)}}">
                                     <input type="hidden" name="topic_name" value="{{$topic_name}}">
-                                    <input type="hidden" name="should_count" value="{{$shouldCount}}">
+                                    <input type="hidden" name="shouldCount" value="{{$shouldCount}}">
+                                    <input type="hidden" name="tries" value="{{$tries}}">
                                     <input type="submit" class="btn btn-success" style="float:right; margin-right:100px;" value="Terminar cuestionario" />
                                 </form>
                             </div>

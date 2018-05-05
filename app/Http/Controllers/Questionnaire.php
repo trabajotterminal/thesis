@@ -33,8 +33,10 @@ class Questionnaire extends Controller
 
     public function evaluate(Request $request){
         $topic_name     = $request -> topic_name;
-        $shouldCount    = $request -> should_count;
         $user_answers   = $request -> user_answers;
+        $try_number     = $request -> tries;
+        $try_number     = (int)$try_number;
+        $shouldEvaluate = $request -> shouldCount;
         $topic          = Topic::where('approved_name', '=', $topic_name) -> orWhere('pending_name', '=', $topic_name) -> first();
         $category       = Category::where('id', '=', $topic -> category_id) -> first();
         $category_path      = "";
@@ -52,14 +54,12 @@ class Questionnaire extends Controller
         $category_name  = $category_path;
         $topic_name     = $topic_path;
         $xmlstring      = file_get_contents('storage/'.$category_name.'/'.$topic_name.'/Cuestionario/latest/cuestionario.xml');
-        $try_number     = $request -> tries;
         $xml            = simplexml_load_string($xmlstring);
         $right_answers  = [];
         $feedbacks      = [];
         $questions      = [];
         $answers_value = [];
         $i = 0;
-        $try_number = (int)$try_number;
         if($try_number < $xml['cuestionarios']){
             for($i = 0; $i < count($xml->children()[$try_number]); $i++) {
                 array_push($questions, htmlspecialchars_decode($xml -> children()[$try_number] -> bloque[$i] -> pregunta));
@@ -68,6 +68,19 @@ class Questionnaire extends Controller
                     if($xml -> children()[$try_number] -> bloque[$i] -> opcion[$j]['value'] == 'true'){
                         array_push($right_answers, $j + 1);
                         array_push($answers_value, $xml -> children()[$try_number] -> bloque[$i] -> opcion[$j]);
+                        break;
+                    }
+                }
+            }
+        }else{
+            $index = count($xml -> children()) - 1;
+            for($i = 0; $i < count($xml->children()[$index]); $i++) {
+                array_push($questions, htmlspecialchars_decode($xml -> children()[$index] -> bloque[$i] -> pregunta));
+                array_push($feedbacks, htmlspecialchars_decode($xml -> children()[$index] -> bloque[$i] -> retroalimentacion));
+                for($j = 0; $j < count($xml -> children()[$index] -> bloque[$i] -> opcion); $j++){
+                    if($xml -> children()[$index] -> bloque[$i] -> opcion[$j]['value'] == 'true'){
+                        array_push($right_answers, $j + 1);
+                        array_push($answers_value, $xml -> children()[$index] -> bloque[$i] -> opcion[$j]);
                         break;
                     }
                 }
@@ -95,13 +108,13 @@ class Questionnaire extends Controller
         $student = User::where('id', '=', $user_id) -> first() -> student;
         $topic = Topic::where('approved_name', '=', $request -> topic_name) -> orWhere('pending_name', '=', $request -> topic_name)-> first();
         $mark = User::where('id', '=', $user_id) -> first() -> student() -> first() -> marks() -> where('topic_id', '=', $topic -> id) -> first();
-        if($shouldCount){
+        if($shouldEvaluate){
             if($mark == null){
                 $mark = new Mark(['try_number' => 1, 'points' => $points, 'user_id' => $user_id, 'student_id' => $student -> id, 'group_id' => $student -> group_id, 'school_id' => $student -> school_id, 'topic_id' => $topic -> id, 'category_id' => $topic -> category_id]);
                 $mark -> save();
             }else{
                 $mark -> try_number = $mark -> try_number + 1;
-                $mark -> points = $points;
+                $mark -> points = ($mark -> points + $points) / $mark -> try_number;
                 $mark -> save();
             }
             $glance = Glance::firstOrNew(array(

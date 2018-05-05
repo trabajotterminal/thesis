@@ -140,20 +140,20 @@
     <script>
         var questions       = <?php  echo json_decode(count($questions)); ?>;
         var feedbacks       = <?php  echo json_decode(count($feedbacks)); ?>;
+        var HelloButton = function (context) {
+            var ui = $.summernote.ui;
+            var button = ui.button({
+                contents: '<b>Σ</b>',
+                tooltip: 'Inserta fórmula',
+                click: function () {
+                    context.invoke('editor.insertText', ' `Introduce LaTeX aquí` ');
+                }
+            });
+            return button.render();   // return button as jquery object
+        };
         $(document).ready(function() {
             questions       = <?php  echo json_decode(count($questions)); ?>;
             feedbacks       = <?php  echo json_decode(count($feedbacks)); ?>;
-            var HelloButton = function (context) {
-                var ui = $.summernote.ui;
-                var button = ui.button({
-                    contents: '<b>Σ</b>',
-                    tooltip: 'Inserta fórmula',
-                    click: function () {
-                        context.invoke('editor.insertText', ' `Introduce LaTeX aquí` ');
-                    }
-                });
-                return button.render();   // return button as jquery object
-            };
             for(var j = 1; j <= questions; j++){
                 $('#question_'+ j).summernote({
                     lang: "es-ES",
@@ -251,6 +251,97 @@
             }
         });
 
+        $("#addQuestion").click(function(e) {
+            e.preventDefault();
+            var title = "";
+            var next  =  title_id * $("#questions_per_questionnaire").val();
+            if(questions == next){
+                title = '<u><h4 style="margin-left:15px;">Cuestionario '+(++title_id)+'</h4></u>';
+            }
+            var new_question = '<div class="clearfix" /><br>\n' +
+                '                    <h3>Pregunta '+(questions + 1)+':</h3>\n' +
+                '                '+title+'<div class="col-md-12 margin-top3">' +
+                '                           <div id="question_'+(questions + 1)+'" style="width:90%;margin-left:-10px;"></div> ' +
+                '                </div>\n' +
+                '                <div class="col-md-12 margin-top3">\n' +
+                '                    <h3>Retroalimentación</h3>\n' +
+                '                           <div id="feedback_'+(questions + 1)+'" style="width:90%;margin-left:-10px;"></div> ' +
+                '                </div>\n' +
+                '                <div class="col-md-12 margin-top3" id="options_'+(questions + 1)+'">\n' +
+                '                    <h3>Opciones</h3>\n' +
+                '                    <div class="form-check form-check-inline">\n' +
+                '                        <input class="form-check-input" type="radio" name="options_'+(questions + 1)+'" id="inlineRadio1" value="1" checked>\n' +
+                '                        <input type="text" class="form-check-label" for="inlineRadio1" id="option_'+(questions + 1)+'_1" value="Primera Opción"/>\n' +
+                '                    </div>\n' +
+                '                    <br>\n' +
+                '                    <div class="form-check form-check-inline">\n' +
+                '                        <input class="form-check-input" type="radio" name="options_'+(questions + 1)+'" id="inlineRadio2" value="2">\n' +
+                '                        <input type="text" class="form-check-label" for="inlineRadio2" id="option_'+(questions + 1)+'_2" value="Segunda Opción"/>\n' +
+                '                    </div>\n' +
+                '                    <br>\n' +
+                '                    <div class="form-check form-check-inline">\n' +
+                '                        <input class="form-check-input" type="radio" name="options_'+(questions + 1)+'" id="inlineRadio3" value="3">\n' +
+                '                        <input type="text" class="form-check-label" for="inlineRadio3" id="option_'+(questions + 1)+'_3" value="Tercera Opción"/>\n' +
+                '                    </div>\n' +
+                '                    <br>\n' +
+                '                    <div class="form-check form-check-inline">\n' +
+                '                        <input class="form-check-input" type="radio" name="options_'+(questions + 1)+'" id="inlineRadio4" value="4">\n' +
+                '                        <input type="text" class="form-check-label" for="inlineRadio4" id="option_'+(questions + 1)+'_4" value="Cuarta Opción"/>\n' +
+                '                    </div>\n' +
+                '                </div>\n';
+            $(new_question).hide().appendTo('#questionnaire').fadeIn();
+            $('#question_'+ (questions + 1)).summernote({
+                lang: "es-ES",
+                toolbar: [
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    ['font', ['strikethrough', 'superscript', 'subscript']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['picture',['picture']],
+                    ['link',['link']],
+                    ['video',['video']],
+                    ['mybutton', ['hello']],
+                    ['insert', ['emoji']],
+                ],
+                buttons: {
+                    hello: HelloButton
+                },
+                placeholder: 'Introduce el titulo de tu pregunta, también puedes agregar contenido adicional como imágenes o videos.',
+                tabsize: 2,
+                height: 200,
+            });
+
+            $('#feedback_' + (questions + 1)).summernote({
+                lang: "es-ES",
+                toolbar: [
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    ['font', ['strikethrough', 'superscript', 'subscript']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['picture',['picture']],
+                    ['link',['link']],
+                    ['video',['video']],
+                    ['mybutton', ['hello']],
+                    ['insert', ['emoji']],
+                ],
+                buttons: {
+                    hello: HelloButton
+                },
+                placeholder: 'En caso de que el usuario se equivoque en la pregunta, el texto introducido aquí, será mostrado a modo de retroalimentación.',
+                tabsize: 2,
+                height: 200,
+            });
+            ++questions;
+            if(questions == requiredQuestions){
+                $("#saveQuestionnaire").show();
+                $("#addQuestion").hide();
+            }
+            return 0;
+        });
 
         $("#finish").submit(function(e) {
             var xmlContent = '<contenido cuestionarios="'+numberOfQuestionnaires+'" preguntas_por_cuestionario="'+questionsPerQuestionnaire+'">\n';
@@ -266,7 +357,6 @@
                 xmlContent += $('#feedback_'+(i)).summernote('code') + '\n';
                 xmlContent += ']]></retroalimentacion>\n';
                 var answer_id = $('input[name="options_'+i+'"]:checked').val();
-                console.warn(answer_id);
                 for(var j = 1; j <= 4; j++){
                     if(answer_id == j)
                         xmlContent += '<opcion value="true">\n';
