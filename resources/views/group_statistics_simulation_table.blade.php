@@ -118,6 +118,9 @@
                     type: "area",
                     name: "Porcentaje representativo grupal",
                     indexLabel: "{label_percentage}%",
+                    indexLabelFormatter: function(e){
+                        return (e.dataPoint.label_percentage).toFixed(2) + "%";
+                    },
                     indexLabelFontColor: "white",
                     toolTipContent: "<p style=color:#85DCBC>Porcentaje representativo grupal: {label_percentage}%</p>",
                     markerBorderColor: "white",

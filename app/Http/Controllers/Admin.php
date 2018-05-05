@@ -693,7 +693,7 @@ class Admin extends Controller{
                 $total_topics++;
             }
         }
-        return view('group_statistics_simulation_table', compact(['categories_array', 'topics_array', 'percentages', 'people', 'users_in_group_count', 'visualizations']));
+        return view('school_statistics_simulation_table', compact(['categories_array', 'topics_array', 'percentages', 'people', 'users_in_group_count', 'visualizations']));
     }
 
     public function creatorsInterface(){
