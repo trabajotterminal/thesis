@@ -60,6 +60,11 @@
                 <img src="{{URL::asset('images/nerd.png')}}" style="width:250px;height:250px;" />
             </center>
         </div>
+        <div class="col-md-12" style="margin-top:20px;margin-bottom:20px;">
+            <center>
+                <a href="{{url('/')}}" class="btn btn-success">Regresar</a>
+            </center>
+        </div>
     @else
         <div class="col-md-12 col-centered" style="margin-top:50px;">
             <center>

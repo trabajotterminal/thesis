@@ -33,6 +33,7 @@ class Questionnaire extends Controller
 
     public function evaluate(Request $request){
         $topic_name     = $request -> topic_name;
+        $shouldCount    = $request -> should_count;
         $user_answers   = $request -> user_answers;
         $topic          = Topic::where('approved_name', '=', $topic_name) -> orWhere('pending_name', '=', $topic_name) -> first();
         $category       = Category::where('id', '=', $topic -> category_id) -> first();
@@ -94,23 +95,25 @@ class Questionnaire extends Controller
         $student = User::where('id', '=', $user_id) -> first() -> student;
         $topic = Topic::where('approved_name', '=', $request -> topic_name) -> orWhere('pending_name', '=', $request -> topic_name)-> first();
         $mark = User::where('id', '=', $user_id) -> first() -> student() -> first() -> marks() -> where('topic_id', '=', $topic -> id) -> first();
-        if($mark == null){
-            $mark = new Mark(['try_number' => 0, 'points' => $points, 'user_id' => $user_id, 'student_id' => $student -> id, 'group_id' => $student -> group_id, 'school_id' => $student -> school_id, 'topic_id' => $topic -> id, 'category_id' => $topic -> category_id]);
-            $mark -> save();
-        }else{
-            $mark -> try_number = $mark -> try_number;
-            $mark -> points = $points;
-            $mark -> save();
-        }
-        $glance = Glance::firstOrNew(array(
-            'type'          => 'C',
-            'topic_id'      => $topic -> id,
-            'category_id'   => $topic -> category_id,
-        ));
-        $glance -> save();
-        $hasGlance = DB::select('SELECT G.type FROM glances G, glance_student Gu where Gu.student_id = ? and G.type = ? and G.topic_id = ? and G.id = Gu.glance_id', [$student -> id, 'C', $topic -> id]);
-        if(count($hasGlance) == 0){
-            $student -> glances() -> attach($glance -> id);
+        if($shouldCount){
+            if($mark == null){
+                $mark = new Mark(['try_number' => 1, 'points' => $points, 'user_id' => $user_id, 'student_id' => $student -> id, 'group_id' => $student -> group_id, 'school_id' => $student -> school_id, 'topic_id' => $topic -> id, 'category_id' => $topic -> category_id]);
+                $mark -> save();
+            }else{
+                $mark -> try_number = $mark -> try_number + 1;
+                $mark -> points = $points;
+                $mark -> save();
+            }
+            $glance = Glance::firstOrNew(array(
+                'type'          => 'C',
+                'topic_id'      => $topic -> id,
+                'category_id'   => $topic -> category_id,
+            ));
+            $glance -> save();
+            $hasGlance = DB::select('SELECT G.type FROM glances G, glance_student Gu where Gu.student_id = ? and G.type = ? and G.topic_id = ? and G.id = Gu.glance_id', [$student -> id, 'C', $topic -> id]);
+            if(count($hasGlance) == 0){
+                $student -> glances() -> attach($glance -> id);
+            }
         }
         $right_answers = $right_answers_to_display;
         $feedbacks = $feedbacks_to_display;
