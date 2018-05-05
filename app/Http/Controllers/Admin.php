@@ -527,7 +527,7 @@ class Admin extends Controller{
             $users_in_group  = DB::select('SELECT * from students where group_id = ?', [$group -> id]);
             $users_in_group_count  = count($users_in_group);
             for($j = 0; $j < count($topics); $j++){
-                $seen = DB::select('SELECT COUNT(*) as many FROM glance_student GS, glances G WHERE GS.glance_id = G.id and G.type = ? and GS.student_id IN (select id from students where group_id = ?);', [ 'T', $group -> id]);
+                $seen = DB::select('SELECT COUNT(*) as many FROM glance_student GS, glances G WHERE GS.glance_id = G.id and G.type = ? and GS.student_id IN (select id from students where group_id = ?) and G.topic_id = ?;', [ 'T', $group -> id, $topics[$j] -> id]);
                 $seen = $seen[0] -> many;
                 $people[$i][$j] = $seen;
                 $visualizations += $seen;
@@ -558,7 +558,7 @@ class Admin extends Controller{
             $users_in_group  = DB::select('SELECT * from students where group_id = ?', [$group -> id]);
             $users_in_group_count  = count($users_in_group);
             for($j = 0; $j < count($topics); $j++){
-                $seen = DB::select('SELECT COUNT(*) as many FROM glance_student GS, glances G WHERE GS.glance_id = G.id and G.type = ? and GS.student_id IN (select id from students where group_id = ?);', [ 'C', $group -> id]);
+                $seen = DB::select('SELECT COUNT(*) as many FROM glance_student GS, glances G WHERE GS.glance_id = G.id and G.type = ? and GS.student_id IN (select id from students where group_id = ?) and G.topic_id = ?;', [ 'C', $group -> id, $topics[$j] -> id]);
                 $seen = $seen[0] -> many;
                 $people[$i][$j] = $seen;
                 $visualizations += $seen;
@@ -589,7 +589,7 @@ class Admin extends Controller{
             $users_in_group  = DB::select('SELECT * from students where group_id = ?', [$group -> id]);
             $users_in_group_count  = count($users_in_group);
             for($j = 0; $j < count($topics); $j++){
-                $seen = DB::select('SELECT COUNT(*) as many FROM glance_student GS, glances G WHERE GS.glance_id = G.id and G.type = ? and GS.student_id IN (select id from students where group_id = ?);', [ 'S', $group -> id]);
+                $seen = DB::select('SELECT COUNT(*) as many FROM glance_student GS, glances G WHERE GS.glance_id = G.id and G.type = ? and GS.student_id IN (select id from students where group_id = ?) and G.topic_id = ?;', [ 'S', $group -> id, $topics[$j] -> id]);
                 $seen = $seen[0] -> many;
                 $people[$i][$j] = $seen;
                 $visualizations += $seen;
@@ -621,7 +621,7 @@ class Admin extends Controller{
             $users_in_school  = DB::select('SELECT * from students where school_id = ?', [$school -> id]);
             $users_in_school_count  = count($users_in_school);
             for($j = 0; $j < count($topics); $j++){
-                $seen = DB::select('SELECT COUNT(*) as many FROM glance_student GS, glances G WHERE GS.glance_id = G.id and G.type = ? and GS.student_id IN (select id from students where school_id = ?);', ['T', $school -> id]);
+                $seen = DB::select('SELECT COUNT(*) as many FROM glance_student GS, glances G WHERE GS.glance_id = G.id and G.type = ? and GS.student_id IN (select id from students where school_id = ? and G.topic_id = ?);', ['T', $school -> id, $topics[$j] -> id]);
                 $seen = $seen[0] -> many;
                 $people[$i][$j] = $seen;
                 $visualizations += $seen;
@@ -652,7 +652,7 @@ class Admin extends Controller{
             $users_in_school  = DB::select('SELECT * from students where school_id = ?', [$school -> id]);
             $users_in_school_count  = count($users_in_school);
             for($j = 0; $j < count($topics); $j++){
-                $seen = DB::select('SELECT COUNT(*) as many FROM glance_student GS, glances G WHERE GS.glance_id = G.id and G.type = ? and GS.student_id IN (select id from students where school_id = ?);', ['C', $school -> id]);
+                $seen = DB::select('SELECT COUNT(*) as many FROM glance_student GS, glances G WHERE GS.glance_id = G.id and G.type = ? and GS.student_id IN (select id from students where school_id = ? and G.topic_id = ?);', ['C', $school -> id, $topics[$j] -> id]);
                 $seen = $seen[0] -> many;
                 $people[$i][$j] = $seen;
                 $visualizations += $seen;
@@ -683,7 +683,7 @@ class Admin extends Controller{
             $users_in_school  = DB::select('SELECT * from students where school_id = ?', [$school -> id]);
             $users_in_school_count  = count($users_in_school);
             for($j = 0; $j < count($topics); $j++){
-                $seen = DB::select('SELECT COUNT(*) as many FROM glance_student GS, glances G WHERE GS.glance_id = G.id and G.type = ? and GS.student_id IN (select id from students where school_id = ?);', ['S', $school -> id]);
+                $seen = DB::select('SELECT COUNT(*) as many FROM glance_student GS, glances G WHERE GS.glance_id = G.id and G.type = ? and GS.student_id IN (select id from students where school_id = ? and G.topic_id = ?);', ['S', $school -> id, $topics[$j] -> id]);
                 $seen = $seen[0] -> many;
                 $people[$i][$j] = $seen;
                 $visualizations += $seen;
