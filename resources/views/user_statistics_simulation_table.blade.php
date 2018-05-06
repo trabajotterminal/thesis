@@ -53,7 +53,8 @@
         <div class="sh-divider-line doubble light  margin"></div>
     @endforeach
 </div>
-<h3 class="margin-left-3 margin-top1">Estadisticas generales - Simulación.</h3>
+<h1 class="margin-left-3 margin-top1">Estadisticas generales</h1>
+<br>
 <div id="chartContainerSimulation" style="height: 300px; width: 100%;margin-top:60px;"></div>
 <script>
     $(document).ready(function(){
@@ -79,7 +80,7 @@
                 toolTipContent: "<b>{label}:</b> {y} (#percent%)",
                 dataPoints: [
                     { y: <?php echo $percentage ?>, label: "Simulaciones vistas" },
-                    { y: 100 - <?php echo $percentage ?>, label: "Simulaciones sin revisar" },
+                    { y: 100 - <?php echo $percentage ?>, label: "Simulaciones no vistas" },
                 ]
             }]
         });

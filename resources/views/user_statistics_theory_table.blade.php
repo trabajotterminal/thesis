@@ -53,7 +53,8 @@
         <div class="sh-divider-line doubble light  margin"></div>
     @endforeach
 </div>
-<h3 class="margin-left-3 margin-top1">Estadisticas generales - Teoría.</h3>
+<h1 class="margin-left-3 margin-top1">Estadisticas generales</h1>
+<br>
 <div id="chartContainerTheory" style="height: 300px; width: 100%;margin-top:60px;"></div>
 <script>
     $(document).ready(function(){
@@ -79,7 +80,7 @@
                 toolTipContent: "<b>{label}:</b> {y} (#percent%)",
                 dataPoints: [
                     { y: <?php echo $percentage ?>, label: "Temas vistos" },
-                    { y: 100 - <?php echo $percentage ?>, label: "Temas sin revisar" },
+                    { y: 100 - <?php echo $percentage ?>, label: "Temas no vistos" },
                 ]
             }]
         });
