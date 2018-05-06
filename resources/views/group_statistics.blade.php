@@ -13,7 +13,7 @@
 @section('content')
     <div class="row" style="min-height:550px;">
         <div class="col-md-6">
-            <h3 class="margin-left-2 margin-top3">Estadisticas grupales para: {{$group_name}}</h3>
+            <h1 class="margin-left-2 margin-top3">{{$group_name}}</h1>
         </div>
         <div class="col-md-6">
             <div class="form-group margin-top4">
