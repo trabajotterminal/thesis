@@ -28,7 +28,7 @@
 <div class="sh-divider-line doubble light  margin"></div>
 @endforeach
 </div>
-<h3 class="margin-left-3 margin-top2">Estadisticas generales - Cuestionarios.</h3>
+<h1 class="margin-left-3 margin-top2">Estadisticas generales</h1>
 <br>
 <div id="chartContainerQuestionnaire" class="col-centered" style="height: 400px; width: 85%;margin-top:60px;"></div>
 <script>
