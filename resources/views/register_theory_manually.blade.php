@@ -253,14 +253,14 @@
             xmlContent += "<teoria>";
             for(var i = 0; i < elements.length; i++) {
                 if (elements[i] == 'title') {
-                    xmlContent += '<titulo>\n';
+                    xmlContent += '<titulo><![CDATA[\n';
                     xmlContent += $('input[name=title]').val();
-                    xmlContent += '</titulo>\n'
+                    xmlContent += ']]></titulo>\n'
                 }
                 if (elements[i] == 'subtitle') {
-                    xmlContent += '<subtitulo>\n';
+                    xmlContent += '<subtitulo><![CDATA[\n';
                     xmlContent += $('input[name=subtitle_' + (++s) + ']').val() + '\n';
-                    xmlContent += '</subtitulo>\n'
+                    xmlContent += ']]></subtitulo>\n'
                 }
                 if (elements[i] == 'paragraph') {
                     xmlContent += '<parrafo><![CDATA[\n';
@@ -272,9 +272,9 @@
                     xmlContent += '<codigo-lenguaje>';
                     xmlContent += $( "#language_" + (c + 1)).val();
                     xmlContent += '</codigo-lenguaje>\n';
-                    xmlContent += '<codigo-contenido>' + '<![CDATA[\n';
+                    xmlContent += '<codigo-contenido>' + '<![CDATA[' + '\n';
                     xmlContent +=  editors[++c].getValue();
-                    xmlContent += ']]>';
+                    xmlContent += ']]>' + '\n';
                     xmlContent += '</codigo-contenido>\n'+'</codigo>\n'
                 }
                 if(elements[i] == 'reference'){
@@ -283,12 +283,12 @@
             }
             for(var i = 0; i < left; i++){
                 xmlContent += '<referencia>\n';
-                xmlContent += '<encabezado>\n';
+                xmlContent += '<encabezado>' + '<![CDATA[' + '\n';
                 xmlContent += $('input[name=reference_title_' + (r + 1) + ']').val() + '\n';
-                xmlContent += '</encabezado>\n';
-                xmlContent += '<link>\n';
+                xmlContent += ']]>' + '</encabezado>\n';
+                xmlContent += '<link>' + '<![CDATA[\n';
                 xmlContent += $('input[name=reference_link_' + (++r) + ']').val() + '\n';
-                xmlContent += '</link>\n';
+                xmlContent += ']]>' + '</link>\n';
                 xmlContent += '</referencia>\n';
             }
             xmlContent += "</teoria>";
