@@ -359,11 +359,11 @@
                 var answer_id = $('input[name="options_'+i+'"]:checked').val();
                 for(var j = 1; j <= 4; j++){
                     if(answer_id == j)
-                        xmlContent += '<opcion value="true">\n';
+                        xmlContent += '<opcion value="true"><![CDATA[\n';
                     else
-                        xmlContent += '<opcion value="false">\n';
+                        xmlContent += '<opcion value="false"><![CDATA[\n';
                     xmlContent += $('#option_'+(i)+'_'+j).val();
-                    xmlContent += '</opcion>\n'
+                    xmlContent += ']]></opcion>\n'
                 }
                 xmlContent += "</bloque>\n";
                 if(next === i){
