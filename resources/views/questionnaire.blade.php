@@ -122,7 +122,7 @@
 
 @section('statics-js')
     @include('layouts/statics-js-2')
-    <script type="text/javascript" async src="{{ asset('/js/mathjax.js')}}"></script>
+    <script type="text/javascript" async src="{{ asset('/js/mathjax.js?config=AM_CHTML')}}"></script>
     <script src="{{ asset('/js/questionnaire_simulation_provider.js')}}"></script>
     <script src="{{ asset('/js/owl-carousel/owl.carousel.js')}}"></script>
     <script src="{{ asset('/js/owl-carousel/custom.js')}}"></script>

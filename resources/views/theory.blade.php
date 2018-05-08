@@ -190,7 +190,7 @@
     <script src="{{ asset('/js/highlight.pack.js')}}"></script>
     <script>hljs.initHighlightingOnLoad();</script>
     <script src="{{ asset('/js/scripts/functions.js')}}" type="text/javascript"></script>
-    <script type="text/javascript" async src="{{ asset('/js/mathjax.js')}}"></script>
+    <script type="text/javascript" async src="{{ asset('/js/mathjax.js?config=AM_CHTML')}}"></script>
     <script>
         $("#updateGlance").submit(function(e){
             e.preventDefault();
