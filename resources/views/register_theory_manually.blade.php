@@ -11,8 +11,8 @@
     <script src="{{ URL::asset('/js/closebrackets.js')}}"></script>
     <script src="{{ URL::asset('/js/javascript.js')}}"></script>
     <script src="{{ URL::asset('/js/sublime.js')}}"></script>
-    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
-    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <link href="{{ URL::asset('/css/summernote.css')}}" rel="stylesheet">
+    <script defer src="{{URL::asset('/js/all.js')}}" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ URL::asset('/css/summernote-ext-emoji-ajax.css')}}"  type="text/css" />
     <style>
         body{
@@ -85,7 +85,7 @@
 @section('statics-js')
     @include('layouts/statics-js-2')
     <script src="{{URL::asset('/ace-builds/src-noconflict/ace.js')}}" type="text/javascript" charset="utf-8"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
+    <script src="{{URL::asset('/js/summernote.js')}}"></script>
     <script src="{{ URL::asset('/js/summernote-es-ES.js')}}"></script>
     <script src="{{ URL::asset('/js/summernote-ext-emoji-ajax.js')}}"></script>
     <script>

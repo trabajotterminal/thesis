@@ -44,7 +44,7 @@
 
 @section('statics-js')
     @include('layouts/statics-js-1')
-    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+    <script defer src="{{ asset('js/all.js')}}"></script>
     <script src="{{ asset('js/progress-circle/jquery.circlechart.js')}}"></script>
     <script src="{{ asset('js/universal/jquery.js')}}"></script>
     <script src="{{ asset('js/canvas.js')}}"></script>

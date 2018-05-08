@@ -44,7 +44,7 @@
                         @endphp
                         @if($i < count($topics))
                             <div class="col-md-4" style="margin-bottom:10px;">
-                                <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+                                <link href="{{ URL::asset('/css/open-sans.css')}}" rel="stylesheet">
                                 <div class="card {{$randomClass}}">
                                     <div class="overlay"></div>
                                     <div class="circle">
