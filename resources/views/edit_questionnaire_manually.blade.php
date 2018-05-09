@@ -36,7 +36,7 @@
 @section('title', 'Edición')
 @section('statics-css')
     @include('layouts/statics-css-1')
-    <link href="{{ URL::asset('/css/summernote.css')}}" rel="stylesheet">
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
     <script defer src="{{URL::asset('/js/all.js')}}" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ URL::asset('/css/summernote-ext-emoji-ajax.css')}}"  type="text/css" />
     <style>
