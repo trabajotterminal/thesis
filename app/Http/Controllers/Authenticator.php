@@ -45,6 +45,7 @@ class Authenticator extends Controller
             $user -> save();
             $student  = new Student(['user_id' => $user -> id]);
             $student -> save();
+            $request -> session() -> flash('welcome', 'Bienvenido ');
             session(['user' => $user -> username, 'user_type' => 'student', 'user_id' => $user-> id]);
             return redirect('/');
         }
