@@ -108,14 +108,19 @@
 @section('title', 'Simulación')
 @section('statics-css')
     @include('layouts/statics-css-1')
+    <style>
+        #iFrameContent{
+            height: calc(100vh - 80px);
+        }
+    </style>
 @endsection
 
 @section('menu')
     @include('layouts/menu', ['page' => 'category'])
 @endsection
 @section('content')
-    <div id="content" style="height:700px;">
-        <iframe width="100%" height="100%;" frameborder="0" id="iFrameContent"></iframe>
+    <div id="content" style="min-height:550px;" >
+        <iframe width="100%" frameborder="0" id="iFrameContent"></iframe>
         @if($user != null && $user_type == 'student')
             <form id="updateGlance" method="POST" action="{{url('/simulation/updateGlance')}}">
                 {{(csrf_field())}}
