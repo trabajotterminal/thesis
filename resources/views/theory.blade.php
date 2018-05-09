@@ -152,9 +152,7 @@
             <div class="row sec-moreless-padding slide-controls-color-7">
                 <div class="col-xs-12 text-left">
                     <h4 class="uppercase oswald">
-                        @php
-                            echo $title;
-                        @endphp
+                        {{$topic_name}}
                     </h4>
                     <div class="divider-line solid light opacity-7"></div>
                     <div class="clearfix"></div>
