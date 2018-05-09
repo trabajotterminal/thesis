@@ -67,7 +67,7 @@
     @include('layouts/menu', ['page' => ''])
 @endsection
 @section('content')
-    <div id="block_error" style="min-height:500px;">
+    <div id="block_error" style="min-height: calc(100vh - 163px);">
         <div>
             <h2>¡Uuuups!</h2>
             <h5>Parece que algo malo malo ocurrió, inténta volver más tarde.</h5>

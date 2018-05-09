@@ -13,7 +13,7 @@
     @include('layouts/menu', ['page' => 'index'])
 @endsection
 @section('content')
-    <div class="container" style="min-height:550px;">
+    <div class="container" style="min-height: calc(100vh - 163px);">
         <div class="row" style="margin-top:50px;">
             <div class="col-md-12">
                 <div class="error-template">

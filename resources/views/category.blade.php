@@ -10,6 +10,11 @@
 @section('statics-css')
     @include('layouts/statics-css-1')
     <link rel="stylesheet" href="{{ URL::asset('/css/cards.css')}}" type="text/css" />
+    <style>
+        #category{
+            min-height: calc(100vh - 330px);
+        }
+    </style>
 @endsection
 @section('menu')
     @include('layouts/menu', ['page' => 'category'])
@@ -20,7 +25,7 @@
             <br>
             <h3 class="raleway text-black uppercase">{{$category_name}}</h1>
             <br>
-            <div class="row-md-5" id="category" style="min-height:390px;">
+            <div class="row-md-5" id="category">
                     @while($i < count($topics))
                         @php
                             $count_reference = 0;

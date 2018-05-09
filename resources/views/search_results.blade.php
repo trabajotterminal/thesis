@@ -10,12 +10,17 @@
 @section('statics-css')
     @include('layouts/statics-css-1')
     <link rel="stylesheet" href="{{ URL::asset('/css/cards.css')}}" type="text/css" />
+    <style>
+        #results{
+            min-height: calc(100vh - 280px);
+        }
+    </style>
 @endsection
 @section('menu')
     @include('layouts/menu', ['page' => 'index'])
 @endsection
 @section('content')
-    <div class="container" style="min-height:550px;">
+    <div class="container" style="min-height: calc(100vh - 163px);">
         <div class="row">
             <div class="col-md-6">
                 <br>
@@ -26,7 +31,7 @@
                 <hr>
             </div>
         </div>
-        <div class="row" style="margin-top:30px;">
+        <div class="row" id="results" style="margin-top:30px;">
             @foreach($search_results as $key => $result)
                 @php
                     $randomClassArray   = ['blue', 'purple', 'green', 'yellow', 'red'];

@@ -53,7 +53,7 @@
 @endsection
 @section('content')
     <section>
-        <div class="container" style="min-height:550px;">
+        <div class="container" style="min-height: calc(100vh - 163px);">
             <h4 style="margin-top:40px;">Teoría {{$action}} por {{strtolower($creator_username)}} para el tema: {{$topic_name}}</h4>
             <div class="divider-line solid light opacity-7"></div>
             <div class="row sec-moreless-padding slide-controls-color-7">

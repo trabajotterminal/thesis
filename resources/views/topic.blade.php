@@ -13,7 +13,7 @@
 @section('content')
     <section class="parallax-section11">
         <h1 style="margin-left:30px;margin-top:30px;">{{$topic_name}}</h1>
-        <div class="container " style="min-height:380px;">
+        <div class="container " style="min-height: calc(100vh - 163px);">
             <div class="row">
                 <div class="col-md-4">
                     <div class="feature-box12">

@@ -81,7 +81,7 @@
     @include('layouts/menu', ['page' => 'category'])
 @endsection
 @section('content')
-    <section class="sec-padding section-light" style="min-height:550px;background-color:white">
+    <section class="sec-padding section-light" style="min-height: calc(100vh - 163px);background-color:white">
         <div class="row">
             <div class="col col-centered text-center">
                 <h1>

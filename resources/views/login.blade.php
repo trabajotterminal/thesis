@@ -13,7 +13,7 @@
     @include('layouts/menu', ['page' => 'login'])
 @endsection
 @section('content')
-    <section class="sec-padding section-light" style="min-height:550px;background-color:white">
+    <section class="sec-padding section-light" style="min-height:calc(100vh - 163px);background-color:white">
         <div class="container white">
             <div class="row">
                 <div class="col-md-4 col-centered">

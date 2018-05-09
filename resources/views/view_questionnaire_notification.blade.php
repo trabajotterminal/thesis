@@ -50,11 +50,11 @@
 @section('content')
     <h4 class="margin-left-5 margin-top3">Cuestionario / {{$topic_name}}</h4>
     <div class="carousel_holder">
-        <div id="owl-demo7" class="owl-carousel" style="min-height:490px;">
+        <div id="owl-demo7" class="owl-carousel" style="min-height: calc(100vh - 163px);">
             @foreach($questions as $key => $question)
                 <div class="item">
                     <div class="row">
-                        <div class="col-md-12" style="min-height:450px;">
+                        <div class="col-md-12" style="min-height: calc(100vh - 163px);">
                             <div class="row no-margin" style="height:auto; margin-bottom:0px;padding-left:30px;padding-right:50px;">
                                 {!! $question !!}
                             </div>

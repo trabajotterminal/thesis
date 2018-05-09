@@ -119,7 +119,7 @@
     @include('layouts/menu', ['page' => 'category'])
 @endsection
 @section('content')
-    <div id="content" style="min-height:550px;" >
+    <div id="content" style="min-height: calc(100vh - 163px);" >
         <iframe width="100%" frameborder="0" id="iFrameContent"></iframe>
         @if($user != null && $user_type == 'student')
             <form id="updateGlance" method="POST" action="{{url('/simulation/updateGlance')}}">

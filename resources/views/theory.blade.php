@@ -147,7 +147,7 @@
 @endsection
 @section('content')
     <section>
-        <div class="container" style="min-height:550px;">
+        <div class="container" style="min-height: calc(100vh - 163px);">
             <div class="divider-line solid light opacity-7"></div>
             <div class="row sec-moreless-padding slide-controls-color-7">
                 <div class="col-xs-12 text-left">

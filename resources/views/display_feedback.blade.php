@@ -50,7 +50,7 @@
 
 </style>
 @section('content')
-<div class="row" style="min-height:550px;">
+<div class="row" style="min-height: calc(100vh - 163px);">
     @if(count($questions) == 0)
         <br><br>
         <div class="col-md-12">

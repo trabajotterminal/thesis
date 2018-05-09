@@ -67,11 +67,11 @@
 @section('content')
     <center><h3 class="uppercase weight1 pull margin-top1">{{$topic_name}}</h3></center>
     <div class="carousel_holder" id="questionnaire" style="overflow-x: hidden;">
-        <div id="owl-demo7" class="owl-carousel" style="min-height:540px;">
+        <div id="owl-demo7" class="owl-carousel" style="min-height: calc(100vh - 163px);">
             @foreach($questions as $key => $question)
                 <div class="item">
                     <div class="row">
-                        <div class="col-md-12" style="height:min-height:450px">
+                        <div class="col-md-12" style="min-height: calc(100vh - 163px);">
                             <div class="row no-margin">
                                     {!!  $question !!}
                             </div>

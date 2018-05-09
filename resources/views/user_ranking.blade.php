@@ -10,7 +10,7 @@
     @include('layouts/menu', ['page' => 'login'])
 @endsection
 @section('content')
-    <div class="row" style="min-height:550px;">
+    <div class="row" style="min-height: calc(100vh - 163px);">
         <div class="col-md-6">
             <h1 class="margin-left-2 margin-top3">Estadisticas para: {{$user_id}}</h1>
         </div>

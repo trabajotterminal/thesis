@@ -14,7 +14,7 @@
     @include('layouts/menu', ['page' => 'login'])
 @endsection
 @section('content')
-    <div class="fluid-container" style="min-height:550px">
+    <div class="fluid-container" style="min-height: calc(100vh - 163px);">
 
         <div class="row" style="margin-top: 10px;">
             <div class="col-md-3">

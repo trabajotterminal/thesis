@@ -30,7 +30,8 @@
             background-image: url({{URL::asset('images/cover.png')}});
             background-position-x: center;
             background-position-y: 0px;
-            background-repeat: repeat-x;
+            background-repeat: repeat;
+            height: 100vh;
         }
         body{
             min-height:100vh;
@@ -42,7 +43,7 @@
     @include('layouts/menu', ['page' => 'index'])
 @endsection
 @section('content')
-        <div class="row customBack" style="height: 90vh;">
+        <div class="row customBack">
             <div class="col-md-8 col-centered">
                 <center>
                     <h1 class="dosis uppercase text-white textoTop" style="margin-top:50px;">Aprende un nuevo algoritmo</h1></center>
