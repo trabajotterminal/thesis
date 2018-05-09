@@ -95,10 +95,10 @@
                                     @if(($key + 1) >= 1 && ($key +1) <= 3)
                                         <img src="{{ URL::asset('/images/gold_medal.png')}}" style="width:25px;height:25px;"/>
                                     @endif
-                                    @if(($key + 1) >= 4 && ($key +1) <= 7)
+                                    @if(($key + 1) >= 4 && ($key +1) <= 6)
                                         <img src="{{ URL::asset('/images/silver_medal.png')}}" style="width:25px;height:25px;"/>
                                     @endif
-                                    @if(($key + 1) >= 8 && ($key +1) <= 10)
+                                    @if(($key + 1) >= 7 && ($key +1) <= 10)
                                         <img src="{{ URL::asset('/images/bronze_medal.png')}}" style="width:25px;height:25px;"/>
                                     @endif
                                 </div>

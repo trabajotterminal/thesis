@@ -54,6 +54,7 @@
                 var topic = topics[i][j];
                 var value = percentages[i][j];
                 value = parseFloat(value);
+                people[i][j] = parseInt(people[i][j]);
                 var firstObject = {'y': people[i][j], 'label': topics[i][j]};
                 var percentage  = visualizations > 0 ? people[i][j] * 100 / visualizations : 0;
                 var percentage_to_display = percentage *  people[i][j] / 100;
