@@ -75,6 +75,7 @@ class Authenticator extends Controller
             if($isCreator)
                 $type = 'creator';
             Log::debug($type);
+            $request -> session() -> flash('welcome', 'Bienvenido ');
             session(['user' => $result -> username, 'user_type' => $type, 'user_id' => $result -> id]);
             return redirect('/');
         }else{
