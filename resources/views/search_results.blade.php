@@ -26,7 +26,7 @@
                 <br>
                 <h4>Resultados para: <u>{{$input}}</u></h4>
                 @if(count($search_results) == 0 && $should_display_predicted_word)
-                    <h5>Quizás quisiste decir: <a href="/search?input_search={{$predicted_word}}" style="color:blue">{{$predicted_word}}</a></h5>
+                    <h5>Quizás quisiste decir: <a href="{{URL('/search?input_search='.$predicted_word)}}" style="color:blue">{{$predicted_word}}</a></h5>
                 @endif
                 <hr>
             </div>
